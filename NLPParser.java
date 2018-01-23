@@ -2,9 +2,7 @@ import java.util.*;
 
 public class NLPParser {
     
-    Set<String> sectors;
-    Set<String> companies;
-    Set<String> timestamps;
+    Keyword keywords;
     Map<String, Integer> patterns; 
     // Pattern -> Action 
     //(action should be an int, say "1")
@@ -13,12 +11,9 @@ public class NLPParser {
     
     // constructor, load data from some JSON file
     public NLPParser() {
-        
-        sectors = getJSON("sectors");
-        companies = getJSON("companies");
-        timestamps = getJSON("timestamps");
-        
+
         patterns = getPatternsJSON();
+        keyword = new Keyword();
     }
     
     // return action and relevant data (keywords)
@@ -35,7 +30,7 @@ public class NLPParser {
         
         List<String> sentence = tokenize(s);
         List<String> keywords = new LinkedList();
-        String pattern = "";
+        StringBuilder pattern = new StringBuilder();
         
         foreach(String token : sentence) {
             String keyword = getKeyword(token);
@@ -44,54 +39,36 @@ public class NLPParser {
                 token = keyword;
             }
             
-            pattern += token;
+            pattern.append(token);
         }
         
-        return new Pair(pattern, keywords);
+        return new Pair(pattern.toString(), keywords);
     }
     
     //return tokenized string
     private List<String> tokenize(String s){
         
-        return new LinkedList();
+        List<String> tokens = String.split("[.,;:?!]");
+        return tokens;
     }
     
-    // Return keyword
-    private getKeyword(String token) {
+    // Load patterns from permanent memory
+    private HashMap<String, Integer> getPatternsJSON(){
         
-        if(sectors.contains(token))
-            return "*sector*";
+        JSONArray a = (JSONArray) parser.parse(new FileReader("patterns.json"));
+        Map map = new HashMap(a.size());
         
-        if(sectors.contains(token))
-            return "*company*";
-        
-        if(sectors.contains(token))
-            return "*timestamp*";
-        
-        return null;
-    }
-    
-    // Load data into memory
-    private Set<String> getJSON(String s){
-        
-        if(s.equals("sectors")){
+        foreach(Object o : a) {
             
-            return new HashSet();
-        } else if(s.equals("companies")){
+            JSONObject patternObj = (JSONObject) o;
             
-            return new HashSet();
-        } else if(s.equals("timestamps")){
+            String pattern = (String) patternObj.get("pattern");
+            String action = (Integer) patternObj.get("action");
             
-            return new HashSet();
-        } else if(s.equals("patterns")){
-            
-            return new HashSet();
+            map.add(pattern, action);
         }
-    }
-    
-    private Map<String, Integer> getPatternsJSON(){
         
-        return new HashMap();
+        return map;
     }
      
 }
