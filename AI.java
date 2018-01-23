@@ -3,7 +3,7 @@ import java.util.*;
 
 // Example of AI part that parses a string and returns information
 
-public class AI(){
+public class AI implements IAI {
     
     NLPParser parser;
     
@@ -12,20 +12,24 @@ public class AI(){
         parser = new NLPParser();
     }
     
-    // String parser
+    // Call action functions
     public String parse(String s){
         
-        Pair<Integer, List<String>> action =  parser.parse(s);
+       Pair<Integer, List<String>> action =  parser.parse(s);
         
-        if(action.getFirst() == 1) {
-            
-            makeFavourite(action.getSecond());
-            return function1(action.getSecond());  
-        } else if(action.getFirst() == 2) {
-            
-            makeFavourite(action.getSecond());
-            return function2(action.getSecond());  
+       switch(action.getSecond()){
+           case 1:
+                makeFavourite(action.getSecond());
+                return function1(action.getSecond());  
+           case 2:
+                makeFavourite(action.getSecond());
+                return function2(action.getSecond());  
         }
+    }
+    
+    // Analyse ( try to make it act constantly )
+    private Object analyse() {
+        return null;
     }
     
     // Actions
