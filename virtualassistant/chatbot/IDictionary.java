@@ -1,7 +1,7 @@
 package virtualassistant.chatbot;
 
 // Keywords store
-public interface IKeyword {
+public interface IDictionary {
   
   // Loads keywords from memory
   public void load();
