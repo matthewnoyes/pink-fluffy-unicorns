@@ -4,7 +4,7 @@ package virtualassistant.chatbot;
 public interface IDictionary {
   
   // Loads keywords from memory
-  public void load();
+  private void load();
   
   // Returns keyword of string s
   public String getKeyword(String s);
