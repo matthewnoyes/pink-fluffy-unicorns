@@ -19,10 +19,10 @@ public class AI implements IAI {
         
        switch(action.getSecond()){
            case 1:
-                makeFavourite(action.getSecond());
+                updateFavourites(action.getSecond());
                 return function1(action.getSecond());  
            case 2:
-                makeFavourite(action.getSecond());
+                updateFavourites(action.getSecond());
                 return function2(action.getSecond());  
         }
     }
@@ -46,7 +46,7 @@ public class AI implements IAI {
     }
     
     // Favourites
-    private void makeFavourite(List<String> list){
+    private void updateFavourites(List<String> list){
         
         foreach(String item : list) {
             // do something
