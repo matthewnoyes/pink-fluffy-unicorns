@@ -2,7 +2,7 @@ import java.util.*;
 
 public class NLPParser {
     
-    Keyword keywords;
+    Dictionary dictionary;
     Map<String, Integer> patterns; 
     // Pattern -> Action 
     //(action should be an int, say "1")
@@ -12,8 +12,8 @@ public class NLPParser {
     // constructor, load data from some JSON file
     public NLPParser() {
 
-        patterns = getPatternsJSON();
-        keyword = new Keyword();
+        patterns = loadPatterns();
+        dictionary = new Dictionary();
     }
     
     // return action and relevant data (keywords)
@@ -33,7 +33,7 @@ public class NLPParser {
         StringBuilder pattern = new StringBuilder();
         
         foreach(String token : sentence) {
-            String keyword = getKeyword(token);
+            String keyword = dictionary.getKeyword(token);
             if(keyword != null) {
                 keywords.add(token);
                 token = keyword;
@@ -53,7 +53,7 @@ public class NLPParser {
     }
     
     // Load patterns from permanent memory
-    private HashMap<String, Integer> getPatternsJSON(){
+    private HashMap<String, Integer> loadPatterns(){
         
         JSONArray a = (JSONArray) parser.parse(new FileReader("patterns.json"));
         Map map = new HashMap(a.size());
