@@ -3,17 +3,23 @@ package virtualassistant.data.stocks;
 //Manages all the stocks data
 public interface IStockData {
 
-  public String getTicker(String company);
+  //Company getters
+  public ICompany getCompanyForName(String company);
+  public ICompany getCompanyForTicker(String ticker);
 
-  public String getSector(String ticker);
-  public String[] getTickersInSector(String sector);
+  public String[] getSectors();
 
-  public double getCurrentPrice(String ticker);
-  public double getChange(String ticker);
-  public double getPercentageChange(String ticker);
+  public ICompany[] getCompaniesInSector(String sector);
 
+  //Sector info
   public double getCurrentSectorPrice(String sector);
   public double getSectorChange(String sector);
   public double getSectorPercentageChange(String sector);
+
+  public double sectorYearHigh();
+  public double sectorYearLow();
+  public double sectorYearAverageClose();
+
+  public double getSectorClosePriceOnDate(Date date);
 
 }
