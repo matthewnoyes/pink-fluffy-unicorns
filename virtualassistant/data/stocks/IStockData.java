@@ -1,5 +1,7 @@
 package virtualassistant.data.stocks;
 
+import java.util.Date;
+
 //Manages all the stocks data
 public interface IStockData {
 

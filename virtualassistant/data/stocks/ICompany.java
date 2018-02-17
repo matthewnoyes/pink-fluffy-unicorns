@@ -1,5 +1,7 @@
 package virtualassistant.data.stocks;
 
+import java.util.Date;
+
 //A store for each company
 public interface ICompany {
 
