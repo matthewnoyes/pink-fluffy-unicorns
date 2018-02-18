@@ -15,6 +15,9 @@ public class StockData implements IStockData {
 
   public StockData() throws IOException {
 
+    //Get the cookie and crumb for yahoo
+    Scrapper.setupYahoo();
+
     companies = new HashMap<String, Company[]>();
     companySectors = new HashMap<String, String>();
 
@@ -35,24 +38,11 @@ public class StockData implements IStockData {
 
       for (int i = 0; i < sectorCom.length; i++) {
         Company com = sectorCom[i];
-        System.out.println(com.getName());
+
         companySectors.put(com.getName(), pair.getKey());
       }
 
     }
-
-    Company[] test = Scrapper.allCompanies();
-
-    for (int i = 0; i < 101; i++) {
-      if (!companySectors.containsKey(test[i].getName())) {
-        System.out.println(test[i].getName());
-      }
-    }
-
-    System.out.println(j);
-
-    System.out.println(companies.size());
-    System.out.println(companySectors.size());
 
   }
 
