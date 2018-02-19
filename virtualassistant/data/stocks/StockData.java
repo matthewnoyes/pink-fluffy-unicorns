@@ -9,7 +9,13 @@ import java.io.IOException;
 public class StockData implements IStockData {
 
   private HashMap<String, Company[]> companies;
-
+  /*
+    Hashmap : Company ticker -> Company
+    Hashmap: Sector name -> List companies
+    Hashmap: Company name -> Company
+  /*
+  
+  
   //<Company name, Sector> -- for quicker accessing
   private HashMap<String, String> companySectors;
 
