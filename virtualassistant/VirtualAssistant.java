@@ -2,12 +2,6 @@ package virtualassistant;
 
 public class VirtualAssistant {
     
-    static final int GET_COMPANY_DATA = 0;
-    static final int GET_SECTOR_DATA = 1;
-    static final int COMPARE_COMPANIES = 2;
-    static final int COMPARE_SECTORS = 3;
-    static final int ALERT = 4;
-    
     private StockData stockdata;
     private Loader loader;
     private LearningAgent learningAgent;
@@ -41,23 +35,23 @@ public class VirtualAssistant {
     }
     
     // Decide action type based on action type decided by chatbot?
-    public static void decideAction(int actionType, List<String> parameters){
+    public static void decideAction(Action actionType, List<String> parameters){
         
         switch(actionType){
             
-            case GET_COMPANY_DATA:  getCompanyData(parameters);
+            case Action.GET_COMPANY_DATA:  getCompanyData(parameters);
                                     break;
                 
-            case GET_SECTOR_DATA:   getSectorData(parameters);
+            case Action.GET_SECTOR_DATA:   getSectorData(parameters);
                                     break;
                 
-            case COMPARE_COMPANIES: compareCompanies(parameters);
+            case Action.COMPARE_COMPANIES: compareCompanies(parameters);
                                     break;
                 
-            case COMPARE_SECTORS:   compareSectors(parameters);
+            case Action.COMPARE_SECTORS:   compareSectors(parameters);
                                     break;
                 
-            case ALERT:             alert(parameters);
+            case Action.ALERT:             alert(parameters);
                                     break;
             
             default:                System.out.println("Undefined action!");
@@ -91,4 +85,12 @@ public class VirtualAssistant {
     }
     
     
+}
+
+public enum Action {
+    GET_COMPANY_DATA,
+    GET_SECTOR_DATA,
+    COMPARE_COMPANIES,
+    COMPARE_SECTORS,
+    ALERT
 }
