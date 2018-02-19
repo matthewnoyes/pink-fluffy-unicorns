@@ -1,5 +1,7 @@
 package virtualassistant.ai;
 
+import java.util.List;
+
 //The AI section
 public interface ILearningAgent {
 
