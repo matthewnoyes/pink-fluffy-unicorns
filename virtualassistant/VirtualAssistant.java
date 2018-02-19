@@ -63,7 +63,12 @@ public class VirtualAssistant {
         
     }
     
-    // Example action
+    /* Example action
+    *
+    *   For this action, the first parameter should always be the company name, followed by
+    *   type of data requested.
+    */
+    
     public static void getCompanyData(List<String> parameters){
         
         Company company = stockData.companyForName(parameters.remove(0));
