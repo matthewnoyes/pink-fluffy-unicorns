@@ -1,5 +1,3 @@
-package virtualassistant.gui;
-
 import java.util.*;
 
 import javafx.application.Application;
@@ -164,7 +162,7 @@ private HBox makeButtons() {
 				HBox.setHgrow(filler1, Priority.ALWAYS);
 
 				StackPane button = new StackPane();
-				Image image = new Image(getClass().getResourceAsStream("Images/microphone.png"));
+				Image image = new Image(getClass().getResourceAsStream("images/microphone.png"));
 				ImageView imageView = new ImageView(image);
 				imageView.setPreserveRatio(false);
 				imageView.setFitHeight(45);
@@ -201,7 +199,7 @@ private void init(Stage window) {
 												e.consume(); // stop window closing automatically
 												closeProgram();
 								});
-  
+
         News[] amazingnews = new News[3];
 				amazingnews[0] = new News("Title 1");
 				amazingnews[1] = new News("Title 2");
