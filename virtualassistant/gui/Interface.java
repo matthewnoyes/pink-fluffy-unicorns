@@ -225,46 +225,6 @@ private void closeProgram() {
 }
 
 }
-class Message {
-
-protected String message;
-
-public Message(String message) {
-				this.message = message;
-}
-
-public String getMessage() {
-				return message;
-}
-
-public News[] getNews() {
-				return null;
-}
-
-}
-
-class Query extends Message {
-
-public Query(String question) {
-				super(question);
-}
-
-}
-
-class Response extends Message {
-
-private News[] news;
-
-public Response(String response, News[] news) {
-				super(response);
-				this.news = news;
-}
-
-public News[] getNews() {
-				return news;
-}
-
-}
 
 class News {
 
