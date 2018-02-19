@@ -1,0 +1,25 @@
+{
+    "companies": 
+        [
+            "comp1" : 
+                [
+                    "ticker" : "IMT", 
+                    "sector" : "Finance",
+                    ...
+                ],
+                
+            "comp2" : 
+                [
+                    "ticker" : "IMT", 
+                    "sector" : "Finance",
+                    ...
+                ],
+        ],
+        
+    "sectors": 
+        {
+            "Finance" : [ "Comp1", "Comp2" ],
+            "Construction" : [ "Comp3", "Comp4" ],
+            ...
+        },
+}

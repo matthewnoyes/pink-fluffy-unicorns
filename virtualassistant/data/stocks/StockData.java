@@ -1,60 +1,94 @@
-import java.util.*;
+package virtualassistant.data.stocks;
 
-public class StockData {
+import java.util.Date;
+import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
+import java.io.IOException;
 
-    public Map<String, Company> companies;
-    public Map<String, Set<String>> sectors;
-    
-    public StockData(Map<String, Company> companies, Map<String,Set<String>> sectors){
-        this.companies = companies;
-        this.sectors = sectors;
-    }
-    
-    //Company getters
-    public ICompany getCompanyForName(String company){
-        return null;
-    }
-    
-    public ICompany getCompanyForTicker(String ticker){
-        return null;
-    }
+public class StockData implements IStockData {
 
-    public String[] getSectors(){
-        return null;
-    }
+  private HashMap<String, Company[]> companies;
+  /*
+    Hashmap : Company ticker -> Company
+    Hashmap: Sector name -> List companies
+    Hashmap: Company name -> Company
+  /*
+  
+  
+  //<Company name, Sector> -- for quicker accessing
+  private HashMap<String, String> companySectors;
 
-    public ICompany[] getCompaniesInSector(String sector){
-        return null;
-    }
+  public StockData() throws IOException {
 
-    //Sector info
-    public double getCurrentSectorPrice(String sector){
-        return 0.0;
-    }
-    
-    public double getSectorChange(String sector){
-        return 0.0;
-    }
-    
-    public double getSectorPercentageChange(String sector){
-        return 0.0;
-    }
+    //Get the cookie and crumb for yahoo
+    Scrapper.setupYahoo();
 
-    public double sectorYearHigh(){
-        return 0.0;
-    }
-    
-    public double sectorYearLow(){
-        return 0.0;
-    }
-    
-    public double sectorYearAverageClose(){
-        return 0.0;
+    companies = new HashMap<String, Company[]>();
+    companySectors = new HashMap<String, String>();
+
+    HashMap<String, Integer> sectors = Scrapper.getSectors();
+
+    Iterator<Map.Entry<String, Integer>> it = sectors.entrySet().iterator();
+
+    int j = 0;
+
+    while (it.hasNext()) {
+      Map.Entry<String, Integer> pair = (Map.Entry<String, Integer>)it.next();
+
+      Company[] sectorCom = Scrapper.getSector(pair.getKey(), pair.getValue());
+
+      j += sectorCom.length;
+
+      companies.put(pair.getKey(), sectorCom);
+
+      for (int i = 0; i < sectorCom.length; i++) {
+        Company com = sectorCom[i];
+
+        companySectors.put(com.getName(), pair.getKey());
+      }
+
     }
 
-    public double getSectorClosePriceOnDate(Date date){
-        return 0.0;
-    }
- 
+  }
+
+  public ICompany getCompanyForName(String company) {
+    return null;
+  }
+  public ICompany getCompanyForTicker(String ticker) {
+    return null;
+  }
+
+  public String[] getSectors() {
+    return null;
+  }
+
+  public ICompany[] getCompaniesInSector(String sector) {
+    return null;
+  }
+
+  public double getCurrentSectorPrice(String sector) {
+    return 0.0;
+  }
+  public double getSectorChange(String sector) {
+    return 0.0;
+  }
+  public double getSectorPercentageChange(String sector) {
+    return 0.0;
+  }
+
+  public double sectorYearHigh() {
+    return 0.0;
+  }
+  public double sectorYearLow() {
+    return 0.0;
+  }
+  public double sectorYearAverageClose() {
+    return 0.0;
+  }
+
+  public double getSectorClosePriceOnDate(Date date) {
+    return 0.0;
+  }
 
 }
