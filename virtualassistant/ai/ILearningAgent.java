@@ -1,6 +1,7 @@
 package virtualassistant.ai;
 
 import java.util.List;
+import java.util.Set;
 
 //The AI section
 public interface ILearningAgent {
@@ -9,7 +10,7 @@ public interface ILearningAgent {
   public void analyzeInput(List<String> tokenized, List<String> patternized);
 
   //?
-  public String[] getFavourites();
+  public Set<String> getFavourites();
   //Lets the AI know the user has bookmarked the stock
   public void bookmarkStock(String ticker);
 

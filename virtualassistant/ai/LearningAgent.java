@@ -1,17 +1,22 @@
 package virtualassistant.ai;
 
 import java.util.List;
+import java.util.Set;
 
 public class LearningAgent implements ILearningAgent {
 
-  private Favourites favourites;
+  private Favourites<String, Integer> favourites;
+
+  public LearningAgent() {
+    favourites = new Favourites<String, Integer>();
+  }
 
   public void analyzeInput(List<String> tokenized, List<String> patternized) {
 
   }
 
-  public String[] getFavourites() {
-    return null;
+  public Set<String> getFavourites() {
+    return favourites.keySet();
   }
 
   public void bookmarkStock(String ticker) {
@@ -22,11 +27,10 @@ public class LearningAgent implements ILearningAgent {
 
     String[] queries = new String[count];
 
-    favourites.startIterating();
+    Set<String> tickers = favourites.keySet();
 
-    for (int i = 0; i < count; i++) {
-      String ticker = favourites.nextIterate();
-
+    //Note: Goes backwards
+    for (String ticker : tickers) {
       //Search for something interesting
 
     }
@@ -44,16 +48,15 @@ public class LearningAgent implements ILearningAgent {
   }
 
   public static void main(String[] args) {
-    Favourites test = new Favourites();
-    String[] values = new String[]{"a", "b", "c", "d", "a", "e", "f"};
+    Favourites<String, Integer> test = new Favourites<String, Integer>();
+    String[] values = new String[]{"a", "b", "c", "d", "a", "e", "f", "g", "g", "f"};
     for (int i = 0; i < values.length; i++) {
-      test.addToFavourites(values[i]);
+      test.addToBegining(values[i], 1);
       //Search for something interesting
 
     }
-    test.startIterating();
-    for (int i = 0; i < 6; i++) {
-      String ticker = test.nextIterate();
+    Set<String> tickers = test.keySet();
+    for (String ticker : tickers) {
       System.out.println(ticker);
       //Search for something interesting
 
