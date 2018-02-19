@@ -1,0 +1,128 @@
+#root {
+  -fx-background: #26262E;
+}
+
+#chatbot_container {
+  -fx-background-color: transparent;
+}
+
+#round_button {
+  -fx-background-radius: 5em;
+  -fx-min-width: 60px;
+  -fx-min-height: 60px;
+  -fx-max-width: 60px;
+  -fx-max-height: 60px;
+}
+
+#round_button: hover {
+  -fx-opacity: 0.7;
+}
+
+.listening {
+  -fx-background-color: #FF4339;
+}
+
+.not_listening {
+  -fx-background-color: #FFFFFF;
+}
+
+
+#update_time {
+  -fx-min-height: 40px;
+  -fx-padding: 20 0 0 60;
+  -fx-text-fill: white;
+  -fx-font-size: 12pt;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+#update_time {
+  -fx-min-height: 40px;
+  -fx-padding: 20 0 0 60;
+  -fx-text-fill: white;
+  -fx-font-size: 12pt;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+#help_button {
+  -fx-background-radius: 5em;
+  -fx-min-width: 20px;
+  -fx-min-height: 20px;
+  -fx-max-width: 20px;
+  -fx-max-height: 20px;
+}
+
+#query_send {
+  -fx-background-color: #303344;
+}
+
+#query_recieve {
+  -fx-font-size: 15pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: white;
+  -fx-background-color: #1E1D25;
+}
+
+#news_heading {
+  -fx-font-size: 15pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: #605E71;
+}
+
+.chat_bubble {
+  -fx-background-radius: 5px;
+  -fx-font-size: 15pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: white;
+  -fx-text-align: center;
+  -fx-padding: 20px;
+  -fx-position: absolute;
+}
+
+#text_field {
+  -fx-min-height: 40px;
+  -fx-font-size: 13pt;
+  -fx-font-family: "Segoe UI Semibold";
+}
+#text_field:focused {
+    -fx-background-color: #a9a9a9 , white , white;
+}
+
+#send_query_button {
+  -fx-background-color: #676778;
+  -fx-min-height: 40px;
+  -fx-text-fill: white;
+  -fx-font-size: 12pt;
+  -fx-font-family: "Segoe UI Semibold";
+}
+#send_query_button: hover {
+  -fx-opacity: 0.7;
+}
+#send_query_button: pressed {
+  -fx-background-color: #101022;
+  -fx-min-height: 40px;
+
+}
+
+.scroll-pane {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical {
+  -fx-background-color: transparent;
+}
+
+.increment-button, .decrement-button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb {
+  -fx-background-color: white;
+  -fx-background-radius: 5em;
+}
