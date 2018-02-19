@@ -6,6 +6,7 @@ public class VirtualAssistant {
     static final int GET_SECTOR_DATA = 1;
     static final int COMPARE_COMPANIES = 2;
     static final int COMPARE_SECTORS = 3;
+    static final int ALERT = 4;
     
     private StockData stockdata;
     private Loader loader;
@@ -56,6 +57,9 @@ public class VirtualAssistant {
             case COMPARE_SECTORS:   compareSectors(parameters);
                                     break;
                 
+            case ALERT:             alert(parameters);
+                                    break;
+            
             default:                System.out.println("Undefined action!");
                                     break;
         }
