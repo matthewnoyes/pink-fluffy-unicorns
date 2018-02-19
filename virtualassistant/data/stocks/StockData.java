@@ -5,30 +5,42 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
+import java.util.Set;
 
 public class StockData implements IStockData {
 
-  private HashMap<String, Company[]> companies;
-  /*
-    Hashmap : Company ticker -> Company
-    Hashmap: Sector name -> List companies
-    Hashmap: Company name -> Company
-  /*
-  
-  
-  //<Company name, Sector> -- for quicker accessing
-  private HashMap<String, String> companySectors;
+  //<Ticker, Company class>
+  private HashMap<String, Company> tickerToCompany;
+
+  //<Sector, Set of tickers>
+  private HashMap<String, Set<Company>> companiesInSector;
+
+  //<Company Name, Ticker>
+  private HashMap<String, Company> nameToCompany;
 
   public StockData() throws IOException {
 
     //Get the cookie and crumb for yahoo
     Scrapper.setupYahoo();
 
-    companies = new HashMap<String, Company[]>();
-    companySectors = new HashMap<String, String>();
+    tickerToCompany = new HashMap<String, Company>();
+    companiesInSector = new HashMap<String, Set<Company>>();
+    nameToCompany = new HashMap<String, Company>();
 
     HashMap<String, Integer> sectors = Scrapper.getSectors();
 
+    for (Map.Entry<String, Integer> sector : sectors.entrySet()) {
+
+      Set<Company> comInCurrSector = Scrapper.getSector(sector.getKey(), sector.getValue());
+
+      companiesInSector.put(sector.getKey(), comInCurrSector);
+
+      for (Company com : comInCurrSector) {
+        tickerToCompany.put(com.getTicker(), com);
+        nameToCompany.put(com.getName(), com);
+      }
+    }
+    /*
     Iterator<Map.Entry<String, Integer>> it = sectors.entrySet().iterator();
 
     int j = 0;
@@ -48,7 +60,7 @@ public class StockData implements IStockData {
         companySectors.put(com.getName(), pair.getKey());
       }
 
-    }
+    }*/
 
   }
 

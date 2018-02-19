@@ -13,7 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Scrapper {
 
@@ -70,8 +71,8 @@ public class Scrapper {
    * Gets a list of all the companies in the given sector.
    *
    */
-  public static Company[] getSector(String sectorName, int value) throws IOException {
-    ArrayList<Company> companies = new ArrayList<Company>();
+  public static Set<Company> getSector(String sectorName, int value) throws IOException {
+    HashSet<Company> companies = new HashSet<Company>();
 
     //Get the page for the sector
     Document doc = Jsoup.connect(lse1 + String.format("%04d", value) + lse2 + "1").get();
@@ -80,7 +81,7 @@ public class Scrapper {
 
     //If no companies in the sector return.
     if (table.size() == 0) {
-      return new Company[0];
+      return companies;
     }
 
 
@@ -102,11 +103,7 @@ public class Scrapper {
       companies.add(company);
     }
 
-    //Convert to array
-    Company[] result = new Company[companies.size()];
-    companies.toArray(result);
-
-    return result;
+    return companies;
   }
 
 
