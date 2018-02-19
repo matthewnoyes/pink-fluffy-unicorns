@@ -1,6 +1,7 @@
 package virtualassistant.data.stocks;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.Set;
 
 //Manages all the stocks data
 public interface IStockData {
@@ -9,9 +10,9 @@ public interface IStockData {
   public ICompany getCompanyForName(String company);
   public ICompany getCompanyForTicker(String ticker);
 
-  public String[] getSectors();
+  public Set<String> getSectors();
 
-  public ICompany[] getCompaniesInSector(String sector);
+  public Set<Company> getCompaniesInSector(String sector);
 
   //Sector info
   public double getCurrentSectorPrice(String sector);
@@ -22,6 +23,6 @@ public interface IStockData {
   public double sectorYearLow();
   public double sectorYearAverageClose();
 
-  public double getSectorClosePriceOnDate(Date date);
+  public double getSectorClosePriceOnDate(Calendar date);
 
 }

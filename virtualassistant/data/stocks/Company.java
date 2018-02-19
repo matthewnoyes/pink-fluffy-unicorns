@@ -1,6 +1,6 @@
 package virtualassistant.data.stocks;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Company implements ICompany {
 
@@ -66,6 +66,22 @@ public class Company implements ICompany {
     return currentPercentChange;
   }
 
+  public double getOpen() {
+    return getOpenPriceOnDate(Calendar.getInstance());
+  }
+
+  public double getHigh() {
+    return getHighPriceOnDate(Calendar.getInstance());
+  }
+
+  public double getLow() {
+    return getLowPriceOnDate(Calendar.getInstance());
+  }
+
+  public double getVolume() {
+    return getVolumeOnDate(Calendar.getInstance());
+  }
+
   //----------------- Past data ----------------
 
   public double yearHigh() {
@@ -80,7 +96,27 @@ public class Company implements ICompany {
     return averageClose;
   }
 
-  public double getClosePriceOnDate(Date date) {
+  public double yearAverageVolume() {
+    return 0.0;
+  }
+
+  public double getClosePriceOnDate(Calendar day) {
+    return 0.0;
+  }
+
+  public double getOpenPriceOnDate(Calendar day) {
+    return 0.0;
+  }
+
+  public double getHighPriceOnDate(Calendar day) {
+    return 0.0;
+  }
+
+  public double getLowPriceOnDate(Calendar day) {
+    return 0.0;
+  }
+
+  public double getVolumeOnDate(Calendar day) {
     return 0.0;
   }
 

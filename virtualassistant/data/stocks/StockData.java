@@ -1,6 +1,6 @@
 package virtualassistant.data.stocks;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,11 +12,11 @@ public class StockData implements IStockData {
   //<Ticker, Company class>
   private HashMap<String, Company> tickerToCompany;
 
-  //<Sector, Set of tickers>
-  private HashMap<String, Set<Company>> companiesInSector;
-
   //<Company Name, Ticker>
   private HashMap<String, Company> nameToCompany;
+
+  //<Sector, Set of tickers>
+  private HashMap<String, Set<Company>> companiesInSector;
 
   public StockData() throws IOException {
 
@@ -40,43 +40,22 @@ public class StockData implements IStockData {
         nameToCompany.put(com.getName(), com);
       }
     }
-    /*
-    Iterator<Map.Entry<String, Integer>> it = sectors.entrySet().iterator();
-
-    int j = 0;
-
-    while (it.hasNext()) {
-      Map.Entry<String, Integer> pair = (Map.Entry<String, Integer>)it.next();
-
-      Company[] sectorCom = Scrapper.getSector(pair.getKey(), pair.getValue());
-
-      j += sectorCom.length;
-
-      companies.put(pair.getKey(), sectorCom);
-
-      for (int i = 0; i < sectorCom.length; i++) {
-        Company com = sectorCom[i];
-
-        companySectors.put(com.getName(), pair.getKey());
-      }
-
-    }*/
 
   }
 
   public ICompany getCompanyForName(String company) {
-    return null;
+    return nameToCompany.get(company);
   }
   public ICompany getCompanyForTicker(String ticker) {
-    return null;
+    return tickerToCompany.get(ticker);
   }
 
-  public String[] getSectors() {
-    return null;
+  public Set<String> getSectors() {
+    return companiesInSector.keySet();
   }
 
-  public ICompany[] getCompaniesInSector(String sector) {
-    return null;
+  public Set<Company> getCompaniesInSector(String sector) {
+    return companiesInSector.get(sector);
   }
 
   public double getCurrentSectorPrice(String sector) {
@@ -99,7 +78,7 @@ public class StockData implements IStockData {
     return 0.0;
   }
 
-  public double getSectorClosePriceOnDate(Date date) {
+  public double getSectorClosePriceOnDate(Calendar date) {
     return 0.0;
   }
 

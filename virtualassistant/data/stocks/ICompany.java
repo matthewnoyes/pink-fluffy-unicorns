@@ -1,6 +1,6 @@
 package virtualassistant.data.stocks;
 
-import java.util.Date;
+import java.util.Calendar;
 
 //A store for each company
 public interface ICompany {
@@ -16,12 +16,22 @@ public interface ICompany {
   public double getChange();
   public double getPercentageChange();
 
+  public double getOpen();
+  public double getHigh();
+  public double getLow();
+  public double getVolume();
+
   //Data from last year
   public double yearHigh();
   public double yearLow();
   public double yearAverageClose();
+  public double yearAverageVolume();
 
-  public double getClosePriceOnDate(Date date);
+  public double getClosePriceOnDate(Calendar day);
+  public double getOpenPriceOnDate(Calendar day);
+  public double getHighPriceOnDate(Calendar day);
+  public double getLowPriceOnDate(Calendar day);
+  public double getVolumeOnDate(Calendar day);
 
 
 }
