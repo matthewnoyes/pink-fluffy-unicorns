@@ -3,6 +3,7 @@ package virtualassistant;
 public class VirtualAssistant {
 
     private StockData stockdata;
+    private SystemStatus systemStatus;
     private Loader loader;
     private LearningAgent learningAgent;
     private NewsProcessor newsProcessor;
@@ -15,6 +16,7 @@ public class VirtualAssistant {
         loader = new Loader();
         stockData = loader.readStocks();
         learningAgent = loader.readLearningAgent();
+        systemStatus = loader.readSystemStatus();
         newsProcessor = new NewsProcessor();
         chatbot = new Chatbot();
 
