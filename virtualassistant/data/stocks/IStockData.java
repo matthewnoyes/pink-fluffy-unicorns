@@ -11,6 +11,8 @@ public interface IStockData {
   public ICompany getCompanyForTicker(String ticker);
 
   public Set<String> getSectors();
+  public Set<String> getCompanyNames();
+  public Set<String> getCompanyTickers();
 
   public Set<Company> getCompaniesInSector(String sector);
 
