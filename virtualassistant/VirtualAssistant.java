@@ -63,10 +63,7 @@ public class VirtualAssistant {
 
     }
 
-    /* Example action
-    *
-    *   For this action, the first parameter should always be the company name, followed by
-    *   type of data requested.
+    /* Company data
     */
 
     public static void getCompanyData(List<String> parameters){
@@ -80,14 +77,88 @@ public class VirtualAssistant {
                 case "open":
                     chatbot.output(company.open);
                     break;
+                
+                case "high":
+                    chatbot.output(company.high);
+                    break;
+                
+                case "low":
+                    chatbot.output(company.low);
+                    break;
+                
+                case "vol":
+                    chatbot.output(company.vol);
+                    break;
 
-                case "close":
-                  chatbot.output(company.close);
+                case "pe":
+                  chatbot.output(company.pe);
                   break;
+                                          
+                case "mktCap":
+                    chatbot.output(company.mktCap);
+                    break;
+                
+                case "yearHigh":
+                    chatbot.output(company.yearHigh);
+                    break;
+                
+                case "yearLow":
+                    chatbot.output(company.yearLow);
+                    break;
+
+                case "avgVol":
+                    chatbot.output(company.avgVol);
+                    break;                
+
+                case "yield":
+                    chatbot.output(company.yield);
+                    break;
+
             }
         }
     }
+    
+    /* Sector data
+    */
 
+    public static void getSectorData(List<String> parameters){
+
+        String sector = parameters.remove(0);
+
+        for(String str : parameters) {
+
+            switch(str) {
+
+                case "price":
+                    chatbot.output(stockData.sectorPrice(sector));
+                    break;
+                
+                case "change":
+                    chatbot.output(stockData.sectorChange(sector));
+                    break;
+                    
+                case "percentageChange":
+                    chatbot.output(stockData.sectorPercentageChange(sector));
+                    break;
+                    
+                case "yearHigh":
+                    chatbot.output(stockData.sectorYearHigh(sector));
+                    break;
+                    
+                case "yearLow":
+                    chatbot.output(stockData.sectorYearLow(sector));
+                    break;
+                    
+                case "yearAverageClose":
+                    chatbot.output(stockData.sectorYearAverageClose(sector));
+                    break;
+                    
+                case "closePriceOn":
+                    // ??? chatbot.output(stockData.sectorYearLow(sector));
+                    break;
+            }
+        }
+    }
 
 }
 
