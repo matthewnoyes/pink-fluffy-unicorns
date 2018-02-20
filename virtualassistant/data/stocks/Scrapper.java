@@ -18,13 +18,18 @@ import java.util.HashSet;
 
 public class Scrapper {
 
+  //Bits of lse website
   private static String lse1 = "http://www.londonstockexchange.com/exchange/prices-and-markets/stocks/indices/constituents-indices.html?index=UKX&industrySector=";
   private static String lse2 = "&page=";
 
+  //Bits of yahoo website
   private static String yahoo1 = "https://query1.finance.yahoo.com/v7/finance/download/";
   private static String yahoo2 = "?period1=";
   private static String yahoo3 = "&period2=";
   private static String yahoo4 = "&interval=1d&events=history&crumb=";
+
+  private static String crumb;
+  private static String cookie;
 
   /*
    *TEST
@@ -124,27 +129,12 @@ public class Scrapper {
     //Iterate through all sectors
     for (int i = 1; i < selector.children().size(); i++) {
       //Add the sector to the map
-      sectors.put(selector.child(i).html(), Integer.parseInt(selector.child(i).attr("value")));
+      sectors.put(Jsoup.parse(selector.child(i).html()).text(), Integer.parseInt(selector.child(i).attr("value")));
     }
 
     return sectors;
 
   }
-
-  /*
-   *TEST
-   */
-  public static void histData() throws ParseException {
-    String dateString = "27 01 2017 12:00:00";
-    DateFormat dateFormat = new SimpleDateFormat("dd mm yyyy hh:mm:ss");
-    Date date = dateFormat.parse(dateString);
-    long unixTime = (long)date.getTime()/1000;
-    System.out.println(unixTime);
-    String loc = "https://query1.finance.yahoo.com/v7/finance/download/SKY.L?period1=1485388800&period2=1516924800&interval=1d&events=history&crumb=oGI5lMzxt0P";
-  }
-
-  private static String crumb;
-  private static String cookie;
 
 
   public static void setupYahoo() throws IOException {
@@ -166,6 +156,7 @@ public class Scrapper {
 	  int q1 = page.html().indexOf("\"", cl + 1);
 	  int q2 = page.html().indexOf("\"", q1 + 1);
     crumb = page.html().substring(q1+1,q2);
+    crumb = Jsoup.parse(crumb).text();
 
     //Store corresponding cookie
     cookie = testSend.cookie("B");
@@ -201,42 +192,51 @@ public class Scrapper {
     Document doc = Jsoup.connect(yahoo1 + ticker + yahoo2 + pastDay + yahoo3 + currentDay + yahoo4 + crumb).userAgent("Mozilla").cookie("B", cookie).get();
 
     //Not working properly
-    String[] rawData = doc.html().split("[\n,]");
+    String[] rawData = doc.html().split("[ ,]");
     int currRow = 0;
 
     //Put the data into the array
     Double[][] data = new Double[6][366];
-    for (int i = 10; i < rawData.length-2; i += 6) {
+    for (int i = 16; i < rawData.length-5; i += 7) {
+
+      //Date
+      //System.out.println(rawData[i]);
 
       try {
-        data[0][currRow] = Double.parseDouble(rawData[i]);
+        data[0][currRow] = Double.parseDouble(rawData[i+1]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
         data[0][currRow] = -1.0;
       }
       try {
-        data[1][currRow] = Double.parseDouble(rawData[i+1]);
+        data[1][currRow] = Double.parseDouble(rawData[i+2]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
         data[1][currRow] = -1.0;
       }
       try {
-        data[2][currRow] = Double.parseDouble(rawData[i+2]);
+        data[2][currRow] = Double.parseDouble(rawData[i+3]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
         data[2][currRow] = -1.0;
       }
       try {
-        data[3][currRow] = Double.parseDouble(rawData[i+3]);
+        data[3][currRow] = Double.parseDouble(rawData[i+4]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
         data[3][currRow] = -1.0;
       }
       try {
-        data[4][currRow] = Double.parseDouble(rawData[i+4]);
+        data[4][currRow] = Double.parseDouble(rawData[i+5]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
         data[4][currRow] = -1.0;
+      }
+      try {
+        data[5][currRow] = Double.parseDouble(rawData[i+6]);
+      } catch (NumberFormatException e) {
+        //Mark that there is no data for this day
+        data[5][currRow] = -1.0;
       }
       // data[1][currRow] = Double.parseDouble(rawData[i+1]);
       // data[2][currRow] = Double.parseDouble(rawData[i+2]);
@@ -251,6 +251,7 @@ public class Scrapper {
 
     return data;
   }
+
 
   public static void main(String[] args) throws IOException, ParseException {
     //getPastData("BT-A");
