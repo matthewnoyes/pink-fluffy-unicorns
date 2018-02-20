@@ -19,11 +19,12 @@ public class VirtualAssistant {
         systemStatus = loader.readSystemStatus();
         newsProcessor = new NewsProcessor();
         chatbot = new Chatbot();
-
+        
+        int timepassed = 0;
         //Try to update data.
 
         for(;;){
-            //Wait a bit
+            //Wait 10 seconds
             TimeUnit.SECONDS.sleep(10);
 
             // Try to update data, if working, fire learning agent
@@ -32,7 +33,15 @@ public class VirtualAssistant {
                 learningAgent.searchForStockEvent();
                 learningAgent.searchForNewsEvent();
             }
-
+            
+            // Autosave every 5 min?
+            timePassed += 10;
+            if(timePassed >= 300) {
+                
+                // Autosave smth
+                timePassed = 0;
+            }
+      
         }
     }
 
