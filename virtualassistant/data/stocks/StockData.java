@@ -54,6 +54,14 @@ public class StockData implements IStockData {
     return companiesInSector.keySet();
   }
 
+  public Set<String> getCompanyNames() {
+    return nameToCompany.keySet();
+  }
+
+  public Set<String> getCompanyTickers() {
+    return tickerToCompany.keySet();
+  }
+
   public Set<Company> getCompaniesInSector(String sector) {
     return companiesInSector.get(sector);
   }
