@@ -18,10 +18,12 @@ public static final int HEIGHT = 700;
 
 Stage window;
 boolean listening = false;
+boolean onHelp = false;
 ArrayList<Message> queries;
 ArrayList<String> helptext;
 
 VBox root;
+ScrollPane scroll;
 VBox chatbot;
 HBox textInput;
 HBox buttons;
@@ -33,15 +35,19 @@ public void changeUpdateTime(String time) {
 }
 
 public void startListening() {
-
+				System.out.println("Start listening");
 }
 
 public void stopListening() {
 				String query = "";
+				System.out.println("Stop listening");
 				// makeQuery(query);
 }
 
 public void makeQuery(String text) {
+				if(onHelp) {
+					closeHelp();
+				}
 				Message query = new Query(text);
 				queries.add(query);
 				addMessage(query);
@@ -53,7 +59,8 @@ public void makeQuery(String text) {
 }
 
 public void openHelp() {
-				chatbot.getChildren().removeAll();
+				onHelp = true;
+				chatbot.getChildren().clear();
 
 				Label helpTitle = new Label("Some questions you can ask:");
 				helpTitle.setPrefWidth(WIDTH);
@@ -62,7 +69,7 @@ public void openHelp() {
 				chatbot.getChildren().add(helpTitle);
 
 				for(int i = 0; i < 4 && i < helptext.size(); i++) {
-								Label text_label = new Label(helptext.get(i));
+								Label text_label = new Label('"'+helptext.get(i)+'"');
 								text_label.setPrefWidth(WIDTH);
 								text_label.setAlignment(Pos.CENTER);
 								text_label.setId("help_text");
@@ -77,7 +84,8 @@ public void openHelp() {
 }
 
 public void closeHelp() {
-				chatbot.getChildren().removeAll();
+				onHelp = false;
+				chatbot.getChildren().clear();
 				for(int i = 0; i < queries.size(); i++) {
 								addMessage(queries.get(i));
 				}
@@ -95,10 +103,13 @@ public void start(Stage primaryStage) throws Exception {
 
 				// chatbot container in scrollable pane, scrolled to bottom
 				makeChatbotContainer();
-				ScrollPane scroll = new ScrollPane(chatbot);
+				scroll = new ScrollPane(chatbot);
 				scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 				scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 				scroll.setFitToWidth(true);
+
+				Region filler = new Region();
+				VBox.setVgrow(filler, Priority.ALWAYS);
 
 				// text input area for user to input queries
 				makeTextInput();
@@ -106,7 +117,7 @@ public void start(Stage primaryStage) throws Exception {
 				// control buttons
 				makeButtons();
 
-				root.getChildren().addAll(scroll, textInput, buttons);
+				root.getChildren().addAll(scroll, filler, textInput, buttons);
 
 				Scene scene = new Scene(root, WIDTH, HEIGHT);
 				scene.getStylesheets().add("styles/stylesheet.css");
@@ -188,7 +199,7 @@ private void makeChatbotContainer() {
 				// container for the chatbot i.e the messages and replies
 				chatbot = new VBox(20);
 				chatbot.setId("chatbot_container");
-				chatbot.setPrefHeight(HEIGHT);
+				//chatbot.setPrefHeight(HEIGHT);
 				chatbot.setPrefWidth(WIDTH);
 				chatbot.setAlignment(Pos.TOP_CENTER);
 }
@@ -215,14 +226,22 @@ private void makeTextInput() {
 
 private void makeButtons() {
 				buttons = new HBox(5);
-				buttons.setAlignment(Pos.BOTTOM_RIGHT);
+				//buttons.setAlignment(Pos.BOTTOM_RIGHT);
 
+				StackPane helpContain = new StackPane();
 				Button helpButton = new Button();
 				helpButton.setText("?");
 				helpButton.setId("help_button");
-
-				Region filler1 = new Region();
-				HBox.setHgrow(filler1, Priority.ALWAYS);
+				helpButton.setOnAction(e->{
+					if(onHelp) {
+						closeHelp();
+					} else {
+						openHelp();
+					}
+				});
+				helpContain.getChildren().add(helpButton);
+				helpContain.setAlignment(Pos.BOTTOM_LEFT);
+				helpContain.setPrefWidth(Math.floor(WIDTH/2));
 
 				StackPane button = new StackPane();
 				Image image = new Image(getClass().getResourceAsStream("images/microphone.png"));
@@ -235,7 +254,6 @@ private void makeButtons() {
 				roundButton.setId("round_button");
 				roundButton.getStyleClass().add("not_listening");
 				roundButton.setOnAction(e->{
-												queries.add(new Query("..."));
 												if(!listening) {
 												        listening = true;
 												        roundButton.getStyleClass().remove("not_listening");
@@ -249,11 +267,17 @@ private void makeButtons() {
 												}
 								});
 				button.getChildren().add(roundButton);
+				button.setPrefWidth(Math.floor(WIDTH/4));
 
+				StackPane updateContain = new StackPane();
 				update_time = new Label("Last updated: ...");
 				update_time.setId("update_time");
+				updateContain.getChildren().add(update_time);
+				updateContain.setAlignment(Pos.BOTTOM_RIGHT);
+				updateContain.setPrefWidth(Math.floor(WIDTH/2));
 
-				buttons.getChildren().addAll(helpButton, filler1, button, update_time);
+
+				buttons.getChildren().addAll(helpContain, button, updateContain);
 }
 
 private void init(Stage window) {
@@ -275,7 +299,7 @@ private void init(Stage window) {
 				news[2] = new News("Stocks rise drastically");
 				news[3] = new News("Barclays buys childhood dog");
 
-				queries.add(new Response("This is what I found", news));
+				queries.add(new Response("This is what I found:", news));
 
 
 				helptext = new ArrayList<String>();
