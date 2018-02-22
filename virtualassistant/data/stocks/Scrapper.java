@@ -31,47 +31,6 @@ public class Scrapper {
   private static String crumb;
   private static String cookie;
 
-  /*
-   *TEST
-   */
-  public static Company[] allCompanies() throws IOException {
-
-    //100 companies in FTSE100  -- X actually 101 constituents
-    Company[] companies = new Company[101];
-    int position = 0;
-
-    for (int page = 1; page < 7; page++) {
-
-      Document doc = Jsoup.connect(lse1+lse2+page).get();
-
-      Elements table = doc.select("[summary=\"Companies and Prices\"]");
-
-
-      Elements tbody = table.first().select("tbody");
-
-      for (Element row : tbody.first().select("tr")) {
-
-        Elements boxes = row.select("td");
-
-        Company company = new Company(boxes.get(0).html(), boxes.get(1).child(0).html(), "");
-        //System.out.println(boxes.get(3).html().replace(",", ""));
-
-        company.updatePrice(Double.parseDouble(boxes.get(3).html().replace(",", "")));
-        company.updateChange(Double.parseDouble(boxes.get(4).html().split("<")[0]));
-        company.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
-
-        companies[position] = company;
-        position++;
-
-
-      }
-    }
-
-    return companies;
-
-
-  }
-
   /**
    * Gets a list of all the companies in the given sector.
    *
@@ -111,6 +70,52 @@ public class Scrapper {
     return companies;
   }
 
+  /**
+   * Updates the company stock prices.
+   *
+   * Returns true if all updated, false means list has changed
+   */
+  public static Boolean updateCurrentData(HashMap<String, Company> companies) throws IOException {
+    int count = 0;
+    for (int page = 1; page < 7; page++) {
+
+      Document doc = Jsoup.connect(lse1+lse2+page).get();
+
+      Elements table = doc.select("[summary=\"Companies and Prices\"]");
+
+
+      Elements tbody = table.first().select("tbody");
+
+      for (Element row : tbody.first().select("tr")) {
+
+        Elements boxes = row.select("td");
+
+        Company com = companies.get(boxes.get(0).html());
+        if (com == null) {
+          //Unknown company -- list has changed
+          return false;
+        }
+
+        // Company company = new Company(boxes.get(0).html(), boxes.get(1).child(0).html(), "");
+        // //System.out.println(boxes.get(3).html().replace(",", ""));
+        //
+        com.updatePrice(Double.parseDouble(boxes.get(3).html().replace(",", "")));
+        com.updateChange(Double.parseDouble(boxes.get(4).html().split("<")[0]));
+        com.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
+        //
+        // companies[position] = company;
+        // position++;
+        count++;
+      }
+    }
+
+    if (count == companies.size()) {
+      return true;
+    }
+    return false;
+
+  }
+
 
   /**
    * Returns all the sectors and the corresponding number for LSE's website
@@ -137,7 +142,7 @@ public class Scrapper {
   }
 
 
-  public static void setupYahoo() throws IOException {
+  private static void setupYahoo() throws IOException {
     //Setup date range
     Calendar cal = Calendar.getInstance();
 
@@ -155,8 +160,12 @@ public class Scrapper {
 	  int cl = page.html().indexOf(":", cr + 5);
 	  int q1 = page.html().indexOf("\"", cl + 1);
 	  int q2 = page.html().indexOf("\"", q1 + 1);
-    crumb = page.html().substring(q1+1,q2);
-    crumb = Jsoup.parse(crumb).text();
+    String test = page.html().substring(q1+1,q2);
+    System.out.println("If Jsoup starts giving 401 errors please give the following two strings to matt:");
+    System.out.println(test);
+    crumb = Jsoup.parse(test).text();
+    System.out.println(crumb);
+    //System.out.println(Jsoup.parse("w9Vd\u002FHWPLDC").text());
 
     //Store corresponding cookie
     cookie = testSend.cookie("B");
@@ -168,7 +177,11 @@ public class Scrapper {
    *
    * NOTE: return type may change.
    */
-  public static Double[][] getPastData(String ticker) throws IOException, ParseException {
+  public static Double[][] getPastData(String ticker) throws IOException {
+
+    if (crumb == null || cookie == null) {
+      setupYahoo();
+    }
 
     //weird regex
     ticker = ticker.replaceAll("\\Q.\\E", "-");

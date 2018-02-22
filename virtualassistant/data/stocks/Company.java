@@ -90,7 +90,7 @@ public class Company implements ICompany {
 
   //----------------- Past data ----------------
 
-  public HistoricalData[] getPastData {
+  public HistoricalData[] getPastData() {
     return pastData;
   }
 
