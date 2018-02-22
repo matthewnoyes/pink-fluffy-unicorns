@@ -19,6 +19,7 @@ public static final int HEIGHT = 700;
 Stage window;
 boolean listening = false;
 ArrayList<Message> queries;
+ArrayList<String> helptext;
 
 VBox root;
 VBox chatbot;
@@ -36,14 +37,50 @@ public void startListening() {
 }
 
 public void stopListening() {
-	String query = "";
-	// makeQuery(query);
+				String query = "";
+				// makeQuery(query);
 }
 
-public void makeQuery(String query) {
-				addMessage(new Query(query));
+public void makeQuery(String text) {
+				Message query = new Query(text);
+				queries.add(query);
+				addMessage(query);
 				// process message here
+
+				Message response = new Response("Response", null);
+				queries.add(response);
 				addMessage(new Response("Random response", null));
+}
+
+public void openHelp() {
+				chatbot.getChildren().removeAll();
+
+				Label helpTitle = new Label("Some questions you can ask:");
+				helpTitle.setPrefWidth(WIDTH);
+				helpTitle.setAlignment(Pos.CENTER);
+				helpTitle.setId("help_title");
+				chatbot.getChildren().add(helpTitle);
+
+				for(int i = 0; i < 4 && i < helptext.size(); i++) {
+								Label text_label = new Label(helptext.get(i));
+								text_label.setPrefWidth(WIDTH);
+								text_label.setAlignment(Pos.CENTER);
+								text_label.setId("help_text");
+								chatbot.getChildren().add(text_label);
+				}
+
+				Label ellipsis = new Label("...");
+				ellipsis.setPrefWidth(WIDTH);
+				ellipsis.setAlignment(Pos.CENTER);
+				ellipsis.setId("help_text");
+				chatbot.getChildren().add(ellipsis);
+}
+
+public void closeHelp() {
+				chatbot.getChildren().removeAll();
+				for(int i = 0; i < queries.size(); i++) {
+								addMessage(queries.get(i));
+				}
 }
 
 // start the gui
@@ -73,13 +110,14 @@ public void start(Stage primaryStage) throws Exception {
 
 				Scene scene = new Scene(root, WIDTH, HEIGHT);
 				scene.getStylesheets().add("styles/stylesheet.css");
+
+				openHelp();
+
 				window.setScene(scene);
 				window.show();
 }
 
 public void addMessage(Message message) {
-				queries.add(message);
-
 				// container of message
 				HBox container = new HBox(0);
 
@@ -226,10 +264,31 @@ private void init(Stage window) {
 												closeProgram();
 								});
 				queries = new ArrayList<Message>();
+
+				queries.add(new Query("Hello"));
+				queries.add(new Response("Good morning", null));
+				queries.add(new Query("Any news on Barclays"));
+
+				News[] news = new News[4];
+				news[0] = new News("Barclays kills children");
+				news[1] = new News("Appointed Hitler as CEO");
+				news[2] = new News("Stocks rise drastically");
+				news[3] = new News("Barclays buys childhood dog");
+
+				queries.add(new Response("This is what I found", news));
+
+
+				helptext = new ArrayList<String>();
+				helptext.add("How are the banks doing?");
+				helptext.add("Any news on Coca Cola?");
+				helptext.add("What is the high price of Just Eat?");
+				helptext.add("Is LLoyds positive?");
+				helptext.add("Open price of Barclays");
+				helptext.add("How do you feel about construction?");
 }
 
 private void closeProgram() {
 
 }
- 
+
 }
