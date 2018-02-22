@@ -231,5 +231,5 @@ private void init(Stage window) {
 private void closeProgram() {
 
 }
-
+ 
 }
