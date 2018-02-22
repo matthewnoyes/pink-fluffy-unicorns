@@ -16,6 +16,8 @@ public class Company implements ICompany {
   private double yearLow;
   private double averageClose;
 
+  private HistoricalData[] pastData;
+
   public Company(String ticker, String name, String sector) {
     this.ticker = ticker;
     this.name = name;
@@ -28,6 +30,10 @@ public class Company implements ICompany {
       System.out.println(ticker);
       System.out.println(e);
     }
+  }
+
+  public Company(String ticker, String name, String sector, HistoricalData[] pastData) {
+
   }
 
   public String getName() {
@@ -83,6 +89,10 @@ public class Company implements ICompany {
   }
 
   //----------------- Past data ----------------
+
+  public HistoricalData[] getPastData {
+    return pastData;
+  }
 
   public double yearHigh() {
     return yearHigh;
