@@ -26,7 +26,6 @@
   -fx-background-color: #FFFFFF;
 }
 
-
 #update_time {
   -fx-min-height: 40px;
   -fx-padding: 20 0 0 60;
@@ -83,8 +82,9 @@
   -fx-font-size: 13pt;
   -fx-font-family: "Segoe UI Semibold";
 }
+
 #text_field:focused {
-    -fx-background-color: #a9a9a9 , white , white;
+  -fx-background-color: #a9a9a9, white, white;
 }
 
 #send_query_button {
@@ -94,13 +94,28 @@
   -fx-font-size: 12pt;
   -fx-font-family: "Segoe UI Semibold";
 }
+
 #send_query_button: hover {
   -fx-opacity: 0.7;
 }
+
 #send_query_button: pressed {
   -fx-background-color: #101022;
   -fx-min-height: 40px;
+}
 
+#help_title {
+  -fx-font-weight: bold;
+  -fx-font-size: 25pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-padding: 120 0 20 0;
+}
+
+#help_text {
+  -fx-text-fill: #676778;
+  -fx-font-size: 17pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-padding: 0 0 5 0;
 }
 
 .scroll-pane {
