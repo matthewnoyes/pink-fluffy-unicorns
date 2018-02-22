@@ -34,14 +34,6 @@
   -fx-font-family: "Segoe UI Semibold";
 }
 
-#update_time {
-  -fx-min-height: 40px;
-  -fx-padding: 20 0 0 60;
-  -fx-text-fill: white;
-  -fx-font-size: 12pt;
-  -fx-font-family: "Segoe UI Semibold";
-}
-
 #help_button {
   -fx-background-radius: 5em;
   -fx-min-width: 20px;
