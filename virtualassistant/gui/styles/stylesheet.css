@@ -1,5 +1,6 @@
 #root {
   -fx-background: #26262E;
+  -fx-padding: 20 10 20 10;
 }
 
 #chatbot_container {

@@ -16,48 +16,142 @@ public class Interface extends Application {
 public static final int WIDTH = 500;
 public static final int HEIGHT = 700;
 
-Stage window;
-boolean listening = false;
-boolean onHelp = false;
-ArrayList<Message> queries;
-ArrayList<String> helptext;
+// needed global variables
+private boolean listening; 						// if current listening to voice
+private boolean onHelp;								// if help screen is being displayed
+private ArrayList<Message> queries;		// list of all queries and responses made
+private ArrayList<String> helptext;		// list of all the 'help' queries
 
-VBox root;
-ScrollPane scroll;
-VBox chatbot;
-HBox textInput;
-HBox buttons;
-Label update_time;
-TextField textField;
+// gui global nodes
+private Stage window;
+private VBox root;
+private ScrollPane scroll;
+private VBox chatbot;
+private HBox textInput;
+private HBox buttons;
+private Label update_time;
+private TextField textField;
 
+// method to change the update time (stocks last updated)
 public void changeUpdateTime(String time) {
 				update_time.setText("Last updated: " + time);
 }
 
+// start listening to voice input
 public void startListening() {
-				System.out.println("Start listening");
+				// ...
 }
 
+// stop listening to voice input
 public void stopListening() {
-				String query = "";
-				System.out.println("Stop listening");
+				// ...
+				//String query = "";
 				// makeQuery(query);
 }
 
+// make a query
 public void makeQuery(String text) {
 				if(onHelp) {
 					closeHelp();
 				}
+
 				Message query = new Query(text);
 				queries.add(query);
 				addMessage(query);
-				// process message here
 
-				Message response = new Response("Response", null);
+				//
+				// process message here
+				//
+
+				News[] news = null;
+				Message response = new Response("Response", news);
 				queries.add(response);
-				addMessage(new Response("Random response", null));
+				addMessage(response);
 }
 
+private void closeProgram() {
+
+}
+
+
+/* ================================================== */
+/* ================= GUI CODE ======================= */
+/* ================================================== */
+
+// start the gui
+@Override
+public void start(Stage primaryStage) throws Exception {
+				window = primaryStage;
+				init(window);
+
+				root = new VBox(10);
+				root.setId("root");
+
+				// chatbot container in scrollable pane, scrolled to bottom
+				makeChatbotContainer();
+
+				// text input area for user to input queries
+				makeTextInput();
+
+				// control buttons
+				makeButtons();
+
+				// put chat bot in scrollable pane
+				scroll = new ScrollPane(chatbot);
+				scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+				scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+				scroll.setFitToWidth(true);
+
+				// filler so chat bot doesn't scroll past buttons
+				Region filler = new Region();
+				VBox.setVgrow(filler, Priority.ALWAYS);
+
+				// add to container
+				root.getChildren().addAll(scroll, filler, textInput, buttons);
+
+				// start with help screen open
+				openHelp();
+
+				// create the scene
+				Scene scene = new Scene(root, WIDTH, HEIGHT);
+				scene.getStylesheets().add("styles/stylesheet.css");
+
+				window.setScene(scene);
+				window.show();
+}
+
+// initialize the window and variables
+private void init(Stage window) {
+				window.setTitle("Trader's Assistant");
+				window.setResizable(false);
+				window.setOnCloseRequest(e->{
+												e.consume(); // stop window closing automatically
+												closeProgram();
+								});
+				listening = false;
+				onHelp = false;
+				queries = new ArrayList<Message>();
+				helptext = new ArrayList<String>();
+
+				queries.add(new Query("Hello"));
+				queries.add(new Response("Good morning", null));
+				queries.add(new Query("Any news on Barclays"));
+				News[] news = new News[4];
+				news[0] = new News("Barclays kills children");
+				news[1] = new News("Appointed Hitler as CEO");
+				news[2] = new News("Stocks rise drastically");
+				news[3] = new News("Barclays buys childhood dog");
+				queries.add(new Response("This is what I found:", news));
+
+				helptext.add("How are the banks doing?");
+				helptext.add("Any news on Coca Cola?");
+				helptext.add("What is the high price of Just Eat?");
+				helptext.add("Is LLoyds positive?");
+				helptext.add("Open price of Barclays");
+				helptext.add("How do you feel about construction?");
+}
+
+// open help screen
 public void openHelp() {
 				onHelp = true;
 				chatbot.getChildren().clear();
@@ -83,6 +177,7 @@ public void openHelp() {
 				chatbot.getChildren().add(ellipsis);
 }
 
+// close help screen
 public void closeHelp() {
 				onHelp = false;
 				chatbot.getChildren().clear();
@@ -91,43 +186,7 @@ public void closeHelp() {
 				}
 }
 
-// start the gui
-@Override
-public void start(Stage primaryStage) throws Exception {
-				window = primaryStage;
-				init(window);
-
-				root = new VBox(10);
-				root.setId("root");
-				root.setPadding(new Insets(20, 10, 20, 10));
-
-				// chatbot container in scrollable pane, scrolled to bottom
-				makeChatbotContainer();
-				scroll = new ScrollPane(chatbot);
-				scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-				scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-				scroll.setFitToWidth(true);
-
-				Region filler = new Region();
-				VBox.setVgrow(filler, Priority.ALWAYS);
-
-				// text input area for user to input queries
-				makeTextInput();
-
-				// control buttons
-				makeButtons();
-
-				root.getChildren().addAll(scroll, filler, textInput, buttons);
-
-				Scene scene = new Scene(root, WIDTH, HEIGHT);
-				scene.getStylesheets().add("styles/stylesheet.css");
-
-				openHelp();
-
-				window.setScene(scene);
-				window.show();
-}
-
+// add message to screen
 public void addMessage(Message message) {
 				// container of message
 				HBox container = new HBox(0);
@@ -203,30 +262,30 @@ private void makeChatbotContainer() {
 				chatbot.setPrefWidth(WIDTH);
 				chatbot.setAlignment(Pos.TOP_CENTER);
 }
-
+// make input
 private void makeTextInput() {
 				textInput = new HBox(0);
 				textInput.setAlignment(Pos.BOTTOM_CENTER);
 
 				textField = new TextField();
-				textField.setId("text_field");
-				textField.setPrefWidth(WIDTH);
 				textField.setPromptText("Input a query here");
+				textField.setPrefWidth(WIDTH);
+				textField.setId("text_field");
 
 				Button confirm = new Button("Send");
+				confirm.setPrefWidth(200);
+				confirm.setId("send_query_button");
+
 				confirm.setOnAction(e->{
 												makeQuery(textField.getText());
 												textField.setText("");
 								});
-				confirm.setPrefWidth(200);
-				confirm.setId("send_query_button");
 
 				textInput.getChildren().addAll(textField, confirm);
 }
-
+// make buttons
 private void makeButtons() {
 				buttons = new HBox(5);
-				//buttons.setAlignment(Pos.BOTTOM_RIGHT);
 
 				StackPane helpContain = new StackPane();
 				Button helpButton = new Button();
@@ -278,41 +337,6 @@ private void makeButtons() {
 
 
 				buttons.getChildren().addAll(helpContain, button, updateContain);
-}
-
-private void init(Stage window) {
-				window.setTitle("Trader's Assistant");
-				window.setResizable(false);
-				window.setOnCloseRequest(e->{
-												e.consume(); // stop window closing automatically
-												closeProgram();
-								});
-				queries = new ArrayList<Message>();
-
-				queries.add(new Query("Hello"));
-				queries.add(new Response("Good morning", null));
-				queries.add(new Query("Any news on Barclays"));
-
-				News[] news = new News[4];
-				news[0] = new News("Barclays kills children");
-				news[1] = new News("Appointed Hitler as CEO");
-				news[2] = new News("Stocks rise drastically");
-				news[3] = new News("Barclays buys childhood dog");
-
-				queries.add(new Response("This is what I found:", news));
-
-
-				helptext = new ArrayList<String>();
-				helptext.add("How are the banks doing?");
-				helptext.add("Any news on Coca Cola?");
-				helptext.add("What is the high price of Just Eat?");
-				helptext.add("Is LLoyds positive?");
-				helptext.add("Open price of Barclays");
-				helptext.add("How do you feel about construction?");
-}
-
-private void closeProgram() {
-
 }
 
 }
