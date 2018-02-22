@@ -23,7 +23,7 @@ public class Company implements ICompany {
     this.name = name;
     this.sector = sector;
     try {
-      Double[][] histData = Scrapper.getPastData(ticker);
+      pastData = Scrapper.getPastData(ticker);
 
       //Do something with the data
     } catch (Exception e) {

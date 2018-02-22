@@ -162,10 +162,11 @@ public class Scrapper {
 	  int q2 = page.html().indexOf("\"", q1 + 1);
     String test = page.html().substring(q1+1,q2);
     System.out.println("If Jsoup starts giving 401 errors please give the following two strings to matt:");
-    System.out.println(test);
-    crumb = Jsoup.parse(test).text();
+    System.out.println(Jsoup.parse(test).text());
+    test = test.replaceAll("\\\\u002F", "/");
+    crumb = Jsoup.parse(new String(test.getBytes(), "UTF-8")).text();
     System.out.println(crumb);
-    //System.out.println(Jsoup.parse("w9Vd\u002FHWPLDC").text());
+    // System.out.println(Jsoup.parse("h0J\u002FSVFBI2l").text());
 
     //Store corresponding cookie
     cookie = testSend.cookie("B");
@@ -177,7 +178,7 @@ public class Scrapper {
    *
    * NOTE: return type may change.
    */
-  public static Double[][] getPastData(String ticker) throws IOException {
+  public static HistoricalData[] getPastData(String ticker) throws IOException {
 
     if (crumb == null || cookie == null) {
       setupYahoo();
@@ -208,48 +209,55 @@ public class Scrapper {
     String[] rawData = doc.html().split("[ ,]");
     int currRow = 0;
 
+    // for (int i = rawData.length - 1; i > rawData.length - 30; i--) {
+    //   System.out.println((i-rawData.length) + ": " + rawData[i]);
+    // }
+
     //Put the data into the array
-    Double[][] data = new Double[6][366];
-    for (int i = 16; i < rawData.length-5; i += 7) {
+    HistoricalData[] data = new HistoricalData[(int)((rawData.length-14) / 7)];
+    for (int i = 12; i < rawData.length-2; i += 7) {
 
       //Date
       //System.out.println(rawData[i]);
+      String strDate = rawData[i];
+      // System.out.println(strDate);
+      // System.out.println(strDate.substring(8, 10));
+      // System.out.println( strDate.substring(5, 7));
+      // System.out.println(strDate.substring(0, 4));
+      Calendar date = Calendar.getInstance();
+      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)), Integer.parseInt(strDate.substring(8, 10)), 12, 0, 0);
+      HistoricalData entry = new HistoricalData(date);
 
       try {
-        data[0][currRow] = Double.parseDouble(rawData[i+1]);
+        entry.open = Double.parseDouble(rawData[i+1]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
-        data[0][currRow] = -1.0;
+        entry.open = -1.0;
       }
       try {
-        data[1][currRow] = Double.parseDouble(rawData[i+2]);
+        entry.high = Double.parseDouble(rawData[i+2]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
-        data[1][currRow] = -1.0;
+        entry.high = -1.0;
       }
       try {
-        data[2][currRow] = Double.parseDouble(rawData[i+3]);
+        entry.low = Double.parseDouble(rawData[i+3]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
-        data[2][currRow] = -1.0;
+        entry.low = -1.0;
       }
       try {
-        data[3][currRow] = Double.parseDouble(rawData[i+4]);
+        entry.close = Double.parseDouble(rawData[i+4]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
-        data[3][currRow] = -1.0;
+        entry.close = -1.0;
       }
+      // 4 is ajusted close
       try {
-        data[4][currRow] = Double.parseDouble(rawData[i+5]);
+        entry.volume = Integer.parseInt(rawData[i+6]);
       } catch (NumberFormatException e) {
         //Mark that there is no data for this day
-        data[4][currRow] = -1.0;
-      }
-      try {
-        data[5][currRow] = Double.parseDouble(rawData[i+6]);
-      } catch (NumberFormatException e) {
-        //Mark that there is no data for this day
-        data[5][currRow] = -1.0;
+        entry.volume = -1;
       }
       // data[1][currRow] = Double.parseDouble(rawData[i+1]);
       // data[2][currRow] = Double.parseDouble(rawData[i+2]);
@@ -258,7 +266,7 @@ public class Scrapper {
 
       //Volume - not working
       // data[5][currRow] = Double.parseDouble(rawData[i+5]);
-
+      data[currRow] = entry;
       currRow++;
     }
 
