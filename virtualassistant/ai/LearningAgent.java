@@ -12,13 +12,23 @@ import virtualassistant.data.news.INewsData;
 
 public class LearningAgent implements ILearningAgent {
 
-  private Favourites<String, Integer> favourites;
+  private Favourites<String, Integer> favouriteStocks;
 
   private IStockData stocks;
   private INewsData news;
 
-  public LearningAgent() {
-    favourites = new Favourites<String, Integer>();
+  public LearningAgent(IStockData stocks, INewsData news) {
+    favouriteStocks = new Favourites<String, Integer>();
+
+    this.stocks = stocks;
+    this.news = news;
+  }
+
+  public LearningAgent(IStockData stocks, INewsData news, Favourites<String, Integer> favouriteStocks) {
+    this.favouriteStocks = favouriteStocks;
+
+    this.stocks = stocks;
+    this.news = news;
   }
 
   public void analyzeInput(List<String> tokenized, List<String> patternized) {
@@ -27,19 +37,19 @@ public class LearningAgent implements ILearningAgent {
 
       //See if item is a company
       if (stocks.getCompanyTickers().contains(item)) {
-        favourites.addToBegining(item,1);
+        favouriteStocks.addToBegining(item,1);
         continue;
       }
       if (stocks.getCompanyNames().contains(item)) {
-        favourites.addToBegining(stocks.getCompanyForName(item).getTicker(),1);
+        favouriteStocks.addToBegining(stocks.getCompanyForName(item).getTicker(),1);
         continue;
       }
     }
 
   }
 
-  public Set<String> getFavourites() {
-    return favourites.keySet();
+  public Set<String> getFavouriteStocks() {
+    return favouriteStocks.keySet();
   }
 
   public void bookmarkStock(String ticker) {
@@ -54,7 +64,7 @@ public class LearningAgent implements ILearningAgent {
    */
   public String[] suggestQueries(int count) {
 
-    Set<String> tickers = favourites.keySet();
+    Set<String> tickers = favouriteStocks.keySet();
 
     String[] queries;
     //Check that there is enough tickers to fill array
@@ -65,7 +75,7 @@ public class LearningAgent implements ILearningAgent {
     }
 
     int i = 0;
-    ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favourites.size());
+    ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favouriteStocks.size());
     while (iterator.hasPrevious()) {
       String ticker = iterator.previous();
     //Note: Goes backwards
