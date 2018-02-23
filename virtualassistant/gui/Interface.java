@@ -70,6 +70,8 @@ public void makeQuery(String text) {
 		addMessage(response);
 }
 
+// this method changes the wifi image
+// if access = true it will display that there is a connection
 public void setWifiAccess(boolean access) {
 		if(access) {
 				Image image = new Image(getClass().getResourceAsStream("images/wifi_access.png"));
@@ -365,7 +367,7 @@ private void makeButtons() {
 // I hope this works, comment out if not, this should be the link to the main.
 /*
 public static void main(String args[]){
-    
+
     VirtualAssistant virtualAssistant = new VirtualAssistant();
     virtualAssistant.startScanning();
 }
