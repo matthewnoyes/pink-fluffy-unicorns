@@ -46,7 +46,7 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public static void decideAction(Action actionType, List<String> parameters){
+    public void decideAction(Action actionType, List<String> parameters){
 
         switch(actionType){
 
@@ -75,7 +75,7 @@ public class VirtualAssistant {
     /* Company data
     */
 
-    public static void getCompanyData(List<String> parameters){
+    private void getCompanyData(List<String> parameters){
 
         Company company = stockData.companyForName(parameters.remove(0));
 
@@ -130,7 +130,7 @@ public class VirtualAssistant {
     /* Sector data
     */
 
-    public static void getSectorData(List<String> parameters){
+    private void getSectorData(List<String> parameters){
 
         String sector = parameters.remove(0);
 

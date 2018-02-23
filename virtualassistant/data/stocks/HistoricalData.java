@@ -9,6 +9,10 @@ public class HistoricalData {
   public double close;
   public double high;
   public double low;
-  public double volume;
+  public int volume;
+
+  public HistoricalData(Calendar date) {
+    this.date = date;
+  }
 
 }

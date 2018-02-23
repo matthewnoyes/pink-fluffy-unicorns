@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class StockData implements IStockData {
 
@@ -19,9 +20,6 @@ public class StockData implements IStockData {
   private HashMap<String, Set<Company>> companiesInSector;
 
   public StockData() throws IOException {
-
-    //Get the cookie and crumb for yahoo
-    Scrapper.setupYahoo();
 
     tickerToCompany = new HashMap<String, Company>();
     companiesInSector = new HashMap<String, Set<Company>>();
@@ -40,6 +38,10 @@ public class StockData implements IStockData {
         nameToCompany.put(com.getName(), com);
       }
     }
+
+  }
+
+  public StockData(Set<Company> companies) {
 
   }
 
@@ -67,11 +69,29 @@ public class StockData implements IStockData {
   }
 
   public double getCurrentSectorPrice(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+      double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getCurrentPrice();
+    }
+
+    return total;
   }
+
   public double getSectorChange(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getChange();
+    }
+
+    return total;
   }
+
   public double getSectorPercentageChange(String sector) {
     return 0.0;
   }
