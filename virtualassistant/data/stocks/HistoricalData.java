@@ -1,18 +1,25 @@
 package virtualassistant.data.stocks;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
-public class HistoricalData {
+public class HistoricalData extends HashMap<Calendar, HistoricalData.Record> {
 
-  public Calendar date;
-  public double open;
-  public double close;
-  public double high;
-  public double low;
-  public int volume;
+  @Override
+  public Record put(Calendar key, Record value) {
+    Record previous = super.put(key, value);
 
-  public HistoricalData(Calendar date) {
-    this.date = date;
+    //Check for dates from more than a year ago.
+
+    return previous;
+  }
+
+  public static class Record {
+    public double open;
+    public double close;
+    public double high;
+    public double low;
+    public int volume;
   }
 
 }

@@ -12,11 +12,12 @@ public class Company implements ICompany {
   private double currentChange;
   private double currentPercentChange;
 
-  private double yearHigh;
-  private double yearLow;
-  private double averageClose;
+  private double yearHigh = 0.0;
+  private double yearLow = 0.0;
+  private double averageClose = 0.0;
+  private double averageVolume = 0.0;
 
-  private HistoricalData[] pastData;
+  private HistoricalData pastData;
 
   public Company(String ticker, String name, String sector) {
     this.ticker = ticker;
@@ -90,7 +91,11 @@ public class Company implements ICompany {
 
   //----------------- Past data ----------------
 
-  public HistoricalData[] getPastData() {
+  private void updateCalculatedData() {
+
+  }
+
+  public HistoricalData getPastData() {
     return pastData;
   }
 
@@ -107,11 +112,17 @@ public class Company implements ICompany {
   }
 
   public double yearAverageVolume() {
-    return 0.0;
+    return averageVolume;
   }
 
   public double getClosePriceOnDate(Calendar day) {
-    return 0.0;
+
+    day = resetTime(day);
+
+    if (pastData.containsKey(day))
+      return pastData.get(day).close;
+
+    return -1.0;
   }
 
   public double getOpenPriceOnDate(Calendar day) {
@@ -128,6 +139,15 @@ public class Company implements ICompany {
 
   public double getVolumeOnDate(Calendar day) {
     return 0.0;
+  }
+
+  public static Calendar resetTime(Calendar day) {
+    day.set(Calendar.HOUR_OF_DAY, 12);
+    day.set(Calendar.MINUTE, 0);
+    day.set(Calendar.SECOND, 0);
+    day.set(Calendar.MILLISECOND, 0);
+
+    return day;
   }
 
 
