@@ -1,5 +1,8 @@
 package virtualassistant;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class VirtualAssistant {
 
     private StockData stockdata;
@@ -8,10 +11,10 @@ public class VirtualAssistant {
     private LearningAgent learningAgent;
     private NewsProcessor newsProcessor;
     private Chatbot chatbot;
-
-    public static void main(String[] args) {
-
-        //Instntiate everything
+    
+    
+    public VirtualAssistant(){
+        //Instantiate everything
 
         loader = new Loader();
         stockData = loader.readStocks();
@@ -19,6 +22,11 @@ public class VirtualAssistant {
         systemStatus = loader.readSystemStatus();
         newsProcessor = new NewsProcessor();
         chatbot = new Chatbot();
+        
+    }
+        
+    public void startScanning(String[] args) {
+
         
         int timepassed = 0;
         //Try to update data.
@@ -46,23 +54,26 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public void decideAction(Action actionType, List<String> parameters){
+    public void decideAction(String response){
+        
+        // Convert to JsonObject
+        JSONObject obj = loader.parseJSON(response);
+        
+        switch(obj.get("action")){
 
-        switch(actionType){
-
-            case Action.GET_COMPANY_DATA:  getCompanyData(parameters);
+            case Action.GET_COMPANY_DATA:  getCompanyData(obj);
                                     break;
 
-            case Action.GET_SECTOR_DATA:   getSectorData(parameters);
+            case Action.GET_SECTOR_DATA:   getSectorData(obj);
                                     break;
 
-            case Action.COMPARE_COMPANIES: compareCompanies(parameters);
+            case Action.COMPARE_COMPANIES: compareCompanies(obj);
                                     break;
 
-            case Action.COMPARE_SECTORS:   compareSectors(parameters);
+            case Action.COMPARE_SECTORS:   compareSectors(obj);
                                     break;
 
-            case Action.ALERT:             alert(parameters);
+            case Action.ALERT:             alert(obj);
                                     break;
 
             default:                System.out.println("Undefined action!");
@@ -75,7 +86,7 @@ public class VirtualAssistant {
     /* Company data
     */
 
-    private void getCompanyData(List<String> parameters){
+    private void getCompanyData(JSONObject parameters){
 
         Company company = stockData.companyForName(parameters.remove(0));
 
@@ -130,7 +141,7 @@ public class VirtualAssistant {
     /* Sector data
     */
 
-    private void getSectorData(List<String> parameters){
+    private void getSectorData(JSONObject parameters){
 
         String sector = parameters.remove(0);
 

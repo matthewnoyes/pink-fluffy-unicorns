@@ -340,4 +340,12 @@ private void makeButtons() {
 				buttons.getChildren().addAll(helpContain, button, updateContain);
 }
 
+// I hope this works, comment out if not, this should be the link to the main.
+/*
+public static void main(String args[]){
+    
+    VirtualAssistant virtualAssistant = new VirtualAssistant();
+    virtualAssistant.startScanning();
+}
+*/
 }
