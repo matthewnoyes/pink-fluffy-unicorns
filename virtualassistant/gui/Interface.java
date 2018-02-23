@@ -251,6 +251,7 @@ public void addMessage(Message message) {
 
 				}
 				chatbot.getChildren().add(container);
+				scroll.setVvalue(1);
 }
 
 // make the chatbot
