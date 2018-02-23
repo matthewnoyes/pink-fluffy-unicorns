@@ -34,7 +34,13 @@ public class Loader {
         parser = new JSONParser();
     }
     
-    private StockData readStocks(){
+    
+    public JSONObject parseJSON(String str) {
+        
+        return parser.parse(str);
+    }
+    
+    public StockData readStocks(){
         
         Map<String, Company> companies = new HashMap(100);
         Map<String, Set<Company>> sectors = new HashMap(20);
