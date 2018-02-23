@@ -29,7 +29,6 @@
 
 #update_time {
   -fx-min-height: 40px;
-  -fx-padding: 20 0 0 60;
   -fx-text-fill: white;
   -fx-font-size: 12pt;
   -fx-font-family: "Segoe UI Semibold";
@@ -37,10 +36,14 @@
 
 #help_button {
   -fx-background-radius: 5em;
-  -fx-min-width: 20px;
-  -fx-min-height: 20px;
-  -fx-max-width: 20px;
-  -fx-max-height: 20px;
+  -fx-margin: 0 0 0 0;
+  -fx-min-width: 30px;
+  -fx-min-height: 30px;
+  -fx-max-width: 30px;
+  -fx-max-height: 30px;
+  -fx-text-fill: black;
+  -fx-font-size: 11pt;
+  -fx-font-family: "Segoe UI Semibold";
 }
 #help_button:focused {
   -fx-background-color: #a9a9a9, white, white;
