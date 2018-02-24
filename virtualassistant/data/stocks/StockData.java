@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
+import java.util.Collection;
 
 public class StockData implements IStockData {
 
@@ -41,7 +43,29 @@ public class StockData implements IStockData {
 
   }
 
-  public StockData(Set<Company> companies) {
+  public StockData(Set<Company> companies) throws IOException {
+
+    tickerToCompany = new HashMap<String, Company>();
+    companiesInSector = new HashMap<String, Set<Company>>();
+    nameToCompany = new HashMap<String, Company>();
+
+    HashMap<String, Integer> sectors = Scrapper.getSectors();
+
+    for (String sector : sectors.keySet()) {
+      companiesInSector.put(sector, new HashSet<Company>());
+    }
+
+    for (Company com : companies) {
+
+      if (companiesInSector.containsKey(com.getSector())) {
+        companiesInSector.get(com.getSector()).add(com);
+      } else {
+        //error
+      }
+
+      tickerToCompany.put(com.getTicker(), com);
+      nameToCompany.put(com.getName(), com);
+    }
 
   }
 
@@ -68,6 +92,10 @@ public class StockData implements IStockData {
     return companiesInSector.get(sector);
   }
 
+  public Collection<Company> getAllCompanies() {
+    return tickerToCompany.values();
+  }
+
   public double getCurrentSectorPrice(String sector) {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
@@ -81,15 +109,7 @@ public class StockData implements IStockData {
   }
 
   public double getSectorChange(String sector) {
-    if (!companiesInSector.containsKey(sector))
-      return -1.0;
-
-    double total = 0.0;
-    for (Company company : companiesInSector.get(sector)) {
-      total += company.getChange();
-    }
-
-    return total;
+    return 0.0;
   }
 
   public double getSectorPercentageChange(String sector) {
