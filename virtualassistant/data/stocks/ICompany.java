@@ -31,7 +31,7 @@ public interface ICompany {
   public double getOpenPriceOnDate(Calendar day);
   public double getHighPriceOnDate(Calendar day);
   public double getLowPriceOnDate(Calendar day);
-  public double getVolumeOnDate(Calendar day);
+  public int getVolumeOnDate(Calendar day);
 
 
 }

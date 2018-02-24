@@ -222,7 +222,8 @@ public class Scrapper {
       // System.out.println( strDate.substring(5, 7));
       // System.out.println(strDate.substring(0, 4));
       Calendar date = Calendar.getInstance();
-      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)), Integer.parseInt(strDate.substring(8, 10)), 12, 0, 0);
+      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)), Integer.parseInt(strDate.substring(8, 10)));
+      date = Company.resetTime(date);
       HistoricalData.Record entry = new HistoricalData.Record();
 
       try {
@@ -273,5 +274,7 @@ public class Scrapper {
   public static void main(String[] args) throws IOException, ParseException {
     //getPastData("BT-A");
     StockData data = new StockData();
+
+    System.out.println(data.getCompanyForTicker("BT.A").getOpen());
   }
 }

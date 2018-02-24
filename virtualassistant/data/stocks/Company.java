@@ -1,6 +1,7 @@
 package virtualassistant.data.stocks;
 
 import java.util.Calendar;
+import java.util.Map;
 
 public class Company implements ICompany {
 
@@ -31,9 +32,19 @@ public class Company implements ICompany {
       System.out.println(ticker);
       System.out.println(e);
     }
+
+    this.updateCalculatedData();
   }
 
-  public Company(String ticker, String name, String sector, HistoricalData[] pastData) {
+  public Company(String ticker, String name, String sector, HistoricalData pastData) {
+
+    this.ticker = ticker;
+    this.name = name;
+    this.sector = sector;
+
+    this.pastData = pastData;
+
+    this.updateCalculatedData();
 
   }
 
@@ -93,6 +104,31 @@ public class Company implements ICompany {
 
   private void updateCalculatedData() {
 
+    double high = -1.0;
+    double low = 10000000.0;
+    double totalPrice = 0.0;
+    double totalVolume = 0;
+
+    for (Map.Entry<Calendar, HistoricalData.Record> date : pastData.entrySet()) {
+
+      totalPrice += date.getValue().close;
+      totalVolume += date.getValue().volume;
+
+      if (high < date.getValue().high) {
+        high = date.getValue().high;
+      }
+
+      if (low > date.getValue().low) {
+        low = date.getValue().low;
+      }
+
+    }
+
+    this.yearHigh = high;
+    this.yearLow = low;
+    this.averageClose = totalPrice / pastData.size();
+    this.averageVolume = totalVolume / pastData.size();
+
   }
 
   public HistoricalData getPastData() {
@@ -126,19 +162,39 @@ public class Company implements ICompany {
   }
 
   public double getOpenPriceOnDate(Calendar day) {
-    return 0.0;
+    day = resetTime(day);
+
+    if (pastData.containsKey(day))
+      return pastData.get(day).open;
+
+    return -1.0;
   }
 
   public double getHighPriceOnDate(Calendar day) {
-    return 0.0;
+    day = resetTime(day);
+
+    if (pastData.containsKey(day))
+      return pastData.get(day).high;
+
+    return -1.0;
   }
 
   public double getLowPriceOnDate(Calendar day) {
-    return 0.0;
+    day = resetTime(day);
+
+    if (pastData.containsKey(day))
+      return pastData.get(day).low;
+
+    return -1.0;
   }
 
-  public double getVolumeOnDate(Calendar day) {
-    return 0.0;
+  public int getVolumeOnDate(Calendar day) {
+    day = resetTime(day);
+
+    if (pastData.containsKey(day))
+      return pastData.get(day).volume;
+
+    return -1;
   }
 
   public static Calendar resetTime(Calendar day) {
