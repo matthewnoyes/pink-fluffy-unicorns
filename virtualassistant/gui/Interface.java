@@ -62,7 +62,8 @@ public void makeQuery(String text) {
 
 		//
 		// process message here
-		//
+        //   String responseStr = virtualAssistant.getResponse(query);
+        //
 
 		News[] news = null;
 		Message response = new Response("Response", news);

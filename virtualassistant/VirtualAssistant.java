@@ -54,7 +54,9 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public void decideAction(String response){
+    public void getResponse(String query){
+        
+        String response = chatbot.getResponse(query);
         
         // Convert to JsonObject
         JSONObject obj = loader.parseJSON(response);
