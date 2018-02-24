@@ -86,8 +86,6 @@ public class NewsScrapper{
 				final String relHref = row.select(".text-left a").first().attr("href");
 				final String absurl=javascriptLinkToUrl(relHref); // html link is a javascript script so need to use regex to get the link out.
 				articlesObjs.add(newsArrayAdder(time,title,impact,absurl,source)); // news article object added to arraylist
-				System.out.println(time + "     " + title + "   " + impact + "  " + absurl + "   " + source);  // FOR TESTING ONLY WILL BE REMOVED
-
 			}	
 		}
 
@@ -123,8 +121,6 @@ public class NewsScrapper{
 				final String dateGrabbed = li.select(".hour").text();
 				final String datetime = dateGrabbed.length() == 5 ? todaysDate + " " + dateGrabbed : dateGrabbed; // at times the article may be posted today, which will only contain the time need to then add the date to it
 				articlesObjs.add(newsArrayAdder(datetime,title,url,"London stock exchange - Alliance News"));  //articles are added to the array list as objects.
-				System.out.println(datetime + "               " + title + "                " + url);  // FOR TESTING ONLY WILL BE REMOVED
-
 			}
 			return articlesObjs;
 		}
@@ -147,7 +143,6 @@ public class NewsScrapper{
 				final String title = li.select("title").text();
 				final String url = li.select("link").text();
 				articlesObjs.add(newsArrayAdder(date,title,url,"Yahoo Fianace News"));
-				System.out.println(date + "               " + title + "                " + url);  // FOR TESTING ONLY WILL BE REMOVED
 			}
 			return articlesObjs;	
 		}
@@ -171,8 +166,6 @@ public class NewsScrapper{
 					String dateTime = toFormat.format(fromFormat.parse(li.select(".o-teaser__timestamp").first().attr("datetime"))); // the datetime of the article.
 					final String relHref = "https://www.ft.com" + li.select(".js-teaser-heading-link").first().attr("href"); // url of the article
 					articlesObjs.add(newsArrayAdder(dateTime,headLine,relHref,"The Financial Times"));
-					System.out.println(headLine + "  " + dateTime + "   " + relHref);
-
 				}
 			}
 			return articlesObjs;
