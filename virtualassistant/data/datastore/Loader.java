@@ -1,9 +1,9 @@
 import virtualassistant.data.stocks.*;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import virtualassistant.data.datastore.org.json.simple.*;
+import virtualassistant.data.datastore.org.json.simple.JSONObject;
+import virtualassistant.data.datastore.org.json.simple.parser.JSONParser;
+import virtualassistant.data.datastore.org.json.simple.parser.ParseException;
 
 import java.io.FileWriter;
 import java.io.IOException;
