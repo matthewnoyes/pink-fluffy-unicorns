@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Collection;
 //For testing
 import java.util.Arrays;
 
@@ -16,6 +17,9 @@ public class LearningAgent implements ILearningAgent {
 
   private IStockData stocks;
   private INewsData news;
+
+  private final double minStockImapact = 20.0;
+  private final double minNewsImapact = 20.0;
 
   public LearningAgent(IStockData stocks, INewsData news) {
     favouriteStocks = new Favourites<String, Integer>();
@@ -76,10 +80,11 @@ public class LearningAgent implements ILearningAgent {
 
     int i = 0;
     ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favouriteStocks.size());
-    while (iterator.hasPrevious()) {
-      String ticker = iterator.previous();
+
     //Note: Goes backwards
     //for (String ticker : tickers) {
+    while (iterator.hasPrevious()) {
+      String ticker = iterator.previous();
       //Search for something interesting
 
       String query = "What is the current price of " + ticker;
@@ -99,9 +104,23 @@ public class LearningAgent implements ILearningAgent {
 
   public void searchForStockEvent() {
 
+    for (Company com : stocks.getAllCompanies()) {
+      if (com.getPercentageChange() > minStockImapact && favourites.containsKey(com.getTicker())) {
+        //Send a alert
+        //xxx.alert(com.getName() + " is changing price quickly");
+      }
+    }
+
   }
 
   public void searchForNewsEvent() {
+
+    // for (NewsObj article : new news) {
+    //   if (article.getImapct() > minNewsImapact && favourites.containsKey(article.com)) {
+    //     //Send a alert
+    //     //xxx.alert("There is significant news on: " + article.com);
+    //   }
+    // }
 
   }
 

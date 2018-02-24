@@ -62,7 +62,8 @@ public void makeQuery(String text) {
 
 		//
 		// process message here
-		//
+        //   String responseStr = virtualAssistant.getResponse(query);
+        //
 
 		News[] news = null;
 		Message response = new Response("Response", news);
@@ -369,7 +370,16 @@ private void makeButtons() {
    public static void main(String args[]){
 
     VirtualAssistant virtualAssistant = new VirtualAssistant();
+<<<<<<< HEAD
     virtualAssistant.startScanning();
    }
  */
+=======
+    
+    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
+        }
+}
+*/
+>>>>>>> 331875ed8b2111edde10f394b41595ae1948ae52
 }

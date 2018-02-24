@@ -178,7 +178,7 @@ public class Scrapper {
    *
    * NOTE: return type may change.
    */
-  public static HistoricalData[] getPastData(String ticker) throws IOException {
+  public static HistoricalData getPastData(String ticker) throws IOException {
 
     if (crumb == null || cookie == null) {
       setupYahoo();
@@ -205,16 +205,13 @@ public class Scrapper {
     //Get csv file
     Document doc = Jsoup.connect(yahoo1 + ticker + yahoo2 + pastDay + yahoo3 + currentDay + yahoo4 + crumb).userAgent("Mozilla").cookie("B", cookie).get();
 
-    //Not working properly
+    //Split up the CSV file
     String[] rawData = doc.html().split("[ ,]");
-    int currRow = 0;
-
-    // for (int i = rawData.length - 1; i > rawData.length - 30; i--) {
-    //   System.out.println((i-rawData.length) + ": " + rawData[i]);
-    // }
 
     //Put the data into the array
-    HistoricalData[] data = new HistoricalData[(int)((rawData.length-14) / 7)];
+    HistoricalData data = new HistoricalData();
+
+    //Ignore the start and end of the CSV file (not data)
     for (int i = 12; i < rawData.length-2; i += 7) {
 
       //Date
@@ -225,8 +222,9 @@ public class Scrapper {
       // System.out.println( strDate.substring(5, 7));
       // System.out.println(strDate.substring(0, 4));
       Calendar date = Calendar.getInstance();
-      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)), Integer.parseInt(strDate.substring(8, 10)), 12, 0, 0);
-      HistoricalData entry = new HistoricalData(date);
+      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)), Integer.parseInt(strDate.substring(8, 10)));
+      date = Company.resetTime(date);
+      HistoricalData.Record entry = new HistoricalData.Record();
 
       try {
         entry.open = Double.parseDouble(rawData[i+1]);
@@ -266,8 +264,7 @@ public class Scrapper {
 
       //Volume - not working
       // data[5][currRow] = Double.parseDouble(rawData[i+5]);
-      data[currRow] = entry;
-      currRow++;
+      data.put(date, entry);
     }
 
     return data;
@@ -277,5 +274,7 @@ public class Scrapper {
   public static void main(String[] args) throws IOException, ParseException {
     //getPastData("BT-A");
     StockData data = new StockData();
+
+    System.out.println(data.getCompanyForTicker("BT.A").getOpen());
   }
 }
