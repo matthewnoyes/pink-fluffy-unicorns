@@ -1,9 +1,9 @@
 import virtualassistant.data.stocks.*;
 
-import virtualassistant.data.datastore.org.json.simple.*;
-import virtualassistant.data.datastore.org.json.simple.JSONObject;
-import virtualassistant.data.datastore.org.json.simple.parser.JSONParser;
-import virtualassistant.data.datastore.org.json.simple.parser.ParseException;
+import org.json.simple.*;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,18 +17,6 @@ public class Loader {
     
     JSONParser parser;
     
-    public static void main(String[] args){
-        
-        Loader loader = new Loader();
-        
-        StockData sd1 = loader.createDummyStockData();
-        
-        loader.writeStocks(sd1);
-        StockData sd2 = loader.readStocks();
-        
-        loader.writeStocks(sd2);
-    }
-    
     public Loader(){
         
         parser = new JSONParser();
@@ -40,7 +28,7 @@ public class Loader {
         return parser.parse(str);
     }
     
-    public StockData readStocks(){
+    /*public StockData readStocks(){
         
         Map<String, Company> companies = new HashMap(100);
         Map<String, Set<Company>> sectors = new HashMap(20);
@@ -60,8 +48,7 @@ public class Loader {
                 JSONObject jo = (JSONObject) o;
                 //System.out.println(jo);
                 
-                Company c = new Company((String) jo.get("ticker"), (String) jo.get("company"));
-                c.sector = (String) jo.get("sector");
+                Company c = new Company((String) jo.get("ticker"), (String) jo.get("company"), (String) jo.get("sector"));
                 c.open = (double) jo.get("open");
                 c.high = (double) jo.get("high");
                 c.low = (double) jo.get("low");
@@ -160,8 +147,8 @@ public class Loader {
 
         //System.out.print(obj);
         
-    }
-    
+    }*/
+    /*
     private StockData createDummyStockData(){
         
         Map<String, Company> companies = new HashMap(100);
@@ -192,7 +179,7 @@ public class Loader {
         }
         
         return new StockData(companies, sectors);
-    }
+    }*/
     
    /* private void read(){
         

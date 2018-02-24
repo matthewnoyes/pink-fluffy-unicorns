@@ -96,13 +96,13 @@ public class StockData implements IStockData {
     return 0.0;
   }
 
-  public double sectorYearHigh() {
+  public double sectorYearHigh(String sector) {
     return 0.0;
   }
-  public double sectorYearLow() {
+  public double sectorYearLow(String sector) {
     return 0.0;
   }
-  public double sectorYearAverageClose() {
+  public double sectorYearAverageClose(String sector) {
     return 0.0;
   }
 

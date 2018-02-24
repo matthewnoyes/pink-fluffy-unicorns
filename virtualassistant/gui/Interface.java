@@ -368,7 +368,10 @@ private void makeButtons() {
 public static void main(String args[]){
     
     VirtualAssistant virtualAssistant = new VirtualAssistant();
-    virtualAssistant.startScanning();
+    
+    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
+        }
 }
 */
 }

@@ -1,11 +1,16 @@
 package virtualassistant;
 
-import data.datastore.org.json.simple.JSONArray;
-import data.datastore.org.json.simple.JSONObject;
+import json.simple.JSONArray;
+import json.simple.JSONObject;
+
+import virtualassistant.data.stocks.Company;
+import virtualassistant.data.stocks.StockData;
+import virtualassistant.data.datastore.Loader;
+import virtualassistant.chatbot.Chatbot;
 
 public class VirtualAssistant {
 
-    private StockData stockdata;
+    private StockData stockData;
     private SystemStatus systemStatus;
     private Loader loader;
     private LearningAgent learningAgent;
@@ -17,39 +22,21 @@ public class VirtualAssistant {
         //Instantiate everything
 
         loader = new Loader();
-        stockData = loader.readStocks();
-        learningAgent = loader.readLearningAgent();
+        stockData = new StockData();// Sloader.readStocks();
+        learningAgent = new LearningAgent();
         systemStatus = loader.readSystemStatus();
         //newsProcessor = new NewsProcessor();
         chatbot = new Chatbot();
         
     }
         
-    public void startScanning(String[] args) {
+    private void scan() {
+                    
+        // Try to update data, if working, fire learning agent
+        if(loader.updateData(stockData)) {
 
-        
-        int timepassed = 0;
-        //Try to update data.
-
-        for(;;){
-            //Wait 10 seconds
-            TimeUnit.SECONDS.sleep(10);
-
-            // Try to update data, if working, fire learning agent
-            if(loader.updateData(stockData)) {
-
-                learningAgent.searchForStockEvent();
-                learningAgent.searchForNewsEvent();
-            }
-            
-            // Autosave every 5 min?
-            timePassed += 10;
-            if(timePassed >= 300) {
-                
-                // Autosave smth
-                timePassed = 0;
-            }
-      
+            learningAgent.searchForStockEvent();
+            learningAgent.searchForNewsEvent();
         }
     }
 
@@ -63,10 +50,10 @@ public class VirtualAssistant {
         
         switch(obj.get("action")){
 
-            case Action.GET_COMPANY_DATA:  getCompanyData(obj);
+            case Action.COMPANY_DATA:  getCompanyData(obj);
                                     break;
 
-            case Action.GET_SECTOR_DATA:   getSectorData(obj);
+            case Action.SECTOR_DATA:   getSectorData(obj);
                                     break;
 
             case Action.COMPARE_COMPANIES: compareCompanies(obj);
@@ -96,45 +83,45 @@ public class VirtualAssistant {
         switch(parameters.get("data1")) {
 
             case "open":
-                chatbot.output(company.open);
+                chatbot.output(company.getOpen());
                 break;
             
             case "high":
-                chatbot.output(company.high);
+                chatbot.output(company.getHigh());
                 break;
             
             case "low":
-                chatbot.output(company.low);
+                chatbot.output(company.getLow());
                 break;
             
             case "vol":
-                chatbot.output(company.vol);
+                chatbot.output(company.getVolume());
                 break;
 
-            case "pe":
-              chatbot.output(company.pe);
+            /*case "pe":
+              chatbot.output(company.getPe());
               break;
                                       
-            case "mktCap":
-                chatbot.output(company.mktCap);
+            /*case "mktCap":
+                chatbot.output(company.getMktCap());
                 break;
-            
+            */
             case "yearHigh":
-                chatbot.output(company.yearHigh);
+                chatbot.output(company.yearHigh());
                 break;
             
             case "yearLow":
-                chatbot.output(company.yearLow);
+                chatbot.output(company.yearLow());
                 break;
 
             case "avgVol":
-                chatbot.output(company.avgVol);
+                chatbot.output(company.yearAverageVolume());
                 break;                
 
-            case "yield":
-                chatbot.output(company.yield);
+           /* case "yield":
+                chatbot.output(company.yield());
                 break;
-
+            */
         }
         
     }
@@ -148,16 +135,16 @@ public class VirtualAssistant {
 
         switch(parameters.get("data")) {
 
-            case "price":
-                chatbot.output(stockData.sectorPrice(sector));
+            /*case "price":
+                chatbot.output(stockData.getSectorCurrentPrice(sector));
                 break;
-            
+            */
             case "change":
-                chatbot.output(stockData.sectorChange(sector));
+                chatbot.output(stockData.getSectorChange(sector));
                 break;
                 
             case "percentageChange":
-                chatbot.output(stockData.sectorPercentageChange(sector));
+                chatbot.output(stockData.getSectorPercentageChange(sector));
                 break;
                 
             case "yearHigh":
@@ -178,12 +165,13 @@ public class VirtualAssistant {
         }
     }
     
-}
+    
+    class Action {
+    static final short COMPANY_DATA = 0,
+        SECTOR_DATA = 1,
+        COMPARE_COMPANIES = 2,
+        COMPARE_SECTORS = 3,
+        ALERT = 4;
+    }
 
-public enum Action {
-    GET_COMPANY_DATA,
-    GET_SECTOR_DATA,
-    COMPARE_COMPANIES,
-    COMPARE_SECTORS,
-    ALERT
 }
