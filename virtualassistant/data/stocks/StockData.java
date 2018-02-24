@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
+import java.util.Collection;
 
 public class StockData implements IStockData {
 
@@ -89,6 +90,10 @@ public class StockData implements IStockData {
 
   public Set<Company> getCompaniesInSector(String sector) {
     return companiesInSector.get(sector);
+  }
+
+  public Collection<Company> getAllCompanies() {
+    return tickerToCompany.values();
   }
 
   public double getCurrentSectorPrice(String sector) {
