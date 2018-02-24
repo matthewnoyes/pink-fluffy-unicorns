@@ -1,7 +1,7 @@
 package virtualassistant;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import data.datastore.org.json.simple.JSONArray;
+import data.datastore.org.json.simple.JSONObject;
 
 public class VirtualAssistant {
 
