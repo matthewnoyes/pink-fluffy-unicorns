@@ -8,6 +8,7 @@
 }
 
 #round_mic_button {
+  -fx-background-color: #a9a9a9;
   -fx-background-radius: 5em;
   -fx-min-width: 80px;
   -fx-min-height: 80px;
@@ -31,6 +32,7 @@
 }
 
 #help_button {
+  -fx-background-color: #a9a9a9;
   -fx-background-radius: 5em;
   -fx-margin: 0 0 0 0;
   -fx-min-width: 30px;
@@ -134,9 +136,12 @@
   -fx-background-color: transparent;
 }
 
-.increment-button, .decrement-button {
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
   -fx-background-color: transparent;
   -fx-border-color: transparent;
+  -fx-shape: " ";
+	-fx-padding:0;
 }
 
 .scroll-bar:horizontal .track {
@@ -146,6 +151,25 @@
 }
 
 .scroll-bar:horizontal .thumb {
-  -fx-background-color: white;
+  -fx-background-color: transparent;
   -fx-background-radius: 5em;
+}
+
+.scroll-bar:vertical .track {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-radius: 0em;
+}
+
+.scroll-bar:vertical .thumb {
+  -fx-background-color: #1E1D25;
+  -fx-background-radius: 5em;
+}
+
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+  -fx-background-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-padding:0 10 0 0;
+
 }

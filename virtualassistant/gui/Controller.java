@@ -55,7 +55,7 @@ public void initialize(URL location, ResourceBundle resources) {
 		helptext_list.add("How do you feel about construction?");
 
 		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt -> round_mic_button.setStyle("-fx-background-color: #FF4339;")),
-                                 					new KeyFrame(Duration.seconds(1), evt -> round_mic_button.setStyle("-fx-background-color: #FFFFFF;")));
+                                 					new KeyFrame(Duration.seconds(1), evt -> round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
 		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
@@ -116,7 +116,7 @@ public void handleMicButtonClick(ActionEvent e) {
 		} else {
 				listening = false;
 				mic_button_timeline.stop();
-				round_mic_button.setStyle("-fx-background-color: #FFFFFF;");
+				round_mic_button.setStyle("-fx-background-color: #a9a9a9;");
 				stopListening();
 		}
 }
