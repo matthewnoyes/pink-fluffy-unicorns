@@ -30,7 +30,13 @@ public class Loader {
 
         return (JSONObject)parser.parse(str);
     }
+    
+    public JSONObject parseJSONFile(String str) throws ParseException {
+      //System.out.println(str);
 
+        return (JSONObject)parser.parse(new FileReader(str));
+    }
+    
     /*public StockData readStocks(){
 
         Map<String, Company> companies = new HashMap(100);

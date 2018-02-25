@@ -58,11 +58,17 @@ public class VirtualAssistant {
 
     // Decide action type based on action type decided by chatbot?
     public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, ParseException {
-
-        String response = chatbot.getResponse(query);
-
-        // Convert to JsonObject
-        JSONObject obj = loader.parseJSON(response);
+        
+        // Uncomment to link to chatbot
+        /*  
+            String response = chatbot.getResponse(query);
+            // Convert to JsonObject
+            JSONObject obj = loader.parseJSON(response);
+        */
+        JSONObject obj = loader.parseJSONFile("tests\test.json");
+        
+        
+        
 
         switch((int)obj.get("action")){
 
