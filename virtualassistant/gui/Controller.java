@@ -56,6 +56,10 @@ public void initialize(URL location, ResourceBundle resources) {
 
 		virtualAssistant = new VirtualAssistant();
 
+	// 	final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+ // -            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
+ // -        }
+
 		openHelp();
 }
 
