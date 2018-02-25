@@ -126,7 +126,6 @@ public class LearningAgent implements ILearningAgent {
     //     //xxx.alert("There is significant news on: " + article.com);
     //   }
     // }
-    return null;
 
     return "";
 

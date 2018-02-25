@@ -1,0 +1,2 @@
+Main-Class: virtualassistant.gui.Main
+Class-Path: JSON-parser.jar jsoup-1.11.2.jar
