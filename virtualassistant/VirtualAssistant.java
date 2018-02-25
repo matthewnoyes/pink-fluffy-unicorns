@@ -4,6 +4,7 @@ package virtualassistant;
 //import json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.json.simple.*;
 import org.json.simple.JSONObject;
@@ -16,6 +17,8 @@ import virtualassistant.data.datastore.Loader;
 import virtualassistant.chatbot.Chatbot;
 import virtualassistant.ai.LearningAgent;
 import virtualassistant.data.system.SystemStatus;
+import virtualassistant.misc.Pair;
+import virtualassistant.data.news.NewsObj;
 
 public class VirtualAssistant {
 
@@ -54,7 +57,7 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public String getResponse(String query) throws IOException, ParseException {
+    public Pair<String, Arraylist<NewsObj>> getResponse(String query) throws IOException, ParseException {
 
         String response = chatbot.getResponse(query);
 
@@ -76,7 +79,7 @@ public class VirtualAssistant {
             case Action.ALERT:             //return alert(obj);
                                     break;
 
-            default:                return "Undefined action!";
+            default:                return new Pair("Undefined action!", null);
         }
         return null;
 
@@ -85,7 +88,7 @@ public class VirtualAssistant {
     /* Company data
     */
 
-    private String getCompanyData(JSONObject parameters){
+    private Pair<String, Arraylist<NewsObj>> getCompanyData(JSONObject parameters){
 
         ICompany company = stockData.getCompanyForName((String)parameters.get("company1"));
 
@@ -93,16 +96,16 @@ public class VirtualAssistant {
         switch((String)parameters.get("data1")) {
 
             case "open":
-                return "" + company.getOpen();
+                return new Pair("" + company.getOpen(), null);
 
             case "high":
-                return "" + company.getHigh();
+                return new Pair("" + company.getHigh(), null);
 
             case "low":
-                return "" + company.getLow();
+                return new Pair("" + company.getLow(), null);
 
             case "vol":
-                return "" + company.getVolume();
+                return new Pair("" + company.getVolume(), null);
 
             /*case "pe":
               return company.getPe();
@@ -113,28 +116,29 @@ public class VirtualAssistant {
                 break;
             */
             case "yearHigh":
-                return "" + company.yearHigh();
+                return new Pair("" + company.yearHigh(), null);
 
             case "yearLow":
-                return "" + company.yearLow();
+                return new Pair("" + company.yearLow(), null);
 
             case "avgVol":
-                return "" + company.yearAverageVolume();
+                return new Pair("" + company.yearAverageVolume(), null);
 
-           /* case "yield":
+           /* case "news":
+                Arraylist news = ...
                 return company.yield();
                 break;
             */
         }
 
-        return "";
+        return null;
 
     }
 
     /* Sector data
     */
 
-    private String getSectorData(JSONObject parameters){
+    private Pair<String, Arraylist<NewsObj>> getSectorData(JSONObject parameters){
 
         String sector = (String)parameters.get("sector");
 
@@ -145,26 +149,26 @@ public class VirtualAssistant {
                 break;
             */
             case "change":
-                return "" + stockData.getSectorChange(sector);
+                return new Pair("" + stockData.getSectorChange(sector), null);
 
             case "percentageChange":
-                return "" + stockData.getSectorPercentageChange(sector);
+                return new Pair("" + stockData.getSectorPercentageChange(sector), null);
 
             case "yearHigh":
-                return "" + stockData.sectorYearHigh(sector);
+                return new Pair("" + stockData.sectorYearHigh(sector), null);
 
             case "yearLow":
-                return "" + stockData.sectorYearLow(sector);
+                return new Pair("" + stockData.sectorYearLow(sector), null);
 
             case "yearAverageClose":
-                return "" + stockData.sectorYearAverageClose(sector);
+                return new Pair("" + stockData.sectorYearAverageClose(sector), null);
 
             case "closePriceOn":
                 // return stockData.sectorYearLow(sector);
                 break;
         }
 
-        return "";
+        return null;
     }
 
 

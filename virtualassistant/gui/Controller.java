@@ -1,6 +1,7 @@
 package virtualassistant.gui;
 
 import virtualassistant.VirtualAssistant;
+import virtualAssistant.misc.Pair;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -69,23 +70,20 @@ public void initialize(URL location, ResourceBundle resources) {
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
-				closeHelp();
+			closeHelp();
 		}
 
 		Message query = new Query(text);
 		chatbot_message_list.add(query);
 		addMessage(query);
 
-
-		// Process message here
 		String responseStr = "An error occured";
 
 		try {
-    	responseStr = virtualAssistant.getResponse(query.getMessage());
+    	responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
-
 
 		News[] news = null; // this should be the news to be displayed with the response
 		Message response = new Response(responseStr, news);

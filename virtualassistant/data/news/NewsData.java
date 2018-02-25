@@ -1,6 +1,6 @@
 package virtualassistant.data.news;
-import java.io.IOException;  
-import org.jsoup.Jsoup;  
+import java.io.IOException;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
@@ -15,7 +15,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 
 
-public class NewsData impelements INewsData{
+public class NewsData implements INewsData{
 
 	private ArrayList<NewsObj> articlesObjs = new ArrayList<NewsObj>(); // arraylist of news articles objects
 	private DateFormat toFormat = new SimpleDateFormat("dd MMM yyyy HH:mm");
@@ -40,7 +40,7 @@ public class NewsData impelements INewsData{
 			fromFormat.setLenient(false);
 			toFormat.setLenient(false);
 
-			final Document doc = Jsoup.connect(webpage).get(); // all the articles from lse new analysis is gotten. 
+			final Document doc = Jsoup.connect(webpage).get(); // all the articles from lse new analysis is gotten.
 			for(Element row: doc.select(".table_datinews tr")){ // loop of articles in the table row is done
 				final String title = row.select(".text-left a").text();
 				final String time = toFormat.format(fromFormat.parse(row.select(".datetime.nowrap").text())); // with the date formatting
@@ -49,10 +49,10 @@ public class NewsData impelements INewsData{
 				final String relHref = row.select(".text-left a").first().attr("href");
 				final String absurl=javascriptLinkToUrl(relHref); // html link is a javascript script so need to use regex to get the link out.
 				articlesObjs.add(newsArrayAdder(time,title,impact,absurl,source)); // news article object added to arraylist
-			}	
+			}
 		}
 
-	private String isinNumberGetter(String webPageLink){	 // used to get the isin Number of the company and return the webpage for that company	
+	private String isinNumberGetter(String webPageLink){	 // used to get the isin Number of the company and return the webpage for that company
 		final Pattern pattern = Pattern.compile("/summary/company-summary/(.*?).html"); // regex used to get the part of link needed (the isin number).
 		final Matcher matcher = pattern.matcher(webPageLink);
 		String absoluteUrl = "";
@@ -88,16 +88,16 @@ public class NewsData impelements INewsData{
 			return articlesObjs;
 		}
 
-		public ArrayList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {			
+		public ArrayList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {
 			DateFormat fromFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date needs to be formatted.
 			fromFormat.setLenient(false);
 			toFormat.setLenient(false);
 
 			String companyName = "";
 		if(comapny.charAt(comapny.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
-			companyName = comapny + "l";		
+			companyName = comapny + "l";
 		}else{
-			companyName = comapny + ".l";	
+			companyName = comapny + ".l";
 		}
 
 			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companyName+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
@@ -107,7 +107,7 @@ public class NewsData impelements INewsData{
 				final String url = li.select("link").text();
 				articlesObjs.add(newsArrayAdder(date,title,url,"Yahoo Fianace News"));
 			}
-			return articlesObjs;	
+			return articlesObjs;
 		}
 
 		public ArrayList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
@@ -116,7 +116,7 @@ public class NewsData impelements INewsData{
 			   food-beverage  luxury-goods  personal-goods (<---contains household goods too)  retail  tobacco  travel-leisure  airlines  shipping  rail
 
 			   General sectors allowed :::: energy  financials  health  industrials  media  professional-services  retail-consumer  telecoms  transport  technology
-			*/			
+			*/
 			DateFormat fromFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // Date needs to be formatted.
 			fromFormat.setLenient(false);
 			toFormat.setLenient(false);
@@ -134,7 +134,7 @@ public class NewsData impelements INewsData{
 			return articlesObjs;
 		}
 
-	private NewsObj newsArrayAdder(String time, String title, String url,String source){ // used to make objects of news articles. 
+	private NewsObj newsArrayAdder(String time, String title, String url,String source){ // used to make objects of news articles.
 		NewsObj c = new NewsObj(time,title,url,source);
 		return c;
 	}
