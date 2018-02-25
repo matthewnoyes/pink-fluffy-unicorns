@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Arrays;
 
 import virtualassistant.data.stocks.IStockData;
+import virtualassistant.data.stocks.ICompany;
 import virtualassistant.data.news.INewsData;
 
 public class LearningAgent implements ILearningAgent {
@@ -104,8 +105,8 @@ public class LearningAgent implements ILearningAgent {
 
   public void searchForStockEvent() {
 
-    for (Company com : stocks.getAllCompanies()) {
-      if (com.getPercentageChange() > minStockImapact && favourites.containsKey(com.getTicker())) {
+    for (ICompany com : stocks.getAllCompanies()) {
+      if (com.getPercentageChange() > minStockImapact && favouriteStocks.containsKey(com.getTicker())) {
         //Send a alert
         //xxx.alert(com.getName() + " is changing price quickly");
       }
@@ -139,14 +140,14 @@ public class LearningAgent implements ILearningAgent {
     //
     // }
 
-    LearningAgent test = new LearningAgent();
-    String[] values = new String[]{"a", "b", "c", "d", "a", "e", "f", "g", "g", "f"};
-
-    test.analyzeInput(Arrays.asList(values), null);
-    String[] output = test.suggestQueries(2);
-    for (int i = 0; i < output.length; i++) {
-      System.out.println(output[i]);
-    }
+    // LearningAgent test = new LearningAgent();
+    // String[] values = new String[]{"a", "b", "c", "d", "a", "e", "f", "g", "g", "f"};
+    //
+    // test.analyzeInput(Arrays.asList(values), null);
+    // String[] output = test.suggestQueries(2);
+    // for (int i = 0; i < output.length; i++) {
+    //   System.out.println(output[i]);
+    // }
 
   }
 

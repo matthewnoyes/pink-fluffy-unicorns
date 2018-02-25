@@ -1,16 +1,17 @@
-package virtualassistant.data.stocks;
+package virtualassistant.data.system;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class SystemStatus {
-    
+
     private static Date lastUpdatedNews;
     private static Date lastUpdatedStocks;
-    
+
     private static boolean soundEnabled;
     private static boolean speechEnabled;
     private static double volume; // [0.0, 1.0]
-    
+
     public SystemStatus(boolean soundEnabled, boolean speechEnabled, double volume){
         this.soundEnabled = soundEnabled;
         this.speechEnabled = speechEnabled;
@@ -20,48 +21,50 @@ public class SystemStatus {
     public static Date getLastUpdatedNews(){
         return lastUpdatedNews;
     }
-    
+
     public static Date getLastUpdatedStocks(){
-        return lastUpdatedStocks
+        return lastUpdatedStocks;
     }
-    
+
     public static void setLastUpdatedNews(Date lastUpdatedNews){
-        this.lastUpdatedNews = lastUpdatedNews;
+        //this.lastUpdatedNews = lastUpdatedNews;
     }
-    
+
     public static void setLastUpdatedStocks(Date lastUpdatedStocks){
-        this.lastUpdatedStocks = lastUpdatedStocks;
+        //this.lastUpdatedStocks = lastUpdatedStocks;
     }
-    
+
     public static void toggleSound(){
-        soundEnabled != soundEnabled; 
+        soundEnabled = !soundEnabled;
     }
-    
+
     public static void toggleSpeech(){
-        speechEnabled != speechEnabled;
+        speechEnabled = !speechEnabled;
     }
-    
+
     public static void setVolume(){
-        
+
     }
-    
+
     public static void setSoundEnabled(){
-        
+
     }
-    
+
     public static void setSpeechEnabled(){
-        
+
     }
-    
+
     public static boolean getSpeechEnabled(){
-        
+      return false;
+
     }
-    
+
     public static boolean getSoundEnabled(){
-        
+      return false;
     }
-    
-    public double void getVolume(){
-        
+
+    public double getVolume(){
+      return 0.0;
+
     }
 }

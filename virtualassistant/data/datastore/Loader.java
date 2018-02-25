@@ -1,3 +1,5 @@
+package virtualassistant.data.datastore;
+
 import virtualassistant.data.stocks.*;
 
 import org.json.simple.*;
@@ -14,40 +16,40 @@ import java.util.*;
 
 
 public class Loader {
-    
+
     JSONParser parser;
-    
+
     public Loader(){
-        
+
         parser = new JSONParser();
     }
-    
-    
-    public JSONObject parseJSON(String str) {
-        
-        return parser.parse(str);
+
+
+    public JSONObject parseJSON(String str) throws ParseException {
+
+        return (JSONObject)parser.parse(str);
     }
-    
+
     /*public StockData readStocks(){
-        
+
         Map<String, Company> companies = new HashMap(100);
         Map<String, Set<Company>> sectors = new HashMap(20);
-        
+
         try{
-            
+
             Object obj = parser.parse(new FileReader("stockData.json"));
-            
-            JSONObject stockData = (JSONObject) obj; 
+
+            JSONObject stockData = (JSONObject) obj;
             //System.out.println(jsonObject);
-            
+
             // Companies
             JSONArray comp = (JSONArray) stockData.get("companies");
-           
+
             for (Object o : comp) {
-                     
+
                 JSONObject jo = (JSONObject) o;
                 //System.out.println(jo);
-                
+
                 Company c = new Company((String) jo.get("ticker"), (String) jo.get("company"), (String) jo.get("sector"));
                 c.open = (double) jo.get("open");
                 c.high = (double) jo.get("high");
@@ -59,22 +61,22 @@ public class Loader {
                 c.yearLow =(double)  jo.get("yearLow");
                 c.avgVol = (double) jo.get("avgVol");
                 c.yield = (double) jo.get("yield");
-                
+
                 companies.put(c.ticker, c);
-                
+
                 // Sectors
                 if(sectors.get(c.sector) == null){
-                    
+
                     sectors.put(c.sector, new HashSet(20));
                 }
-                
+
                 sectors.get(c.sector).add(c);
             }
-            
-            
-            
+
+
+
             return new StockData(companies, sectors);
-        
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -82,21 +84,21 @@ public class Loader {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
-    
+
     private void writeStocks(StockData stockData){
-        
+
         JSONObject obj = new JSONObject();
-        
+
         // Companies
         JSONArray companies = new JSONArray();
-        
+
         for(Company c : stockData.companies.values()){
-            
+
             JSONObject cObj = new JSONObject();
-            
+
             cObj.put("ticker", c.ticker);
             cObj.put("sector", c.sector);
             cObj.put("company", c.company);
@@ -110,31 +112,31 @@ public class Loader {
             cObj.put("yearLow", c.yearLow);
             cObj.put("avgVol", c.avgVol);
             cObj.put("yield", c.yield);
-            
+
             companies.add(cObj);
         }
-        
+
         obj.put("companies", companies);
-        
+
         // Sectors
         JSONObject sectors = new JSONObject();
-        
+
         for(Set<Company> set : stockData.sectors.values()){
-            
+
             JSONArray sArray = new JSONArray();
             String sectorName = new String();
-            
+
             for(Company c : set) {
-    
+
                 sArray.add(c.ticker);
                 sectorName = c.sector;
             }
-            
+
             sectors.put(sectorName, sArray);
         }
-        
+
         obj.put("sectors", sectors);
-        
+
         // Write to file
         try (FileWriter file = new FileWriter("stockData.json")) {
 
@@ -146,43 +148,43 @@ public class Loader {
         }
 
         //System.out.print(obj);
-        
+
     }*/
     /*
     private StockData createDummyStockData(){
-        
+
         Map<String, Company> companies = new HashMap(100);
         Map<String, Set<Company>> sectors = new HashMap(20);
-        
-        // Sectors 
+
+        // Sectors
         for(int i = 1; i < 4; i++){
             sectors.put("Sector " + i, new HashSet(3));
         }
-        
+
         // Companies:
         for(int i = 1; i < 10; i++) {
             Company c = new Company("C" + i, "Company " + i);
-            
+
             if(i < 4) {
-                
-                c.sector = "Sector 1";              
+
+                c.sector = "Sector 1";
             } else if(i < 7) {
-                
-                c.sector = "Sector 2";           
+
+                c.sector = "Sector 2";
             } else {
-                
-                c.sector = "Sector 3";      
+
+                c.sector = "Sector 3";
             }
- 
+
             sectors.get(c.sector).add(c);
             companies.put(c.ticker, c);
         }
-        
+
         return new StockData(companies, sectors);
     }*/
-    
+
    /* private void read(){
-        
+
 
         try {
 
@@ -212,9 +214,9 @@ public class Loader {
             e.printStackTrace();
         }
     }
-    
+
     private void write(){
-        
+
         JSONObject obj = new JSONObject();
         obj.put("name", "mkyong.com");
         obj.put("age", new Integer(100));
@@ -236,6 +238,6 @@ public class Loader {
         }
 
         System.out.print(obj);
-        
+
     } */
 }

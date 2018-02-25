@@ -1,3 +1,5 @@
+package virtualassistant.gui;
+
 class News {
 
 private String title;

@@ -1,3 +1,5 @@
+package virtualassistant.gui;
+
 public class Message {
 
 protected String message;

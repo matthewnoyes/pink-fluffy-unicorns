@@ -1,3 +1,5 @@
+package virtualassistant.gui;
+
 import java.util.*;
 
 import javafx.application.Application;

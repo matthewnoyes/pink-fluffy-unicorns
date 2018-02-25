@@ -1,11 +1,11 @@
 package virtualassistant;
 
+import java.util.List;
+
 public interface IVirtualAssistant {
-  
-  public static void main(String args[]);
-  
+
   // Startup & update memory
   public void start();
-  public void decideAction(Action action, List<String> parameters);
- 
+  public void decideAction(int action, List<String> parameters);
+
 }

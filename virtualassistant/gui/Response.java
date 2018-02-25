@@ -1,3 +1,5 @@
+package virtualassistant.gui;
+
 public class Response extends Message {
 
 private News[] news;
