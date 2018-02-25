@@ -12,6 +12,8 @@ import javafx.scene.text.*;
 import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.control.Separator;
+import javafx.animation.*;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
@@ -30,6 +32,7 @@ public TextField query_text_field;
 public ImageView wifi_image_view;
 @FXML
 public Button round_mic_button;
+public Timeline mic_button_timeline;
 
 private boolean listening;
 private boolean onHelp;
@@ -50,6 +53,10 @@ public void initialize(URL location, ResourceBundle resources) {
 		helptext_list.add("Is LLoyds positive?");
 		helptext_list.add("Open price of Barclays");
 		helptext_list.add("How do you feel about construction?");
+
+		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt -> round_mic_button.setStyle("-fx-background-color: #FF4339;")),
+                                 					new KeyFrame(Duration.seconds(1), evt -> round_mic_button.setStyle("-fx-background-color: #FFFFFF;")));
+		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
 
@@ -92,11 +99,11 @@ public void makeQuery(String text) {
 }
 
 public void startListening() {
-
 }
+
 public void stopListening() {
 		String text = "";
-		makeQuery(text);
+		//makeQuery(text);
 }
 
 // handle when the mic button is clicked
@@ -104,13 +111,12 @@ public void stopListening() {
 public void handleMicButtonClick(ActionEvent e) {
 		if(!listening) {
 				listening = true;
-				round_mic_button.getStyleClass().remove("not_listening");
-				round_mic_button.getStyleClass().add("listening");
+				mic_button_timeline.play();
 				startListening();
 		} else {
 				listening = false;
-				round_mic_button.getStyleClass().remove("listening");
-				round_mic_button.getStyleClass().add("not_listening");
+				mic_button_timeline.stop();
+				round_mic_button.setStyle("-fx-background-color: #FFFFFF;");
 				stopListening();
 		}
 }
@@ -119,7 +125,7 @@ public void handleMicButtonClick(ActionEvent e) {
 public void handleSendQueryButtonClick(ActionEvent e) {
 		String typed_query = query_text_field.getText();
 
-		if(typed_query != "") {
+		if(typed_query != null && !typed_query.trim().isEmpty()) {
 				makeQuery(typed_query);
 		}
 		query_text_field.setText("");

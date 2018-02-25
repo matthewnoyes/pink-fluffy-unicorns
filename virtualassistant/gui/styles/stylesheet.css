@@ -9,25 +9,18 @@
 
 #round_mic_button {
   -fx-background-radius: 5em;
-  -fx-min-width: 60px;
-  -fx-min-height: 60px;
-  -fx-max-width: 60px;
-  -fx-max-height: 60px;
+  -fx-min-width: 80px;
+  -fx-min-height: 80px;
+  -fx-max-width: 80px;
+  -fx-max-height: 80px;
 }
 
 #round_mic_button: hover {
   -fx-opacity: 0.7;
 }
+
 #round_mic_button:focused {
   -fx-background-color: #a9a9a9, white, white;
-}
-
-.listening {
-  -fx-background-color: #FF4339;
-}
-
-.not_listening {
-  -fx-background-color: #FFFFFF;
 }
 
 #update_time {
@@ -48,6 +41,7 @@
   -fx-font-size: 11pt;
   -fx-font-family: "Segoe UI Semibold";
 }
+
 #help_button:focused {
   -fx-background-color: #a9a9a9, white, white;
 }
@@ -62,17 +56,10 @@
 
 #query_send {
   -fx-background-color: #303344;
-  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-  -fx-font-family: "Segoe UI Semibold";
-  -fx-text-fill: white;
 }
 
 #query_recieve {
-  -fx-background-color: #1E1D25;s
-  -fx-font-size: 15pt;
-  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-  -fx-font-family: "Segoe UI Semibold";
-  -fx-text-fill: white;
+  -fx-background-color: #1E1D25;
 }
 
 .chat_bubble {
@@ -83,6 +70,7 @@
   -fx-text-align: center;
   -fx-padding: 20px;
   -fx-position: absolute;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 
 #news_heading {
@@ -132,7 +120,7 @@
 }
 
 #help_text {
-  -fx-text-fill: #676778;
+  -fx-text-fill: #A2A1AB;
   -fx-font-size: 17pt;
   -fx-font-family: "Segoe UI Semibold";
   -fx-padding: 0 0 5 0;
