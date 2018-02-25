@@ -1,5 +1,7 @@
 package virtualassistant.gui;
 
+import virtualassistant.VirtualAssistant;
+
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -31,6 +33,8 @@ private boolean onHelp;
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
+private VirtualAssistant assistant;
+
 @Override
 public void initialize(URL location, ResourceBundle resources) {
 		listening = false;
@@ -45,6 +49,9 @@ public void initialize(URL location, ResourceBundle resources) {
 		helptext_list.add("How do you feel about construction?");
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
+
+		assistant = new VirtualAssistant();
+
 		openHelp();
 }
 
