@@ -5,10 +5,6 @@ package virtualassistant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.date.DateFormat;
-import java.date.SimpleDateFormat;
-import java.date.Calendar;
-import java.date.Date;
 
 import org.json.simple.*;
 import org.json.simple.JSONObject;
@@ -102,28 +98,28 @@ public class VirtualAssistant {
 
         ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
         INewsData news = new NewsData();
-        Calendar calDate  = Calendar.getInstance();
+	Calendar calDate  = Calendar.getInstance();
 	    
 	    if(parameters.get("date") != null){
-		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");		
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");		
 		calDate.setTime(df.parse(parameters.get("date")));	    
 	    }
 
         switch((String)parameters.get("data1")) {
 			
-            case "ClosePriceOnDateen":
+	    case "ClosePriceOnDateen":
                 return new Pair("" + company.getClosePriceOnDate(calDate), null);
 			
-            case "OpenPriceOnDate":
+	    case "OpenPriceOnDate":
                 return new Pair("" + company.getOpenPriceOnDate(calDate), null);
 		
-            case "HighPriceOnDate":
+	    case "HighPriceOnDate":
                 return new Pair("" + company.getHighPriceOnDate(calDate), null);
 	
-            case "LowPriceOnDate":
+	    case "LowPriceOnDate":
                 return new Pair("" + company.getLowPriceOnDate(calDate), null);	
 
-            case "VolumeOnDate":
+	    case "VolumeOnDate":
                 return new Pair("" + company.getVolumeOnDate(calDate), null);	
 
             case "open":
@@ -147,15 +143,15 @@ public class VirtualAssistant {
             case "CurrentPrice":
                 return new Pair("" + company.getCurrentPrice(), null);
 			
-            case "Change":
+	    case "Change":
                 return new Pair("" + company.getChange(), null);
 			
-            case "AverageClose":
+	    case "AverageClose":
                 return new Pair("" + company.yearAverageClose(), null);
 			
-            /*case "PastData":
+            case "PastData":
                 return new Pair("" + company.getPastData(), null);
-*/
+
   
             case "yearHigh":
                 return new Pair("" + company.yearHigh(), null);
