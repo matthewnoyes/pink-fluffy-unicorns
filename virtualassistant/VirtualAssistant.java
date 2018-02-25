@@ -117,14 +117,22 @@ public class VirtualAssistant {
             case "vol":
                 return new Pair("" + company.getVolume(), null);
 
-            /*case "pe":
-              return company.getPe();
-              break;
+            case "PercentageChange":
+                return new Pair("" + company.getPercentageChange(), null);
+	
+            case "CurrentPrice":
+                return new Pair("" + company.getCurrentPrice(), null);
+			
+	    case "Change":
+                return new Pair("" + company.getChange(), null);
+			
+	    case "AverageClose":
+                return new Pair("" + company.yearAverageClose(), null);
+			
+            case "PastData":
+                return new Pair("" + company.getPastData(), null);
 
-            /*case "mktCap":
-                return company.getMktCap();
-                break;
-            */
+  
             case "yearHigh":
                 return new Pair("" + company.yearHigh(), null);
 
