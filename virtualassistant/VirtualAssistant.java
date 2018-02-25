@@ -31,8 +31,9 @@ public class VirtualAssistant {
     private SystemStatus systemStatus;
     private Loader loader;
     private LearningAgent learningAgent;
-    //private NewsProcessor newsProcessor;
+    private INewsData news;
     private Chatbot chatbot;
+    private Calendar calDate;
 
 
     public VirtualAssistant(){
@@ -40,14 +41,15 @@ public class VirtualAssistant {
 
         loader = new Loader();
         try {
-          stockData = new StockData();// Sloader.readStocks();
+            stockData = new StockData();// Sloader.readStocks();
         } catch (Exception e) {
-          System.out.println(e);
+            System.out.println(e);
         }
         learningAgent = new LearningAgent(stockData, null);
         //systemStatus = loader.readSystemStatus();
-        //newsProcessor = new NewsProcessor();
+        news = new NewsData()
         chatbot = new Chatbot();
+        calDate  = Calendar.getInstance();
 
     }
 
@@ -64,34 +66,30 @@ public class VirtualAssistant {
     // Decide action type based on action type decided by chatbot?
     public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, java.text.ParseException, ParseException {
 
-        // Uncomment to link to chatbot
+        JSONObject response = chatbot.getResponse(query);
 
-        String response = chatbot.getResponse(query);
-        // Convert to JsonObject
-        JSONObject obj = loader.parseJSON(response);
-
-        //JSONObject obj = loader.parseJSONFile("tests/test.json");
-     
-
-        switch(Math.toIntExact((long)obj.get("action"))){
-
-            case Action.COMPANY_DATA:  return getCompanyData(obj);
-
-            case Action.SECTOR_DATA:   return getSectorData(obj);
-
-            case Action.COMPARE_COMPANIES: //return compareCompanies(obj);
-                                    break;
-
-            case Action.COMPARE_SECTORS:   //return compareSectors(obj);
-                                    break;
-
-            case Action.ALERT:             //return alert(obj);
-                                    break;
-
-            default:                return new Pair("Undefined action!", null);
-        }
+        // Check if ALERT or DATA_REQUEST
+        if((long)response.get("action") == Action.ALERT) 
+            return ((String)response.get("message"), null);
+        
+        if((long)response.get("action") != Action.DATA_REQUEST) 
+            return null;//((String)response.get("message"), null);
+        
+        
+        /// ADDD SPLITTING LOGICC HEREE
+        
+        // Check whether company or sector
+        ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
+        if(company != null) {
+            
+            return getCompanyData(response);
+        } else if (stockData.isSector((String)parameters.get("company1"))){
+            
+            return getSectorData(response);
+        } 
+        
+        // Return
         return null;
-
     }
 
     /* Company data
@@ -101,36 +99,32 @@ public class VirtualAssistant {
 
         ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
         // Add split logic on and, use a for loop to return 
-        // Return the 2 concatenated strings / concatennated arraylists
         
-        
-        INewsData news = new NewsData();
-	Calendar calDate  = Calendar.getInstance();
-
+      
+        // Try to get date
 	    if(parameters.get("date") != null){
-		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-		calDate.setTime(df.parse((String)parameters.get("date")));
+            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            calDate.setTime(df.parse((String)parameters.get("date")));
 	    }
 
         switch((String)parameters.get("data1")) {
 
+            case "currentPrice":
+                return new Pair("" + company.getCurrentPrice(), null);
 
-        case "currentPrice":
-              return new Pair("" + company.getCurrentPrice(), null);
+            case "ClosePriceOnDate":
+                return new Pair("" + company.getClosePriceOnDate(calDate), null);
 
-	    case "ClosePriceOnDate":
-               return new Pair("" + company.getClosePriceOnDate(calDate), null);
-
-	    case "OpenPriceOnDate":
+            case "OpenPriceOnDate":
                 return new Pair("" + company.getOpenPriceOnDate(calDate), null);
 
-	    case "HighPriceOnDate":
+            case "HighPriceOnDate":
                 return new Pair("" + company.getHighPriceOnDate(calDate), null);
 
-	    case "LowPriceOnDate":
+            case "LowPriceOnDate":
                 return new Pair("" + company.getLowPriceOnDate(calDate), null);
 
-	    case "VolumeOnDate":
+            case "VolumeOnDate":
                 return new Pair("" + company.getVolumeOnDate(calDate), null);
 
             case "open":
@@ -154,15 +148,11 @@ public class VirtualAssistant {
             case "CurrentPrice":
                 return new Pair("" + company.getCurrentPrice(), null);
 
-	    case "Change":
+            case "Change":
                 return new Pair("" + company.getChange(), null);
 
-	    case "AverageClose":
+            case "AverageClose":
                 return new Pair("" + company.yearAverageClose(), null);
-
-            // case "PastData":
-            //     return new Pair("" + company.getPastData(), null);
-
 
             case "yearHigh":
                 return new Pair("" + company.yearHigh(), null);
@@ -191,12 +181,12 @@ public class VirtualAssistant {
 
         String sector = (String)parameters.get("sector");
         INewsData news = new NewsData();
-	Calendar calDate  = Calendar.getInstance();
+        Calendar calDate  = Calendar.getInstance();
 
-	if(parameters.get("date") != null){
-		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-		calDate.setTime(df.parse((String)parameters.get("date")));
-	}
+        if(parameters.get("date") != null){
+            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            calDate.setTime(df.parse((String)parameters.get("date")));
+        }
 
 
         switch((String)parameters.get("data")) {
@@ -213,7 +203,7 @@ public class VirtualAssistant {
                 return new Pair("" + stockData.getSectorPercentageChange(sector), null);
 
             case "news":
-		return new Pair("Here is the news that you wanted", news.sectorNews(sector));
+                return new Pair("Here is the news that you wanted", news.sectorNews(sector));
 
             case "yearHigh":
                 return new Pair("" + stockData.sectorYearHigh(sector), null);
@@ -237,11 +227,8 @@ public class VirtualAssistant {
 
 
     class Action {
-    static final short COMPANY_DATA = 0,
-        SECTOR_DATA = 1,
-        COMPARE_COMPANIES = 2,
-        COMPARE_SECTORS = 3,
-        ALERT = 4;
+    static final short DATA_REQUEST = 0,
+        ALERT = 1;
     }
 
 }
