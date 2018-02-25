@@ -1,15 +1,17 @@
 package virtualassistant.gui;
 
+import virtualassistant.data.news.NewsObj;
+
 public class Response extends Message {
 
-private News[] news;
+private NewsObj[] news;
 
-public Response(String response, News[] news) {
+public Response(String response, NewsObj[] news) {
 				super(response);
 				this.news = news;
 }
 
-public News[] getNews() {
+public NewsObj[] getNews() {
 				return news;
 }
 
