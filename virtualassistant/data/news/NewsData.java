@@ -15,7 +15,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 
 
-public class NewsScrapper{
+public class NewsData impelements INewsData{
 
 	private ArrayList<NewsObj> articlesObjs = new ArrayList<NewsObj>(); // arraylist of news articles objects
 	private DateFormat toFormat = new SimpleDateFormat("dd MMM yyyy HH:mm");

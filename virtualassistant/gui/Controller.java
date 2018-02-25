@@ -69,7 +69,7 @@ public void initialize(URL location, ResourceBundle resources) {
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
-				closeHelp();
+			closeHelp();
 		}
 
 		Message query = new Query(text);
@@ -77,7 +77,7 @@ public void makeQuery(String text) {
 		addMessage(query);
 
 
-		// Process message here
+
 		String responseStr = "An error occured";
 
 		try {
@@ -85,7 +85,6 @@ public void makeQuery(String text) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 
 		News[] news = null; // this should be the news to be displayed with the response
 		Message response = new Response(responseStr, news);
