@@ -9,6 +9,13 @@ A Trader ChatBot that
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+## Compiling on Linux/Mac
+
+In directory PFU run './virtualassistant/virtualassistant.sh' to compile
+
+java -cp .:./virtualassistant/data/jsoup-1.11.2.jar:./virtualassistant/data/datastore/JSON-parser.jar virtualassistant.gui.Main
+
+
 ### Prerequisites
 
 What things you need to install the software and how to install them
