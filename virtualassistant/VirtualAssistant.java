@@ -185,6 +185,13 @@ public class VirtualAssistant {
 
         String sector = (String)parameters.get("sector");
         INewsData news = new NewsData();
+	Calendar calDate  = Calendar.getInstance();
+
+	if(parameters.get("date") != null){
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+		calDate.setTime(df.parse((String)parameters.get("date")));
+	}
+
 
         switch((String)parameters.get("data")) {
 
@@ -212,7 +219,10 @@ public class VirtualAssistant {
 
             case "closePriceOn":
                 // return stockData.sectorYearLow(sector);
-                break;
+                break;			
+
+            case "SectorClosePriceOnDate":
+                return new Pair("" + stockData.getSectorClosePriceOnDate(sector,calDate), null);
         }
 
         return null;

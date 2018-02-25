@@ -27,6 +27,6 @@ public interface IStockData {
   public double sectorYearLow(String sector);
   public double sectorYearAverageClose(String sector);
 
-  public double getSectorClosePriceOnDate(Calendar date);
+  public double getSectorClosePriceOnDate(String sector, Calendar date);
 
 }
