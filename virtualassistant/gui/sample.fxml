@@ -10,7 +10,7 @@
   </ScrollPane>
   <Region VBox.Vgrow="ALWAYS"/>
   <HBox fx:id="textInput" alignment="bottom_center">
-    <TextField fx:id="query_text_field" promptText="Input a query here" prefWidth="${root.width}"/>
+    <TextField fx:id="query_text_field" promptText="Input a query here" prefWidth="${root.width}" onAction="#handleSendQueryButtonClick"/>
     <Button fx:id="send_query_button" text="Send" prefWidth="${root.width * 0.33}" onAction="#handleSendQueryButtonClick"/>
   </HBox>
   <HBox fx:id="buttons">
