@@ -79,11 +79,11 @@ public class VirtualAssistant {
         /// ADDD SPLITTING LOGICC HEREE
         
         // Check whether company or sector
-        ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
+        ICompany company = stockData.getCompanyForTicker((String) response.get("company1"));
         if(company != null) {
             
             return getCompanyData(response);
-        } else if (stockData.isSector((String)parameters.get("company1"))){
+        } else if (stockData.isSector((String)response.get("company1"))){
             
             return getSectorData(response);
         } 

@@ -103,7 +103,7 @@ public class LearningAgent implements ILearningAgent {
     return queries;
   }
 
-  public Bool searchForStockEvent() {
+  public String searchForStockEvent() {
 
 
 
@@ -113,7 +113,7 @@ public class LearningAgent implements ILearningAgent {
         //xxx.alert(com.getName() + " is changing price quickly");
       }
     }
-
+    return null;
   }
 
   public String searchForNewsEvent() {
@@ -124,6 +124,7 @@ public class LearningAgent implements ILearningAgent {
     //     //xxx.alert("There is significant news on: " + article.com);
     //   }
     // }
+    return null;
 
   }
 

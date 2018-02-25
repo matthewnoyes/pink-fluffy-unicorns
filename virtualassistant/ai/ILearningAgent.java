@@ -19,7 +19,7 @@ public interface ILearningAgent {
   //For notifications (when the data gets updated):
 
   //Constantly search for stock anomalies
-  public void searchForStockEvent();
+  public String searchForStockEvent();
   //Constantly search for news anomalies
-  public void searchForNewsEvent();
+  public String searchForNewsEvent();
 }
