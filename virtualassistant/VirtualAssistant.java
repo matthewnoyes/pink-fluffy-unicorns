@@ -54,7 +54,7 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public void getResponse(String query) throws IOException, ParseException {
+    public String getResponse(String query) throws IOException, ParseException {
 
         String response = chatbot.getResponse(query);
 
@@ -63,32 +63,32 @@ public class VirtualAssistant {
 
         switch((int)obj.get("action")){
 
-            case Action.COMPANY_DATA:  getCompanyData(obj);
+            case Action.COMPANY_DATA:  return getCompanyData(obj);
                                     break;
 
-            case Action.SECTOR_DATA:   getSectorData(obj);
+            case Action.SECTOR_DATA:   return getSectorData(obj);
                                     break;
 
-            case Action.COMPARE_COMPANIES: //compareCompanies(obj);
+            case Action.COMPARE_COMPANIES: //return compareCompanies(obj);
                                     break;
 
-            case Action.COMPARE_SECTORS:   //compareSectors(obj);
+            case Action.COMPARE_SECTORS:   //return compareSectors(obj);
                                     break;
 
-            case Action.ALERT:             //alert(obj);
+            case Action.ALERT:             //return alert(obj);
                                     break;
 
-            default:                System.out.println("Undefined action!");
+            default:                return "Undefined action!";
                                     break;
         }
-
+        return null;
 
     }
 
     /* Company data
     */
 
-    private void getCompanyData(JSONObject parameters){
+    private String getCompanyData(JSONObject parameters){
 
         ICompany company = stockData.getCompanyForName((String)parameters.get("company1"));
 
@@ -96,43 +96,43 @@ public class VirtualAssistant {
         switch((String)parameters.get("data1")) {
 
             case "open":
-                chatbot.output(company.getOpen());
+                return company.getOpen();
                 break;
 
             case "high":
-                chatbot.output(company.getHigh());
+                return company.getHigh();
                 break;
 
             case "low":
-                chatbot.output(company.getLow());
+                return company.getLow();
                 break;
 
             case "vol":
-                chatbot.output(company.getVolume());
+                return company.getVolume();
                 break;
 
             /*case "pe":
-              chatbot.output(company.getPe());
+              return company.getPe();
               break;
 
             /*case "mktCap":
-                chatbot.output(company.getMktCap());
+                return company.getMktCap();
                 break;
             */
             case "yearHigh":
-                chatbot.output(company.yearHigh());
+                return company.yearHigh();
                 break;
 
             case "yearLow":
-                chatbot.output(company.yearLow());
+                return company.yearLow();
                 break;
 
             case "avgVol":
-                chatbot.output(company.yearAverageVolume());
+                return company.yearAverageVolume();
                 break;
 
            /* case "yield":
-                chatbot.output(company.yield());
+                return company.yield();
                 break;
             */
         }
@@ -142,7 +142,7 @@ public class VirtualAssistant {
     /* Sector data
     */
 
-    private void getSectorData(JSONObject parameters){
+    private String getSectorData(JSONObject parameters){
 
         String sector = (String)parameters.get("sector");
 
@@ -153,27 +153,27 @@ public class VirtualAssistant {
                 break;
             */
             case "change":
-                chatbot.output(stockData.getSectorChange(sector));
+                return stockData.getSectorChange(sector);
                 break;
 
             case "percentageChange":
-                chatbot.output(stockData.getSectorPercentageChange(sector));
+                return stockData.getSectorPercentageChange(sector);
                 break;
 
             case "yearHigh":
-                chatbot.output(stockData.sectorYearHigh(sector));
+                return stockData.sectorYearHigh(sector);
                 break;
 
             case "yearLow":
-                chatbot.output(stockData.sectorYearLow(sector));
+                return stockData.sectorYearLow(sector);
                 break;
 
             case "yearAverageClose":
-                chatbot.output(stockData.sectorYearAverageClose(sector));
+                return stockData.sectorYearAverageClose(sector);
                 break;
 
             case "closePriceOn":
-                // ??? chatbot.output(stockData.sectorYearLow(sector));
+                // return stockData.sectorYearLow(sector);
                 break;
         }
     }
