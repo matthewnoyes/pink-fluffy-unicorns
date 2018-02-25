@@ -1,5 +1,7 @@
 package virtualassistant.gui;
 
+import virtualassistant.data.news.NewsObj;
+
 public class Message {
 
 protected String message;
@@ -12,7 +14,7 @@ public String getMessage() {
 				return message;
 }
 
-public News[] getNews() {
+public NewsObj[] getNews() {
 				return null;
 }
 

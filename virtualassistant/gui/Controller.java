@@ -2,6 +2,7 @@ package virtualassistant.gui;
 
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
+import virtualassistant.data.news.NewsObj;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -92,7 +93,7 @@ public void makeQuery(String text) {
 			e.printStackTrace();
 		}
 
-		News[] news = null; // this should be the news to be displayed with the response
+		NewsObj[] news = null; // this should be the news to be displayed with the response
 		Message response = new Response(responseStr, news);
 		chatbot_message_list.add(response);
 		addMessage(response);
@@ -222,7 +223,7 @@ public void addMessage(Message message) {
 				content_contain.getChildren().add(label);
 
 				// if the response contains news to display
-				News[] news = message.getNews();
+				NewsObj[] news = message.getNews();
 				if(news != null) {
 						// set to max width for message
 						content_contain.setPrefWidth(Main.WIDTH);
@@ -233,7 +234,7 @@ public void addMessage(Message message) {
 
 								Label heading = new Label(news[x].getTitle());
 								heading.setId("news_heading");
-								Label url = new Label("https://www.random.url");
+								Label url = new Label(news[x].getUrl());
 								url.setId("news_data");
 
 								VBox newsContain = new VBox(5);
