@@ -60,11 +60,11 @@ public class VirtualAssistant {
     public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, java.text.ParseException, ParseException {
 
         // Uncomment to link to chatbot
-        /*
-            String response = chatbot.getResponse(query);
-            // Convert to JsonObject
-            JSONObject obj = loader.parseJSON(response);
-        */
+        
+        String response = chatbot.getResponse(query);
+        // Convert to JsonObject
+        JSONObject obj = loader.parseJSON(response);
+        
         JSONObject obj = loader.parseJSONFile("tests/test.json");
 
 
