@@ -16,9 +16,12 @@ import java.text.ParseException;
 
 
 public class NewsData implements INewsData{
-
 	private ArrayList<NewsObj> articlesObjs = new ArrayList<NewsObj>(); // arraylist of news articles objects
-	private DateFormat toFormat = new SimpleDateFormat("dd MMM yyyy HH:mm");
+	private DateFormat MmultiUseFormat = new SimpleDateFormat("dd MMM yyyy HH:mm"); // date format for multiple news
+	private DateFormat rnsNewsDateFormat = new SimpleDateFormat("HH:mm dd-MMM-yyyy"); // date format for rns londonstockexchange news
+	private DateFormat yahooNewFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date format for yahoo news
+	private DateFormat sectorNewsFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // Date format for the sectors
+
 
 
 	public ArrayList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
@@ -36,19 +39,18 @@ public class NewsData implements INewsData{
 		}
 
 		private void rnsNewsArticleGetter(String webpage) throws IOException, ParseException {
-			DateFormat fromFormat = new SimpleDateFormat("HH:mm dd-MMM-yyyy"); // Date needs to be formatted.
-			fromFormat.setLenient(false);
-			toFormat.setLenient(false);
-
+			
+			Calendar calDate = Calendar.getInstance();
+			
 			final Document doc = Jsoup.connect(webpage).get(); // all the articles from lse new analysis is gotten.
 			for(Element row: doc.select(".table_datinews tr")){ // loop of articles in the table row is done
 				final String title = row.select(".text-left a").text();
-				final String time = toFormat.format(fromFormat.parse(row.select(".datetime.nowrap").text())); // with the date formatting
+				calDate.setTime(rnsNewsDateFormat.parse((row.select(".datetime.nowrap").text()))); // with the date formatting
 				final String source = row.select(".nowrap.text-left").get(1).text();
 				final String impact = row.select(".nowrap.text-left").get(2).text();
 				final String relHref = row.select(".text-left a").first().attr("href");
 				final String absurl=javascriptLinkToUrl(relHref); // html link is a javascript script so need to use regex to get the link out.
-				articlesObjs.add(newsArrayAdder(time,title,impact,absurl,source)); // news article object added to arraylist
+				articlesObjs.add(newsArrayAdder(calDate,title,impact,absurl,source)); // news article object added to arraylist
 			}
 		}
 
@@ -73,8 +75,9 @@ public class NewsData implements INewsData{
 	}
 
 	public ArrayList<NewsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
-		Date date = new Date();
+		Date date = new Date();		
 		String todaysDate= new SimpleDateFormat("dd MMM yyyy").format(date);
+		Calendar calDate = Calendar.getInstance();
 
 		final Document doc = Jsoup.connect("http://www.londonstockexchange.com/exchange/news/alliance-news/company-news.html?tidm=" + company).get();
 
@@ -82,18 +85,16 @@ public class NewsData implements INewsData{
 				final String title = (li.select("a").text());
 				final String url = "http://www.londonstockexchange.com" + li.select("a").first().attr("href");
 				final String dateGrabbed = li.select(".hour").text();
-				final String datetime = dateGrabbed.length() == 5 ? todaysDate + " " + dateGrabbed : dateGrabbed; // at times the article may be posted today, which will only contain the time need to then add the date to it
-				articlesObjs.add(newsArrayAdder(datetime,title,url,"London stock exchange - Alliance News"));  //articles are added to the array list as objects.
+				calDate.setTime(MmultiUseFormat.parse(dateGrabbed.length() == 5 ? todaysDate + " " + dateGrabbed : dateGrabbed)); // at times the article may be posted today, which will only contain the time need to then add the date to it
+				articlesObjs.add(newsArrayAdder(calDate,title,url,"London stock exchange - Alliance News"));  //articles are added to the array list as objects.
 			}
 			return articlesObjs;
 		}
 
 		public ArrayList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {
-			DateFormat fromFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date needs to be formatted.
-			fromFormat.setLenient(false);
-			toFormat.setLenient(false);
-
+	                Calendar calDate = Calendar.getInstance();
 			String companyName = "";
+			
 		if(comapny.charAt(comapny.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
 			companyName = comapny + "l";
 		}else{
@@ -102,10 +103,10 @@ public class NewsData implements INewsData{
 
 			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companyName+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
 			for(Element li: doc.select("item")){
-				String date = toFormat.format(fromFormat.parse(li.select("pubDate").text()));
+				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
 				final String title = li.select("title").text();
 				final String url = li.select("link").text();
-				articlesObjs.add(newsArrayAdder(date,title,url,"Yahoo Fianace News"));
+				articlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Fianace News"));
 			}
 			return articlesObjs;
 		}
@@ -117,30 +118,28 @@ public class NewsData implements INewsData{
 
 			   General sectors allowed :::: energy  financials  health  industrials  media  professional-services  retail-consumer  telecoms  transport  technology
 			*/
-			DateFormat fromFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // Date needs to be formatted.
-			fromFormat.setLenient(false);
-			toFormat.setLenient(false);
+			Calendar calDate = Calendar.getInstance();
 
 			final Document doc = Jsoup.connect("https://www.ft.com/companies/" + sector).get();
 
 			for(Element li: doc.select("#stream li")){ // going through each list item and adding the article into the arraylist
 				if(li.select(".stream-card__date .o-date.o-teaser__timestamp").text().length() >0){  // needed to prevent empty spaces from being added due to ads on the website
 					String headLine = li.select(".js-teaser-heading-link").text();
-					String dateTime = toFormat.format(fromFormat.parse(li.select(".o-teaser__timestamp").first().attr("datetime"))); // the datetime of the article.
+					calDate.setTime(sectorNewsFormat.parse(li.select(".o-teaser__timestamp").first().attr("datetime"))); // the datetime of the article.
 					final String relHref = "https://www.ft.com" + li.select(".js-teaser-heading-link").first().attr("href"); // url of the article
-					articlesObjs.add(newsArrayAdder(dateTime,headLine,relHref,"The Financial Times"));
+					articlesObjs.add(newsArrayAdder(calDate,headLine,relHref,"The Financial Times"));
 				}
 			}
 			return articlesObjs;
 		}
 
-	private NewsObj newsArrayAdder(String time, String title, String url,String source){ // used to make objects of news articles.
-		NewsObj c = new NewsObj(time,title,url,source);
+	private NewsObj newsArrayAdder(Calendar Datetime, String title, String url,String source){ // used to make objects of news articles.
+		NewsObj c = new NewsObj(Datetime,title,url,source);
 		return c;
 	}
 
-	private NewsObj newsArrayAdder(String time, String title, String impact, String url,String source){ // creates objects for each rns news article
-		NewsObj c = new NewsObj(time,title,impact,url,source);
+	private NewsObj newsArrayAdder(Calendar Datetime, String title, String impact, String url,String source){ // creates objects for each rns news article
+		NewsObj c = new NewsObj(Datetime,title,impact,url,source);
 		return c;
 	}
 }
