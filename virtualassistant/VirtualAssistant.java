@@ -65,7 +65,7 @@ public class VirtualAssistant {
         // Convert to JsonObject
         JSONObject obj = loader.parseJSON(response);
         
-        JSONObject obj = loader.parseJSONFile("tests/test.json");
+        //JSONObject obj = loader.parseJSONFile("tests/test.json");
 
 
 
