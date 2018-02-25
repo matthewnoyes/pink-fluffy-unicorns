@@ -100,7 +100,7 @@ public class VirtualAssistant {
                 return new Pair("" + company.getOpen(), null);
                 
             case "news":     
-                return new Pair("This is the news that you wanted", news.getAllianceNews((String)parameters.get("company1")));   
+                return new Pair("Here is the news that you wanted", news.getAllianceNews((String)parameters.get("company1")));   
 
             case "high":
                 return new Pair("" + company.getHigh(), null);
@@ -160,7 +160,7 @@ public class VirtualAssistant {
                 return new Pair("" + stockData.getSectorPercentageChange(sector), null);
                 
             case "news":     
-		        return new Pair("Here is the news you wanted", news.sectorNews(sector));
+		return new Pair("Here is the news that you wanted", news.sectorNews(sector));
 
             case "yearHigh":
                 return new Pair("" + stockData.sectorYearHigh(sector), null);
