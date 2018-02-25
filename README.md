@@ -11,9 +11,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Compiling on Linux/Mac
 
-In directory PFU run './virtualassistant/virtualassistant.sh' to compile
+In directory PFU run './virtualassistant.sh' to compile
 
-java -cp .:./virtualassistant/data/jsoup-1.11.2.jar:./virtualassistant/data/datastore/JSON-parser.jar virtualassistant.gui.Main
+To run: 'java -jar virtualassistant.jar'
 
 
 ### Prerequisites
