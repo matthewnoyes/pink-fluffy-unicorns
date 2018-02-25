@@ -18,7 +18,7 @@ import virtualassistant.chatbot.Chatbot;
 import virtualassistant.ai.LearningAgent;
 import virtualassistant.data.system.SystemStatus;
 import virtualassistant.misc.Pair;
-import virtualassistant.data.news.NewsObj;
+import virtualassistant.data.news.*;
 
 public class VirtualAssistant {
 
@@ -57,20 +57,20 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, ParseException {
-        
+    public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, java.text.ParseException, ParseException {
+
         // Uncomment to link to chatbot
-        /*  
+        /*
             String response = chatbot.getResponse(query);
             // Convert to JsonObject
             JSONObject obj = loader.parseJSON(response);
         */
-        JSONObject obj = loader.parseJSONFile("tests\test.json");
-        
-        
-        
+        JSONObject obj = loader.parseJSONFile("tests/test.json");
 
-        switch((int)obj.get("action")){
+
+
+
+        switch(Math.toIntExact((long)obj.get("action"))){
 
             case Action.COMPANY_DATA:  return getCompanyData(obj);
 
@@ -94,9 +94,9 @@ public class VirtualAssistant {
     /* Company data
     */
 
-    private Pair<String, ArrayList<NewsObj>> getCompanyData(JSONObject parameters){
+    private Pair<String, ArrayList<NewsObj>> getCompanyData(JSONObject parameters) throws IOException, java.text.ParseException {
 
-        ICompany company = stockData.getCompanyForName((String)parameters.get("company1"));
+        ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
         INewsData news = new NewsData();
 
 
@@ -104,9 +104,9 @@ public class VirtualAssistant {
 
             case "open":
                 return new Pair("" + company.getOpen(), null);
-                
-            case "news":     
-                return new Pair("Here is the news that you wanted", news.getAllianceNews((String)parameters.get("company1")));   
+
+            case "news":
+                return new Pair("Here is the news that you wanted", news.getAllianceNews((String)parameters.get("company1")));
 
             case "high":
                 return new Pair("" + company.getHigh(), null);
@@ -148,7 +148,7 @@ public class VirtualAssistant {
     /* Sector data
     */
 
-    private Pair<String, ArrayList<NewsObj>> getSectorData(JSONObject parameters){
+    private Pair<String, ArrayList<NewsObj>> getSectorData(JSONObject parameters) throws IOException, ParseException, java.text.ParseException {
 
         String sector = (String)parameters.get("sector");
         INewsData news = new NewsData();
@@ -164,8 +164,8 @@ public class VirtualAssistant {
 
             case "percentageChange":
                 return new Pair("" + stockData.getSectorPercentageChange(sector), null);
-                
-            case "news":     
+
+            case "news":
 		return new Pair("Here is the news that you wanted", news.sectorNews(sector));
 
             case "yearHigh":
