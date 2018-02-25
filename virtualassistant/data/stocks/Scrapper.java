@@ -161,11 +161,10 @@ public class Scrapper {
 	  int q1 = page.html().indexOf("\"", cl + 1);
 	  int q2 = page.html().indexOf("\"", q1 + 1);
     String test = page.html().substring(q1+1,q2);
-    System.out.println("If Jsoup starts giving 401 errors please give the following two strings to matt:");
-    System.out.println(Jsoup.parse(test).text());
+    
     test = test.replaceAll("\\\\u002F", "/");
     crumb = Jsoup.parse(new String(test.getBytes(), "UTF-8")).text();
-    System.out.println(crumb);
+
     // System.out.println(Jsoup.parse("h0J\u002FSVFBI2l").text());
 
     //Store corresponding cookie
@@ -222,7 +221,7 @@ public class Scrapper {
       // System.out.println( strDate.substring(5, 7));
       // System.out.println(strDate.substring(0, 4));
       Calendar date = Calendar.getInstance();
-      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)), Integer.parseInt(strDate.substring(8, 10)));
+      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)) - 1, Integer.parseInt(strDate.substring(8, 10)));
       date = Company.resetTime(date);
       HistoricalData.Record entry = new HistoricalData.Record();
 
