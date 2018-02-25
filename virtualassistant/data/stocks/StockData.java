@@ -88,6 +88,10 @@ public class StockData implements IStockData {
     return tickerToCompany.keySet();
   }
 
+  public boolean isSector(String sector) {
+    return companiesInSector.containsKey(sector);
+  }
+
   public Set<Company> getCompaniesInSector(String sector) {
     return companiesInSector.get(sector);
   }
