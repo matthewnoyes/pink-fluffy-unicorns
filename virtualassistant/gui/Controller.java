@@ -82,7 +82,7 @@ public void makeQuery(String text) {
 		try {
     	responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 
 		News[] news = null; // this should be the news to be displayed with the response

@@ -26,8 +26,8 @@ public class Loader {
 
 
     public JSONObject parseJSON(String str) throws ParseException {
-        
-        
+      System.out.println(str);
+
         return (JSONObject)parser.parse(str);
     }
 
