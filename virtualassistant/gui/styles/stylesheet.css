@@ -63,14 +63,16 @@
 #query_send {
   -fx-background-color: #303344;
   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: white;
 }
 
 #query_recieve {
+  -fx-background-color: #1E1D25;s
   -fx-font-size: 15pt;
   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
   -fx-font-family: "Segoe UI Semibold";
   -fx-text-fill: white;
-  -fx-background-color: #1E1D25;
 }
 
 .chat_bubble {
@@ -85,6 +87,12 @@
 
 #news_heading {
   -fx-font-size: 15pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: #A2A1AB;
+}
+
+#news_data {
+  -fx-font-size: 10pt;
   -fx-font-family: "Segoe UI Semibold";
   -fx-text-fill: #605E71;
 }
