@@ -47,7 +47,7 @@ public class VirtualAssistant {
         }
         learningAgent = new LearningAgent(stockData, null);
         //systemStatus = loader.readSystemStatus();
-        news = new NewsData()
+        news = new NewsData();
         chatbot = new Chatbot();
         calDate  = Calendar.getInstance();
 
@@ -70,7 +70,7 @@ public class VirtualAssistant {
 
         // Check if ALERT or DATA_REQUEST
         if((long)response.get("action") == Action.ALERT) 
-            return ((String)response.get("message"), null);
+            return new Pair((String)response.get("message"), null);
         
         if((long)response.get("action") != Action.DATA_REQUEST) 
             return null;//((String)response.get("message"), null);
