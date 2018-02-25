@@ -106,7 +106,7 @@ public class NewsData implements INewsData{
 				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
 				final String title = li.select("title").text();
 				final String url = li.select("link").text();
-				articlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Fianace News"));
+				articlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Finance News"));
 			}
 			return articlesObjs;
 		}
