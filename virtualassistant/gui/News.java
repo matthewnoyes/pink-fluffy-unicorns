@@ -1,3 +1,5 @@
+package gui;
+
 class News {
 
 private String title;

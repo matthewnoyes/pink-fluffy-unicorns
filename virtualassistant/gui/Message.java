@@ -1,3 +1,5 @@
+package gui;
+
 public class Message {
 
 protected String message;
