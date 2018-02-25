@@ -91,12 +91,16 @@ public class VirtualAssistant {
     private Pair<String, ArrayList<NewsObj>> getCompanyData(JSONObject parameters){
 
         ICompany company = stockData.getCompanyForName((String)parameters.get("company1"));
+        INewsData news = new NewsData();
 
 
         switch((String)parameters.get("data1")) {
 
             case "open":
                 return new Pair("" + company.getOpen(), null);
+                
+            case "news":     
+                return new Pair("Here is the news that you wanted", news.getAllianceNews((String)parameters.get("company1")));   
 
             case "high":
                 return new Pair("" + company.getHigh(), null);
@@ -141,6 +145,7 @@ public class VirtualAssistant {
     private Pair<String, ArrayList<NewsObj>> getSectorData(JSONObject parameters){
 
         String sector = (String)parameters.get("sector");
+        INewsData news = new NewsData();
 
         switch((String)parameters.get("data")) {
 
@@ -153,6 +158,9 @@ public class VirtualAssistant {
 
             case "percentageChange":
                 return new Pair("" + stockData.getSectorPercentageChange(sector), null);
+                
+            case "news":     
+		return new Pair("Here is the news that you wanted", news.sectorNews(sector));
 
             case "yearHigh":
                 return new Pair("" + stockData.sectorYearHigh(sector), null);
