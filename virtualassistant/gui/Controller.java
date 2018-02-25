@@ -1,6 +1,7 @@
 package virtualassistant.gui;
 
 import virtualassistant.VirtualAssistant;
+import virtualAssistant.misc.Pair;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -76,12 +77,10 @@ public void makeQuery(String text) {
 		chatbot_message_list.add(query);
 		addMessage(query);
 
-
-
 		String responseStr = "An error occured";
 
 		try {
-    	responseStr = virtualAssistant.getResponse(query.getMessage());
+    	responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
