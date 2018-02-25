@@ -126,7 +126,7 @@ public class StockData implements IStockData {
     return 0.0;
   }
 
-  public double getSectorClosePriceOnDate(Calendar date) {
+  public double getSectorClosePriceOnDate(String sector, Calendar date) {
     return 0.0;
   }
 
