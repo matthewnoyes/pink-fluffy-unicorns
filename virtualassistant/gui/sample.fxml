@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+
+<VBox fx:id="root" spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.Controller">
+  <ScrollPane fx:id="scrollpane" fitToWidth="true">
+    <VBox fx:id="chatbot_container" spacing="20" alignment="top_center" prefWidth="500"/>
+  </ScrollPane>
+  <Region VBox.Vgrow="ALWAYS"/>
+  <HBox fx:id="textInput" alignment="bottom_center">
+    <TextField fx:id="query_text_field" promptText="Input a query here" prefWidth="${root.width}"/>
+    <Button fx:id="send_query_button" text="Send" prefWidth="${root.width * 0.33}" onAction="#handleSendQueryButtonClick"/>
+  </HBox>
+  <HBox fx:id="buttons">
+    <StackPane alignment="bottom_left" prefWidth="${root.width * 0.5}">
+      <Button fx:id="help_button" text="?" onAction="#handleHelpButtonClick"/>
+    </StackPane>
+    <StackPane>
+      <Button fx:id="round_mic_button" onAction="#handleMicButtonClick">
+        <graphic>
+          <ImageView fitHeight="45.0" fitWidth="34.0" preserveRatio="false">
+            <image>
+              <Image url="@images/microphone.png"/>
+            </image>
+          </ImageView>
+        </graphic>
+      </Button>
+    </StackPane>
+    <StackPane alignment="bottom_right" prefWidth="${root.width * 0.5}">
+      <VBox alignment="bottom_right">
+        <ImageView fx:id="wifi_image_view" fitHeight="30" preserveRatio="true">
+          <Image url="@images/wifi_no_access.png"/>
+        </ImageView>
+        <Label fx:id="update_time" text="Last updated: ..."/>
+      </VBox>
+    </StackPane>
+  </HBox>
+</VBox>
