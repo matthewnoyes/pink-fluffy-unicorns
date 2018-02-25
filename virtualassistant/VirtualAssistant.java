@@ -5,6 +5,10 @@ package virtualassistant;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.date.DateFormat;
+import java.date.SimpleDateFormat;
+import java.date.Calendar;
+import java.date.Date;
 
 import org.json.simple.*;
 import org.json.simple.JSONObject;
@@ -98,7 +102,7 @@ public class VirtualAssistant {
 
         ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
         INewsData news = new NewsData();
-	Calendar calDate  = Calendar.getInstance();
+        Calendar calDate  = Calendar.getInstance();
 	    
 	    if(parameters.get("date") != null){
 		DateFormat df = new SimpleDateFormat("dd.MM.yyyy");		
