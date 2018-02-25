@@ -119,20 +119,20 @@ public class VirtualAssistant {
 
             case "PercentageChange":
                 return new Pair("" + company.getPercentageChange(), null);
-	
+
             case "CurrentPrice":
                 return new Pair("" + company.getCurrentPrice(), null);
-			
+
 	    case "Change":
                 return new Pair("" + company.getChange(), null);
-			
+
 	    case "AverageClose":
                 return new Pair("" + company.yearAverageClose(), null);
-			
-            case "PastData":
-                return new Pair("" + company.getPastData(), null);
 
-  
+            // case "PastData":
+            //     return new Pair("" + company.getPastData(), null);
+
+
             case "yearHigh":
                 return new Pair("" + company.yearHigh(), null);
 
