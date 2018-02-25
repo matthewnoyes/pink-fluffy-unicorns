@@ -57,7 +57,7 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public Pair<String, Arraylist<NewsObj>> getResponse(String query) throws IOException, ParseException {
+    public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, ParseException {
 
         String response = chatbot.getResponse(query);
 
@@ -88,7 +88,7 @@ public class VirtualAssistant {
     /* Company data
     */
 
-    private Pair<String, Arraylist<NewsObj>> getCompanyData(JSONObject parameters){
+    private Pair<String, ArrayList<NewsObj>> getCompanyData(JSONObject parameters){
 
         ICompany company = stockData.getCompanyForName((String)parameters.get("company1"));
 
@@ -138,7 +138,7 @@ public class VirtualAssistant {
     /* Sector data
     */
 
-    private Pair<String, Arraylist<NewsObj>> getSectorData(JSONObject parameters){
+    private Pair<String, ArrayList<NewsObj>> getSectorData(JSONObject parameters){
 
         String sector = (String)parameters.get("sector");
 

@@ -1,7 +1,7 @@
 package virtualassistant.gui;
 
 import virtualassistant.VirtualAssistant;
-import virtualAssistant.misc.Pair;
+import virtualassistant.misc.Pair;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
