@@ -111,19 +111,19 @@ public class VirtualAssistant {
 
         switch((String)parameters.get("data1")) {
 			
-	    case "ClosePriceOnDateen":
+            case "ClosePriceOnDateen":
                 return new Pair("" + company.getClosePriceOnDate(calDate), null);
 			
-	    case "OpenPriceOnDate":
+            case "OpenPriceOnDate":
                 return new Pair("" + company.getOpenPriceOnDate(calDate), null);
 		
-	    case "HighPriceOnDate":
+            case "HighPriceOnDate":
                 return new Pair("" + company.getHighPriceOnDate(calDate), null);
 	
-	    case "LowPriceOnDate":
+            case "LowPriceOnDate":
                 return new Pair("" + company.getLowPriceOnDate(calDate), null);	
 
-	    case "VolumeOnDate":
+            case "VolumeOnDate":
                 return new Pair("" + company.getVolumeOnDate(calDate), null);	
 
             case "open":
@@ -147,15 +147,15 @@ public class VirtualAssistant {
             case "CurrentPrice":
                 return new Pair("" + company.getCurrentPrice(), null);
 			
-	    case "Change":
+            case "Change":
                 return new Pair("" + company.getChange(), null);
 			
-	    case "AverageClose":
+            case "AverageClose":
                 return new Pair("" + company.yearAverageClose(), null);
 			
-            case "PastData":
+            /*case "PastData":
                 return new Pair("" + company.getPastData(), null);
-
+*/
   
             case "yearHigh":
                 return new Pair("" + company.yearHigh(), null);
