@@ -48,16 +48,9 @@ public void initialize(URL location, ResourceBundle resources) {
 		onHelp = false;
 		chatbot_message_list = new ArrayList<>();
 		helptext_list = new ArrayList<>();
-		helptext_list.add("How are the banks doing?");
-		helptext_list.add("Any news on Coca Cola?");
-		helptext_list.add("What is the high price of Just Eat?");
-		helptext_list.add("Is LLoyds positive?");
-		helptext_list.add("Open price of Barclays");
-		helptext_list.add("How do you feel about construction?");
 
-		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt -> round_mic_button.setStyle("-fx-background-color: #FF4339;")),
-                                 					new KeyFrame(Duration.seconds(1), evt -> round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
-		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
+		generateHelpText();
+		generateAnimations();
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
 
@@ -68,17 +61,17 @@ public void initialize(URL location, ResourceBundle resources) {
 
 /* ============ METHODS YOU NEED TO KNOW ============ */
 /*
-	void changeUpdateTime(String time) :
-		changes displayed update time
-*/
+    void changeUpdateTime(String time) :
+        changes displayed update time
+ */
 /* void changeWifiAccess(boolean access) :
-	chnages displayed wifi access true = have connection
-*/
+    chnages displayed wifi access true = have connection
+ */
 
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
-			closeHelp();
+				closeHelp();
 		}
 
 		Message query = new Query(text);
@@ -88,9 +81,9 @@ public void makeQuery(String text) {
 		String responseStr = "An error occured";
 
 		try {
-    	responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
+				responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
 		} catch (Exception e) {
-			e.printStackTrace();
+				e.printStackTrace();
 		}
 
 		NewsObj[] news = null; // this should be the news to be displayed with the response
@@ -105,6 +98,20 @@ public void startListening() {
 public void stopListening() {
 		String text = "";
 		//makeQuery(text);
+}
+
+public void generateHelpText() {
+		helptext_list.add("How are the banks doing?");
+		helptext_list.add("Any news on Coca Cola?");
+		helptext_list.add("What is the high price of Just Eat?");
+		helptext_list.add("Is LLoyds positive?");
+		helptext_list.add("Open price of Barclays");
+		helptext_list.add("How do you feel about construction?");
+}
+public void generateAnimations() {
+		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt->round_mic_button.setStyle("-fx-background-color: #FF4339;")),
+		                                   new KeyFrame(Duration.seconds(1), evt->round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
+		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
 }
 
 // handle when the mic button is clicked
@@ -226,7 +233,7 @@ public void addMessage(Message message) {
 				NewsObj[] news = message.getNews();
 				if(news != null) {
 						// set to max width for message
-						content_contain.setPrefWidth(Main.WIDTH);
+						//content_contain.setPrefWidth(Main.WIDTH);
 
 						for(int x = 0; x < 3 && x < news.length; x++) {
 								Separator separator = new Separator();
@@ -234,12 +241,14 @@ public void addMessage(Message message) {
 
 								Label heading = new Label(news[x].getTitle());
 								heading.setId("news_heading");
+								Label time = new Label(news[x].getDateTime());
+								time.setId("news_data");
 								Label url = new Label(news[x].getUrl());
 								url.setId("news_data");
 
-								VBox newsContain = new VBox(5);
+								VBox newsContain = new VBox(0);
 								newsContain.setAlignment(Pos.CENTER_RIGHT);
-								newsContain.getChildren().addAll(separator, heading, url);
+								newsContain.getChildren().addAll(separator, heading, time,url);
 
 								content_contain.getChildren().add(newsContain);
 						}

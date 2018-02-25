@@ -79,6 +79,7 @@
   -fx-font-size: 15pt;
   -fx-font-family: "Segoe UI Semibold";
   -fx-text-fill: #A2A1AB;
+  -fx-padding: 5 0 0 0;
 }
 
 #news_data {
