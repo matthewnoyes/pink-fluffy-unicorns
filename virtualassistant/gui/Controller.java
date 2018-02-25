@@ -15,6 +15,8 @@ import javafx.scene.control.Separator;
 import java.net.URL;
 import java.util.*;
 
+import java.io.IOException;
+
 public class Controller implements Initializable {
 
 @FXML
@@ -33,7 +35,7 @@ private boolean onHelp;
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
-private VirtualAssistant assistant;
+private VirtualAssistant virtualAssistant;
 
 @Override
 public void initialize(URL location, ResourceBundle resources) {
@@ -50,7 +52,7 @@ public void initialize(URL location, ResourceBundle resources) {
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
 
-		assistant = new VirtualAssistant();
+		virtualAssistant = new VirtualAssistant();
 
 		openHelp();
 }
@@ -74,13 +76,19 @@ public void makeQuery(String text) {
 		chatbot_message_list.add(query);
 		addMessage(query);
 
-		
-		// Process message here
-            String responseStr = virtualAssistant.getResponse(query);
-		
 
-		News[] news = null; // this should be the news to be displayed with the response 
-		Message response = new Response(responseStr, news); 
+		// Process message here
+		String responseStr = "An error occured";
+
+		try {
+    	responseStr = virtualAssistant.getResponse(query.getMessage());
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+
+		News[] news = null; // this should be the news to be displayed with the response
+		Message response = new Response(responseStr, news);
 		chatbot_message_list.add(response);
 		addMessage(response);
 }

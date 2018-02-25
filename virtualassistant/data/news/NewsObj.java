@@ -1,12 +1,12 @@
 	package virtualassistant.data.news;
-  private class NewsObj{ 
+  public class NewsObj{
 		private String DateTime;
 		private String title;
 		private String impact;
 		private String url;
 		private String source;
 
-		public newsObj(String time, String title, String impact, String url,String source){ // for Rns news
+		public NewsObj(String time, String title, String impact, String url,String source){ // for Rns news
 			this.DateTime = time;
 			this.title = title;
 			this.impact = impact;
@@ -14,7 +14,7 @@
 			this.source = source;
 		}
 
-		public newsObj(String time, String title, String url,String source){ // for other types of news articles
+		public NewsObj(String time, String title, String url,String source){ // for other types of news articles
 			this.DateTime = time;
 			this.title = title;
 			this.url = url;
