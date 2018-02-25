@@ -64,10 +64,8 @@ public class VirtualAssistant {
         switch((int)obj.get("action")){
 
             case Action.COMPANY_DATA:  return getCompanyData(obj);
-                                    break;
 
             case Action.SECTOR_DATA:   return getSectorData(obj);
-                                    break;
 
             case Action.COMPARE_COMPANIES: //return compareCompanies(obj);
                                     break;
@@ -79,7 +77,6 @@ public class VirtualAssistant {
                                     break;
 
             default:                return "Undefined action!";
-                                    break;
         }
         return null;
 
@@ -96,20 +93,16 @@ public class VirtualAssistant {
         switch((String)parameters.get("data1")) {
 
             case "open":
-                return company.getOpen();
-                break;
+                return "" + company.getOpen();
 
             case "high":
-                return company.getHigh();
-                break;
+                return "" + company.getHigh();
 
             case "low":
-                return company.getLow();
-                break;
+                return "" + company.getLow();
 
             case "vol":
-                return company.getVolume();
-                break;
+                return "" + company.getVolume();
 
             /*case "pe":
               return company.getPe();
@@ -120,22 +113,21 @@ public class VirtualAssistant {
                 break;
             */
             case "yearHigh":
-                return company.yearHigh();
-                break;
+                return "" + company.yearHigh();
 
             case "yearLow":
-                return company.yearLow();
-                break;
+                return "" + company.yearLow();
 
             case "avgVol":
-                return company.yearAverageVolume();
-                break;
+                return "" + company.yearAverageVolume();
 
            /* case "yield":
                 return company.yield();
                 break;
             */
         }
+
+        return "";
 
     }
 
@@ -153,29 +145,26 @@ public class VirtualAssistant {
                 break;
             */
             case "change":
-                return stockData.getSectorChange(sector);
-                break;
+                return "" + stockData.getSectorChange(sector);
 
             case "percentageChange":
-                return stockData.getSectorPercentageChange(sector);
-                break;
+                return "" + stockData.getSectorPercentageChange(sector);
 
             case "yearHigh":
-                return stockData.sectorYearHigh(sector);
-                break;
+                return "" + stockData.sectorYearHigh(sector);
 
             case "yearLow":
-                return stockData.sectorYearLow(sector);
-                break;
+                return "" + stockData.sectorYearLow(sector);
 
             case "yearAverageClose":
-                return stockData.sectorYearAverageClose(sector);
-                break;
+                return "" + stockData.sectorYearAverageClose(sector);
 
             case "closePriceOn":
                 // return stockData.sectorYearLow(sector);
                 break;
         }
+
+        return "";
     }
 
 
