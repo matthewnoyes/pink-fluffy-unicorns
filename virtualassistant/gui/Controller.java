@@ -67,13 +67,13 @@ public void makeQuery(String text) {
 		chatbot_message_list.add(query);
 		addMessage(query);
 
-		//
-		// process message here
-		//   String responseStr = virtualAssistant.getResponse(query);
-		//
+		
+		// Process message here
+            String responseStr = virtualAssistant.getResponse(query);
+		
 
-		News[] news = null; // this should be the news to be displayed with the response
-		Message response = new Response("Random Response", news);
+		News[] news = null; // this should be the news to be displayed with the response 
+		Message response = new Response(responseStr, news); 
 		chatbot_message_list.add(response);
 		addMessage(response);
 }
