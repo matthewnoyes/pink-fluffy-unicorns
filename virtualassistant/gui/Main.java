@@ -1,4 +1,4 @@
-package sample;
+package gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +26,7 @@ public void start(Stage primaryStage) throws Exception {
 
 		Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
-		scene.getStylesheets().add("sample/styles/stylesheet.css");
+		scene.getStylesheets().add("gui/styles/stylesheet.css");
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
