@@ -227,10 +227,12 @@ public void addMessage(Message message) {
 
 								Label heading = new Label(news[x].getTitle());
 								heading.setId("news_heading");
+								Label url = new Label("https://www.random.url");
+								url.setId("news_data");
 
 								VBox newsContain = new VBox(5);
 								newsContain.setAlignment(Pos.CENTER_RIGHT);
-								newsContain.getChildren().addAll(separator, heading);
+								newsContain.getChildren().addAll(separator, heading, url);
 
 								content_contain.getChildren().add(newsContain);
 						}
