@@ -1,12 +1,12 @@
 	package virtualassistant.data.news;
   public class NewsObj{
-		private String DateTime;
+		private Calendar DateTime;
 		private String title;
 		private String impact;
 		private String url;
 		private String source;
 
-		public NewsObj(String time, String title, String impact, String url,String source){ // for Rns news
+		public NewsObj(Calendar time, String title, String impact, String url,String source){ // for Rns news
 			this.DateTime = time;
 			this.title = title;
 			this.impact = impact;
@@ -14,14 +14,14 @@
 			this.source = source;
 		}
 
-		public NewsObj(String time, String title, String url,String source){ // for other types of news articles
+		public NewsObj(Calendar time, String title, String url,String source){ // for other types of news articles
 			this.DateTime = time;
 			this.title = title;
 			this.url = url;
 			this.source = source;
 		}
 
-		public String getDateTime(){
+		public Calendar getDateTime(){
 			return this.DateTime;
 		}
 		public String getTitle(){
