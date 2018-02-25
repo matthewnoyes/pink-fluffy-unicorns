@@ -18,7 +18,7 @@ public class Chatbot implements IChatBot {
 
     // Input: Query
     // Output: Response
-    public String getResponse(String query) throws IOException, ParseException {
+    public JSONObject getResponse(String query) throws IOException, ParseException {
         String body = "{\n"
 		+ "   \"lang\": \"en\",\n"
 		+ "   \"query\": \""+query+" \",\n"  // query
@@ -35,7 +35,7 @@ public class Chatbot implements IChatBot {
         // Getting the response needed from the json retrieved.
         final JSONObject json = (JSONObject) parser.parse(document);
 	    final JSONObject results =  (JSONObject) json.get("result");
-	    final String response = ((JSONObject) results.get("fulfillment")).get("speech").toString();
+	    final JSONObject response = (JSONObject)((JSONObject) results.get("fulfillment")).get("speech");
         return response;
     }
 
