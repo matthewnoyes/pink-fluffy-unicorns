@@ -100,7 +100,7 @@ public void stopListening() {
 		//makeQuery(text);
 }
 
-public void generateHelpText() {
+private void generateHelpText() {
 		helptext_list.add("How are the banks doing?");
 		helptext_list.add("Any news on Coca Cola?");
 		helptext_list.add("What is the high price of Just Eat?");
@@ -108,7 +108,7 @@ public void generateHelpText() {
 		helptext_list.add("Open price of Barclays");
 		helptext_list.add("How do you feel about construction?");
 }
-public void generateAnimations() {
+private void generateAnimations() {
 		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt->round_mic_button.setStyle("-fx-background-color: #FF4339;")),
 		                                   new KeyFrame(Duration.seconds(1), evt->round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
 		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
@@ -116,7 +116,7 @@ public void generateAnimations() {
 
 // handle when the mic button is clicked
 @FXML
-public void handleMicButtonClick(ActionEvent e) {
+private void handleMicButtonClick(ActionEvent e) {
 		if(!listening) {
 				listening = true;
 				mic_button_timeline.play();
@@ -130,7 +130,7 @@ public void handleMicButtonClick(ActionEvent e) {
 }
 
 @FXML
-public void handleSendQueryButtonClick(ActionEvent e) {
+private void handleSendQueryButtonClick(ActionEvent e) {
 		String typed_query = query_text_field.getText();
 
 		if(typed_query != null && !typed_query.trim().isEmpty()) {
@@ -140,7 +140,7 @@ public void handleSendQueryButtonClick(ActionEvent e) {
 }
 
 @FXML
-public void handleHelpButtonClick(ActionEvent e) {
+private void handleHelpButtonClick(ActionEvent e) {
 		if(onHelp) {
 				closeHelp();
 		} else {
@@ -149,7 +149,7 @@ public void handleHelpButtonClick(ActionEvent e) {
 }
 
 // open help screen
-public void openHelp() {
+private void openHelp() {
 		onHelp = true;
 		chatbot_container.getChildren().clear();
 
@@ -175,7 +175,7 @@ public void openHelp() {
 }
 
 // close help screen
-public void closeHelp() {
+private void closeHelp() {
 		onHelp = false;
 		chatbot_container.getChildren().clear();
 		for(int i = 0; i < chatbot_message_list.size(); i++) {
@@ -197,7 +197,7 @@ public void changeWifiAccess(boolean access) {
 		}
 }
 
-public void addMessage(Message message) {
+private void addMessage(Message message) {
 		// container of message
 		HBox container = new HBox(0);
 
