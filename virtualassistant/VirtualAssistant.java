@@ -71,9 +71,7 @@ public class VirtualAssistant {
         JSONObject obj = loader.parseJSON(response);
 
         //JSONObject obj = loader.parseJSONFile("tests/test.json");
-
-
-
+     
 
         switch(Math.toIntExact((long)obj.get("action"))){
 
@@ -102,6 +100,10 @@ public class VirtualAssistant {
     private Pair<String, ArrayList<NewsObj>> getCompanyData(JSONObject parameters) throws IOException, java.text.ParseException {
 
         ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
+        // Add split logic on and, use a for loop to return 
+        // Return the 2 concatenated strings / concatennated arraylists
+        
+        
         INewsData news = new NewsData();
 	Calendar calDate  = Calendar.getInstance();
 
@@ -112,7 +114,7 @@ public class VirtualAssistant {
 
         switch((String)parameters.get("data1")) {
 
-	    case "ClosePriceOnDateen":
+	    case "ClosePriceOnDate":
                 return new Pair("" + company.getClosePriceOnDate(calDate), null);
 
 	    case "OpenPriceOnDate":
