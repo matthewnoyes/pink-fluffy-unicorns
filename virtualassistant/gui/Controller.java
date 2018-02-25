@@ -245,7 +245,7 @@ private void addMessage(Message message) {
 
 								Label heading = new Label(news[x].getTitle());
 								heading.setId("news_heading");
-								Label time = new Label(news[x].getDateTime());
+								Label time = new Label(news[x].getDateTime().toString());
 								time.setId("news_data");
 								Label url = new Label(news[x].getUrl());
 								url.setId("news_data");

@@ -2,4 +2,5 @@
 
 echo 'Running jar...'
 java -jar virtualassistant.jar
-pause
+
+echo 'Complete..'

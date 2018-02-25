@@ -1,14 +1,24 @@
 @echo off
 
-set classpath=C:\Users\Admin\Documents\Github\pink-fluffy-unicorns\virtualassistant\data\jsoup-1.11.2.jar;C:\Users\Admin\Documents\Github\pink-fluffy-unicorns\virtualassistant\data\datastore\JSON-parser.jar
+REM dir "$(dirname "$0")"
+
+set classpath=.;jsoup-1.11.2.jar;JSON-parser.jar 
+set folders=.\virtualassistant\ai\*.java .\virtualassistant\chatbot\*.java .\virtualassistant\data\news\*.java .\virtualassistant\data\system\*.java .\virtualassistant\data\stocks\*.java .\virtualassistant\data\datastore\*.java .\virtualassistant\gui\*.java .\virtualassistant\misc\*.java 
+
 REM Compile all java files
 
-javac -cp %classpath% virtualassistant/ai/*.java virtualassistant/chatbot/*.java virtualassistant/data/news/*.java virtualassistant/data/system/*.java virtualassistant/data/stocks/*.java virtualassistant/data/datastore/*.java virtualassistant/gui/*.java virtualassistant/misc/*.java virtualassistant/IVirtualAssistant.java virtualassistant/VirtualAssistant.java || { echo 'Compiling Failed' ; exit 1; }
+javac -cp %classpath% %folders% virtualassistant\IVirtualAssistant.java virtualassistant\VirtualAssistant.java || { echo 'Compiling Failed' ; exit 1; }
+
+set gui=.\virtualassistant\gui\*.class .\virtualassistant\gui\sample.fxml .\virtualassistant\gui\images\* virtualassistant/gui/styles/* 
+set classes=virtualassistant/ai/*.class virtualassistant/chatbot/*.class virtualassistant/data/datastore/*.class virtualassistant/data/news/*.class virtualassistant/data/stocks/*.class virtualassistant/data/system/*.class virtualassistant/misc/*.class 
 
 echo 'Making jar file...'
 
-jar cfe virtualassistant.jar virtualassistant.gui.Main * || { echo 'Creating jar file failed' ; exit 1; }
+jar cfm virtualassistant.jar Manifest.txt %gui% %classes% virtualassistant/*.class 
+
 
 echo 'Succesfully created jar file'
+
+
 REM echo 'Run "java -jar virtualassistant.jar" to run program';
 pause
