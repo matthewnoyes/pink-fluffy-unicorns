@@ -83,7 +83,7 @@ public void makeQuery(String text) {
 		try {
     	responseStr = virtualAssistant.getResponse(query.getMessage());
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 
 
