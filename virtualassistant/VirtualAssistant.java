@@ -20,6 +20,11 @@ import virtualassistant.data.system.SystemStatus;
 import virtualassistant.misc.Pair;
 import virtualassistant.data.news.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class VirtualAssistant {
 
     private StockData stockData;
@@ -60,11 +65,11 @@ public class VirtualAssistant {
     public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, java.text.ParseException, ParseException {
 
         // Uncomment to link to chatbot
-        
+
         String response = chatbot.getResponse(query);
         // Convert to JsonObject
         JSONObject obj = loader.parseJSON(response);
-        
+
         //JSONObject obj = loader.parseJSONFile("tests/test.json");
 
 
@@ -99,28 +104,28 @@ public class VirtualAssistant {
         ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
         INewsData news = new NewsData();
 	Calendar calDate  = Calendar.getInstance();
-	    
+
 	    if(parameters.get("date") != null){
-		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");		
-		calDate.setTime(df.parse(parameters.get("date")));	    
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+		calDate.setTime(df.parse((String)parameters.get("date")));
 	    }
 
         switch((String)parameters.get("data1")) {
-			
+
 	    case "ClosePriceOnDateen":
                 return new Pair("" + company.getClosePriceOnDate(calDate), null);
-			
+
 	    case "OpenPriceOnDate":
                 return new Pair("" + company.getOpenPriceOnDate(calDate), null);
-		
+
 	    case "HighPriceOnDate":
                 return new Pair("" + company.getHighPriceOnDate(calDate), null);
-	
+
 	    case "LowPriceOnDate":
-                return new Pair("" + company.getLowPriceOnDate(calDate), null);	
+                return new Pair("" + company.getLowPriceOnDate(calDate), null);
 
 	    case "VolumeOnDate":
-                return new Pair("" + company.getVolumeOnDate(calDate), null);	
+                return new Pair("" + company.getVolumeOnDate(calDate), null);
 
             case "open":
                 return new Pair("" + company.getOpen(), null);
@@ -139,20 +144,20 @@ public class VirtualAssistant {
 
             case "PercentageChange":
                 return new Pair("" + company.getPercentageChange(), null);
-	
+
             case "CurrentPrice":
                 return new Pair("" + company.getCurrentPrice(), null);
-			
+
 	    case "Change":
                 return new Pair("" + company.getChange(), null);
-			
+
 	    case "AverageClose":
                 return new Pair("" + company.yearAverageClose(), null);
-			
-            case "PastData":
-                return new Pair("" + company.getPastData(), null);
 
-  
+            // case "PastData":
+            //     return new Pair("" + company.getPastData(), null);
+
+
             case "yearHigh":
                 return new Pair("" + company.yearHigh(), null);
 
