@@ -67,7 +67,7 @@ public void initialize(URL location, ResourceBundle resources) {
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
-				closeHelp();
+			closeHelp();
 		}
 
 		Message query = new Query(text);
@@ -76,7 +76,7 @@ public void makeQuery(String text) {
 
 		
 		// Process message here
-            String responseStr = virtualAssistant.getResponse(query);
+        String responseStr = virtualAssistant.getResponse(query);
 		
 
 		News[] news = null; // this should be the news to be displayed with the response 
