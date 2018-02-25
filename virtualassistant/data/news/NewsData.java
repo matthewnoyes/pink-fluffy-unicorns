@@ -1,3 +1,4 @@
+package virtualassistant.data.news;
 import java.io.IOException;  
 import org.jsoup.Jsoup;  
 import org.jsoup.nodes.Document;
@@ -14,51 +15,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 
 
-public class NewsScrapper{
+public class NewsData impelements INewsData{
 
-	private ArrayList<newsObj> articlesObjs = new ArrayList<newsObj>(); // arraylist of news articles objects
+	private ArrayList<NewsObj> articlesObjs = new ArrayList<NewsObj>(); // arraylist of news articles objects
 	private DateFormat toFormat = new SimpleDateFormat("dd MMM yyyy HH:mm");
 
-	private class newsObj{  // possibly in another file ??
-		private String DateTime;
-		private String title;
-		private String impact;
-		private String url;
-		private String source;
 
-		public newsObj(String time, String title, String impact, String url,String source){ // for Rns news
-			this.DateTime = time;
-			this.title = title;
-			this.impact = impact;
-			this.url = url;
-			this.source = source;
-		}
-
-		public newsObj(String time, String title, String url,String source){ // for other types of news articles
-			this.DateTime = time;
-			this.title = title;
-			this.url = url;
-			this.source = source;
-		}
-
-		public String getDateTime(){
-			return this.DateTime;
-		}
-		public String getTitle(){
-			return this.title;
-		}
-		public String getImpact(){
-			return this.impact;
-		}
-		public String getUrl(){
-			return this.url;
-		}
-		public String getSource(){
-			return this.source;
-		}
-	}
-
-	public ArrayList<newsObj> getRnsNews(String company) throws IOException, ParseException {
+	public ArrayList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
 		for(int i=1;i<=6;i++){ // loop to go through each page and get the isin number of the company wanted.
 			final Document doc = Jsoup.connect("http://www.londonstockexchange.com/exchange/prices-and-markets/stocks/indices/constituents-indices.html?index=UKX&industrySector=&page=" + i).get();
 				for(Element li: doc.select(".table_dati tr")){ // going through each list item and adding the article into the arraylist
@@ -109,7 +72,7 @@ public class NewsScrapper{
 		return absurl;
 	}
 
-	public ArrayList<newsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
+	public ArrayList<NewsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
 		Date date = new Date();
 		String todaysDate= new SimpleDateFormat("dd MMM yyyy").format(date);
 
@@ -125,7 +88,7 @@ public class NewsScrapper{
 			return articlesObjs;
 		}
 
-		public ArrayList<newsObj> getYahooNews(String comapny) throws IOException, ParseException {			
+		public ArrayList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {			
 			DateFormat fromFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date needs to be formatted.
 			fromFormat.setLenient(false);
 			toFormat.setLenient(false);
@@ -147,7 +110,7 @@ public class NewsScrapper{
 			return articlesObjs;	
 		}
 
-		public ArrayList<newsObj> sectorNews(String sector) throws IOException, ParseException {
+		public ArrayList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
 			/* Sectors allowed here ::::    mining  oil-gas  utilities  banks  insurance  property  financial-services  health-care  pharmaceuticals  aerospace-defence
 			   automobiles  basic-resources  chemicals  construction  industrial-goods  support-services  accounting-consulting-services  legal-services  recruitment-services
 			   food-beverage  luxury-goods  personal-goods (<---contains household goods too)  retail  tobacco  travel-leisure  airlines  shipping  rail
@@ -171,13 +134,13 @@ public class NewsScrapper{
 			return articlesObjs;
 		}
 
-	private newsObj newsArrayAdder(String time, String title, String url,String source){ // used to make objects of news articles. 
-		newsObj c = new newsObj(time,title,url,source);
+	private NewsObj newsArrayAdder(String time, String title, String url,String source){ // used to make objects of news articles. 
+		NewsObj c = new NewsObj(time,title,url,source);
 		return c;
 	}
 
-	private newsObj newsArrayAdder(String time, String title, String impact, String url,String source){ // creates objects for each rns news article
-		newsObj c = new newsObj(time,title,impact,url,source);
+	private NewsObj newsArrayAdder(String time, String title, String impact, String url,String source){ // creates objects for each rns news article
+		NewsObj c = new NewsObj(time,title,impact,url,source);
 		return c;
 	}
 }
