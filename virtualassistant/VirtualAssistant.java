@@ -112,6 +112,9 @@ public class VirtualAssistant {
 
         switch((String)parameters.get("data1")) {
 
+          case "currentPrice":
+              return new Pair("" + company.getCurrentPrice(), null);
+
 	    case "ClosePriceOnDateen":
                 return new Pair("" + company.getClosePriceOnDate(calDate), null);
 
@@ -199,6 +202,7 @@ public class VirtualAssistant {
                 chatbot.output(stockData.getSectorCurrentPrice(sector));
                 break;
             */
+
             case "change":
                 return new Pair("" + stockData.getSectorChange(sector), null);
 
@@ -219,7 +223,7 @@ public class VirtualAssistant {
 
             case "closePriceOn":
                 // return stockData.sectorYearLow(sector);
-                break;			
+                break;
 
             case "SectorClosePriceOnDate":
                 return new Pair("" + stockData.getSectorClosePriceOnDate(sector,calDate), null);

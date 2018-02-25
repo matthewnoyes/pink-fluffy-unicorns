@@ -103,7 +103,9 @@ public class LearningAgent implements ILearningAgent {
     return queries;
   }
 
-  public void searchForStockEvent() {
+  public Bool searchForStockEvent() {
+
+
 
     for (ICompany com : stocks.getAllCompanies()) {
       if (com.getPercentageChange() > minStockImapact && favouriteStocks.containsKey(com.getTicker())) {
@@ -114,7 +116,7 @@ public class LearningAgent implements ILearningAgent {
 
   }
 
-  public void searchForNewsEvent() {
+  public String searchForNewsEvent() {
 
     // for (NewsObj article : new news) {
     //   if (article.getImapct() > minNewsImapact && favourites.containsKey(article.com)) {
