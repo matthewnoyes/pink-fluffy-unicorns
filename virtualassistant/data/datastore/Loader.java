@@ -87,7 +87,11 @@ public class Loader {
             }
             
             // Sort arrayList
-            arrayList.sort();
+            arrayList.sort(); 
+            
+            for(Pair<String,Integer> p : arrayList) {
+                favourites.add(p.first, p.second);
+            }
             
             return favourites;
 
