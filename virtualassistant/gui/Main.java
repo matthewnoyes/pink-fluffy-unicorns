@@ -34,7 +34,8 @@ public void start(Stage primaryStage) throws Exception {
 }
 
 public void closeProgram() {
-
+		// save any data before if closes
+		System.exit(0);
 }
 
 
