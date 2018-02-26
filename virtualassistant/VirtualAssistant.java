@@ -138,15 +138,26 @@ public class VirtualAssistant {
         } catch (Exception e) {
             e.toString();
         }
-
+        
+        StringBuilder sb = new StringBuilder(name);
+        sb.append(", ");
+        
         switch((String)parameters.get("data1")) {
 
             case "currentPrice":
-                return new Pair("" + company.getCurrentPrice(), null);
+                sb.append("current price: ");
+                sb.append(company.getCurrentPrice());
+                sb.append("£.");
+                return new Pair(sb.toString(), null);
 
             case "ClosePriceOnDate":
-                return new Pair("" + company.getClosePriceOnDate(calDate), null);
-
+                sb.append("closing price on ");
+                sb.append(calDate.toString());
+                sb.append(": ");
+                sb.append(company.getClosePriceOnDate(calDate));
+                sb.append("£.");
+                return new Pair(sb.toString(), null);
+                
             case "OpenPriceOnDate":
                 return new Pair("" + company.getOpenPriceOnDate(calDate), null);
 
