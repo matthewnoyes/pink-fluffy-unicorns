@@ -1,5 +1,6 @@
 package virtualassistant.gui;
 
+import java.util.*;
 import virtualassistant.data.news.NewsObj;
 
 public class Message {
@@ -14,7 +15,7 @@ public String getMessage() {
 				return message;
 }
 
-public NewsObj[] getNews() {
+public LinkedList<NewsObj> getNews() {
 				return null;
 }
 

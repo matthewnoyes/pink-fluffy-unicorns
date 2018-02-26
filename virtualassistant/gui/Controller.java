@@ -1,5 +1,10 @@
 package virtualassistant.gui;
 
+// TODO
+// Thread response
+// LinkedList news
+// clickable articles
+
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
 import virtualassistant.data.news.NewsObj;
@@ -53,18 +58,18 @@ public void initialize(URL location, ResourceBundle resources) {
 		generateAnimations();
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
-        
-        System.out.println("Downloading data...");
+
+		System.out.println("Downloading data...");
 		virtualAssistant = new VirtualAssistant();
-        
-	// 	final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
- // -            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
- // -        }
-        System.out.println("Launching interface...");
+
+		//  final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+		// -            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
+		// -        }
+		System.out.println("Launching interface...");
 		openHelp();
-        
-        System.out.println("Success!");
-        System.out.println("===================================\n\n");
+
+		System.out.println("Success!");
+		System.out.println("===================================\n\n");
 }
 
 /* ============ METHODS YOU NEED TO KNOW ============ */
@@ -94,7 +99,7 @@ public void makeQuery(String text) {
 				e.printStackTrace();
 		}
 
-		NewsObj[] news = null; // this should be the news to be displayed with the response
+		LinkedList<NewsObj> news = null; // this should be the news to be displayed with the response
 		Message response = new Response(responseStr, news);
 		chatbot_message_list.add(response);
 		addMessage(response);
@@ -238,21 +243,21 @@ private void addMessage(Message message) {
 				content_contain.getChildren().add(label);
 
 				// if the response contains news to display
-				NewsObj[] news = message.getNews();
+				LinkedList<NewsObj> news = message.getNews();
 				if(news != null) {
 						// set to max width for message
 						//content_contain.setPrefWidth(Main.WIDTH);
 
-						for(int x = 0; x < 3 && x < news.length; x++) {
+						for(int x = 0; x < 3 && x < news.size(); x++) {
 								Separator separator = new Separator();
 								separator.setMaxWidth(200);
 
-								Label heading = new Label(news[x].getTitle());
+								Label heading = new Label(news.get(x).getTitle());
 								heading.setId("news_heading");
-								Label time = new Label(news[x].getDateTime().toString());
+								Label time = new Label(news.get(x).getDateTime().toString());
 								time.setId("news_data");
-								Label url = new Label(news[x].getUrl());
-								url.setId("news_data");
+								Hyperlink url = new Hyperlink(news.get(x).getUrl());
+								url.setId("news_url");
 
 								VBox newsContain = new VBox(0);
 								newsContain.setAlignment(Pos.CENTER_RIGHT);

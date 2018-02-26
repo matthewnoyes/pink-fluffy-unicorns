@@ -88,6 +88,17 @@
   -fx-text-fill: #605E71;
 }
 
+#news_url {
+  -fx-font-size: 10pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: #605E71;
+}
+#news_url : hover {
+  -fx-font-size: 10pt;
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-text-fill: blue;
+}
+
 #query_text_field {
   -fx-min-height: 40px;
   -fx-font-size: 13pt;
