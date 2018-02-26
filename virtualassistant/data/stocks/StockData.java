@@ -26,11 +26,15 @@ public class StockData implements IStockData {
     tickerToCompany = new HashMap<String, Company>();
     companiesInSector = new HashMap<String, Set<Company>>();
     nameToCompany = new HashMap<String, Company>();
-
+    
+    System.out.println("Downloading sector data...");
+    
     HashMap<String, Integer> sectors = Scrapper.getSectors();
-
+    int index = 1;
+    
     for (Map.Entry<String, Integer> sector : sectors.entrySet()) {
-
+      
+      System.out.println("Loading " + sector.getKey() + " data(" + index++ + "/41)...");
       Set<Company> comInCurrSector = Scrapper.getSector(sector.getKey(), sector.getValue());
 
       companiesInSector.put(sector.getKey(), comInCurrSector);

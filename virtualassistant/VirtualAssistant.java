@@ -4,7 +4,6 @@ package virtualassistant;
 //import json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.json.simple.*;
 import org.json.simple.JSONObject;
@@ -24,6 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class VirtualAssistant {
 
@@ -34,8 +34,10 @@ public class VirtualAssistant {
     private INewsData news;
     private Chatbot chatbot;
     private Calendar calDate;
-
-
+    
+    // Set this for debugging
+    private boolean verbose = false;
+    
     public VirtualAssistant(){
         //Instantiate everything
 
@@ -64,7 +66,7 @@ public class VirtualAssistant {
     }
 
     // Decide action type based on action type decided by chatbot?
-    public Pair<String, ArrayList<NewsObj>> getResponse(String query) throws IOException, java.text.ParseException, ParseException {
+    public Pair<String, LinkedList<NewsObj>> getResponse(String query) throws IOException, java.text.ParseException, ParseException {
 
         JSONObject response = chatbot.getResponse(query);
 
@@ -78,35 +80,56 @@ public class VirtualAssistant {
         
         /// ADDD SPLITTING LOGICC HEREE
         
-        // Check whether company or sector
-        ICompany company = stockData.getCompanyForTicker((String) response.get("company1"));
-        if(company != null) {
+        Pair result = new Pair("", new LinkedList<NewsObj>());
+        
+        String names = (String) response.get("company1");
+        
+        if(verbose) {
+            System.out.println("VirtualAssistant.getResponse(): Names = " + names);
+        }
+        
+        String[] namesList = names.split(" and ");
+        
+        for(String name : namesList){
             
-            return getCompanyData(response);
-        } else if (stockData.isSector((String)response.get("company1"))){
+            if(verbose) {
+                System.out.println("VirtualAssistant.getResponse(): Company name = " + name);
+            }
             
-            return getSectorData(response);
+            // Check whether company or sector
+            ICompany company = stockData.getCompanyForTicker(name);
+            if(company != null) {
+                
+                result = Pair.merge(result, getCompanyData(name, response));
+            } else if (stockData.isSector(name)){
+                
+                result = Pair.merge(result, getSectorData(name, response));
+            } 
         } 
         
         // Return
-        return null;
+        return result;
     }
 
     /* Company data
     */
 
-    private Pair<String, ArrayList<NewsObj>> getCompanyData(JSONObject parameters) throws IOException, java.text.ParseException {
+    private Pair<String, LinkedList<NewsObj>> getCompanyData(String name, JSONObject parameters) throws IOException, java.text.ParseException {
 
-        ICompany company = stockData.getCompanyForTicker((String)parameters.get("company1"));
+        ICompany company = stockData.getCompanyForTicker(name);
         // Add split logic on and, use a for loop to return 
         
       
         // Try to get date
-	    if(parameters.get("date") != null){
-            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-            calDate.setTime(df.parse((String)parameters.get("date")));
-	    }
-
+        try {
+            if(parameters.get("date") != null){
+                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+                calDate.setTime(df.parse((String)parameters.get("date")));
+            }
+        } catch (Exception e) {
+            e.toString();
+        }
+        
         switch((String)parameters.get("data1")) {
 
             case "currentPrice":
@@ -177,15 +200,18 @@ public class VirtualAssistant {
     /* Sector data
     */
 
-    private Pair<String, ArrayList<NewsObj>> getSectorData(JSONObject parameters) throws IOException, ParseException, java.text.ParseException {
+    private Pair<String, LinkedList<NewsObj>> getSectorData(String sector, JSONObject parameters) throws IOException, ParseException, java.text.ParseException {
 
-        String sector = (String)parameters.get("sector");
         INewsData news = new NewsData();
         Calendar calDate  = Calendar.getInstance();
-
-        if(parameters.get("date") != null){
-            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-            calDate.setTime(df.parse((String)parameters.get("date")));
+        
+        try{
+            if(parameters.get("date") != null){
+                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+                calDate.setTime(df.parse((String)parameters.get("date")));
+            }
+        } catch (Exception e) {
+            e.toString();
         }
 
 

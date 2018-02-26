@@ -53,14 +53,18 @@ public void initialize(URL location, ResourceBundle resources) {
 		generateAnimations();
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
-
+        
+        System.out.println("Downloading data...");
 		virtualAssistant = new VirtualAssistant();
-
+        
 	// 	final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
  // -            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
  // -        }
-
+        System.out.println("Launching interface...");
 		openHelp();
+        
+        System.out.println("Success!");
+        System.out.println("===================================\n\n");
 }
 
 /* ============ METHODS YOU NEED TO KNOW ============ */

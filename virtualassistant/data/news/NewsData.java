@@ -16,7 +16,7 @@ import java.text.ParseException;
 
 
 public class NewsData implements INewsData{
-	private ArrayList<NewsObj> articlesObjs = new ArrayList<NewsObj>(); // arraylist of news articles objects
+	private LinkedList<NewsObj> articlesObjs = new LinkedList<NewsObj>(); // arraylist of news articles objects
 	private DateFormat MmultiUseFormat = new SimpleDateFormat("dd MMM yyyy HH:mm"); // date format for multiple news
 	private DateFormat rnsNewsDateFormat = new SimpleDateFormat("HH:mm dd-MMM-yyyy"); // date format for rns londonstockexchange news
 	private DateFormat yahooNewFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date format for yahoo news
@@ -24,7 +24,7 @@ public class NewsData implements INewsData{
 
 
 
-	public ArrayList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
+	public LinkedList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
 		for(int i=1;i<=6;i++){ // loop to go through each page and get the isin number of the company wanted.
 			final Document doc = Jsoup.connect("http://www.londonstockexchange.com/exchange/prices-and-markets/stocks/indices/constituents-indices.html?index=UKX&industrySector=&page=" + i).get();
 				for(Element li: doc.select(".table_dati tr")){ // going through each list item and adding the article into the arraylist
@@ -74,7 +74,7 @@ public class NewsData implements INewsData{
 		return absurl;
 	}
 
-	public ArrayList<NewsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
+	public LinkedList<NewsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
 		Date date = new Date();		
 		String todaysDate= new SimpleDateFormat("dd MMM yyyy").format(date);
 		Calendar calDate = Calendar.getInstance();
@@ -91,7 +91,7 @@ public class NewsData implements INewsData{
 			return articlesObjs;
 		}
 
-		public ArrayList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {
+		public LinkedList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {
 	                Calendar calDate = Calendar.getInstance();
 			String companyName = "";
 			
@@ -111,7 +111,7 @@ public class NewsData implements INewsData{
 			return articlesObjs;
 		}
 
-		public ArrayList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
+		public LinkedList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
 			/* Sectors allowed here ::::    mining  oil-gas  utilities  banks  insurance  property  financial-services  health-care  pharmaceuticals  aerospace-defence
 			   automobiles  basic-resources  chemicals  construction  industrial-goods  support-services  accounting-consulting-services  legal-services  recruitment-services
 			   food-beverage  luxury-goods  personal-goods (<---contains household goods too)  retail  tobacco  travel-leisure  airlines  shipping  rail

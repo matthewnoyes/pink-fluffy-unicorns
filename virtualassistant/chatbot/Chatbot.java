@@ -35,8 +35,10 @@ public class Chatbot implements IChatBot {
         // Getting the response needed from the json retrieved.
         final JSONObject json = (JSONObject) parser.parse(document);
 	    final JSONObject results =  (JSONObject) json.get("result");
-	    final JSONObject response = (JSONObject)parser.parse((String) ((JSONObject) results.get("fulfillment")).get("speech"));
-        return response;
+	    final String response = (String) ((JSONObject) results.get("fulfillment")).get("speech");
+        System.out.println(response);
+        final JSONObject jsonResponse = (JSONObject)parser.parse(response);
+        return jsonResponse;
     }
 
     public void output(Double text) {
