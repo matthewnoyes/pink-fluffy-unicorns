@@ -10,7 +10,7 @@ public interface ILearningAgent {
   public void analyzeInput(List<String> tokenized, List<String> patternized);
 
   //?
-  public Set<String> getFavouriteStocks();
+  public Favourites<String, Integer> getFavouriteStocks();
   //Lets the AI know the user has bookmarked the stock
   public void bookmarkStock(String ticker);
 

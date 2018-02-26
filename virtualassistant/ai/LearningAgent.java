@@ -53,7 +53,8 @@ public class LearningAgent implements ILearningAgent {
 
   }
 
-  public Set<String> getFavouriteStocks() {
+  //Upate to have number be order
+  public Favourites<String, Integer> getFavouriteStocks() {
     return favouriteStocks.keySet();
   }
 
