@@ -2,8 +2,8 @@ package virtualassistant.gui;
 
 // TODO
 // Thread response
-// LinkedList news
-// clickable articles
+// Open news url
+// scrolling
 
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
@@ -28,6 +28,8 @@ import java.io.IOException;
 
 public class Controller implements Initializable {
 
+@FXML
+public ScrollPane scrollpane;
 @FXML
 public VBox chatbot_container;
 @FXML
@@ -125,6 +127,13 @@ private void generateAnimations() {
 		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt->round_mic_button.setStyle("-fx-background-color: #FF4339;")),
 		                                   new KeyFrame(Duration.seconds(1), evt->round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
 		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
+}
+
+private void scrollToBottom() {
+		Animation animation = new Timeline(
+				new KeyFrame(Duration.seconds(1),
+				             new KeyValue(scrollpane.vvalueProperty(), 1)));
+		animation.play();
 }
 
 // handle when the mic button is clicked
@@ -272,6 +281,7 @@ private void addMessage(Message message) {
 
 		}
 		chatbot_container.getChildren().add(container);
+		scrollToBottom();
 }
 
 }

@@ -38,5 +38,4 @@ public void closeProgram() {
 		System.exit(0);
 }
 
-
 }
