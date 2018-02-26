@@ -59,7 +59,7 @@ public class LearningAgent implements ILearningAgent {
     int place = favouriteStocks.size() - 1;
 
     //Iterates through oldest to newest
-    for (String ticker : tickers) {
+    for (String ticker : favouriteStocks.keySet()) {
       favouriteStocks.put(ticker, place);
       place--;
     }
@@ -91,7 +91,7 @@ public class LearningAgent implements ILearningAgent {
 
     int i = 0;
     ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favouriteStocks.size());
-    
+
     while (iterator.hasPrevious()) {
       String ticker = iterator.previous();
       //Search for something interesting
