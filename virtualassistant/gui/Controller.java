@@ -3,7 +3,6 @@ package virtualassistant.gui;
 // TODO
 // Thread response
 // Open news url
-// scrolling
 
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
@@ -20,6 +19,8 @@ import javafx.geometry.*;
 import javafx.scene.control.Separator;
 import javafx.animation.*;
 import javafx.util.Duration;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 import java.net.URL;
 import java.util.*;
@@ -44,6 +45,7 @@ public Timeline mic_button_timeline;
 
 private boolean listening;
 private boolean onHelp;
+private boolean ready;
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
@@ -53,6 +55,7 @@ private VirtualAssistant virtualAssistant;
 public void initialize(URL location, ResourceBundle resources) {
 		listening = false;
 		onHelp = false;
+		ready = false;
 		chatbot_message_list = new ArrayList<>();
 		helptext_list = new ArrayList<>();
 
@@ -61,20 +64,34 @@ public void initialize(URL location, ResourceBundle resources) {
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
 
-		System.out.println("Downloading data...");
-		virtualAssistant = new VirtualAssistant();
+		// Run download of data in background
+		Task task = new Task<Void>() {
+				@Override
+				public Void call() {
+						System.out.println("Downloading data...");
+						virtualAssistant = new VirtualAssistant();
+						ready = true;
+						System.out.println("Success!");
+						System.out.println("===================================\n\n");
+						changeWifiAccess(true);
+						return null;
+				}
+		};
+
+		new Thread(task).start();
 
 		//  final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 		// -            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
 		// -        }
 		System.out.println("Launching interface...");
 		openHelp();
-
-		System.out.println("Success!");
-		System.out.println("===================================\n\n");
 }
 
-/* ============ METHODS YOU NEED TO KNOW ============ */
+/* ============ THINGS YOU NEED TO KNOW ============ */
+/*
+	variable:
+		boolean ready : "ready to recieve queries"
+*/
 /*
     void changeUpdateTime(String time) :
         changes displayed update time
@@ -89,22 +106,50 @@ public void makeQuery(String text) {
 				closeHelp();
 		}
 
+		// add the query to the UI
 		Message query = new Query(text);
 		chatbot_message_list.add(query);
 		addMessage(query);
 
-		String responseStr = "An error occured";
+		// if the connection is established
+		if(ready) {
+				// Get response in extra task
+				Task task = new Task<Message>() {
+						@Override
+						public Message call() {
+								String responseStr = "An error occured";
+								try {
+										responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
+								} catch (Exception e) {
+										e.printStackTrace();
+								}
+								LinkedList<NewsObj> news = null;     // this should be the news to be displayed with the response
+								Message response = new Response(responseStr, news);
+								return response;
+						}
+				};
+				// once task completed add it to the UI
+				task.setOnSucceeded(new EventHandler() {
+								@Override
+								public void handle(Event event) {
+								        Platform.runLater(new Runnable() {
+												@Override
+												public void run() {
+												        Message response = (Message)task.getValue();
+												        chatbot_message_list.add(response);
+												        addMessage(response);
+												}
+										});
+								}
+						});
+				new Thread(task).start();
 
-		try {
-				responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
-		} catch (Exception e) {
-				e.printStackTrace();
+		// If there is no connection established
+		} else {
+				Message error_response = new Response("Connection error. Please try again later.",null);
+				chatbot_message_list.add(error_response);
+				addMessage(error_response);
 		}
-
-		LinkedList<NewsObj> news = null; // this should be the news to be displayed with the response
-		Message response = new Response(responseStr, news);
-		chatbot_message_list.add(response);
-		addMessage(response);
 }
 
 public void startListening() {
@@ -211,9 +256,11 @@ public void changeUpdateTime(String time) {
 
 public void changeWifiAccess(boolean access) {
 		if(access) {
+				ready = true;
 				Image image = new Image(getClass().getResourceAsStream("images/wifi_access.png"));
 				wifi_image_view.setImage(image);
 		} else {
+				ready = false;
 				Image image = new Image(getClass().getResourceAsStream("images/wifi_no_access.png"));
 				wifi_image_view.setImage(image);
 		}
