@@ -68,9 +68,9 @@ public class Loader {
         }  
     }
     
-    // Load high first
+    
     public Favourites<String, Integer> readFavourites(){
-     
+        // IMPORTANT : Load high first
         Favourites<String, Integer> favourites = new Favourites();
         ArrayList<Pair<String, Integer>> arrayList = new ArrayList(Favourites.maxFavourites);
         
@@ -89,7 +89,7 @@ public class Loader {
             }
             
             // Sort arrayList
-            arrayList.sort(); 
+            arrayList.sort(new SortBySecond()); 
             
             for(Pair<String,Integer> p : arrayList) {
                 favourites.put(p.getFirst(), p.getSecond());
@@ -107,6 +107,16 @@ public class Loader {
 
         return null;
         
+    }
+    
+    class SortBySecond implements Comparator<Pair<String, Integer>>
+    {
+        // Used for sorting in ascending order of
+        // roll number
+        public int compare(Pair<String, Integer> a, Pair<String, Integer> b)
+        {
+            return b.getSecond() - a.getSecond();
+        }
     }
     
 }
