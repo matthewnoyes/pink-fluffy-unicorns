@@ -24,6 +24,9 @@ import javafx.concurrent.Task;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import java.io.IOException;
 
@@ -46,6 +49,10 @@ public Timeline mic_button_timeline;
 private boolean listening;
 private boolean onHelp;
 private boolean ready;
+
+// IMPORTANT: Set to false only if it slows down your internet connection too much
+private boolean autoUpdate = true;
+
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
@@ -79,10 +86,11 @@ public void initialize(URL location, ResourceBundle resources) {
 		};
 
 		new Thread(task).start();
-
-		//  final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-		// -            executorService.scheduleAtFixedRate(App::virtualAssistant.scan, 0, 15, TimeUnit.SECONDS);
-		// -        }
+        
+        if(autoUpdate) {
+            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                executorService.scheduleAtFixedRate(new Runnable(){ public void run() {virtualAssistant.scan();}}, 60, 60, TimeUnit.SECONDS);
+        }
 		System.out.println("Launching interface...");
 		openHelp();
 }

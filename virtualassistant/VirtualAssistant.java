@@ -64,14 +64,27 @@ public class VirtualAssistant {
 
     }
 
-    private void scan() {
+    public void scan() {
 
         // Try to update data, if working, fire learning agent
-        // if(loader.updateData(stockData)) {
-        //
-        //     learningAgent.searchForStockEvent();
-        //     learningAgent.searchForNewsEvent();
-        // }
+        //if(loader.updateData(stockData)) {
+        StockData stockDataNew = null;
+        boolean loaded = false;
+        while(!loaded) {
+            try {
+                stockDataNew = new StockData();
+                loaded = true;
+            } catch (Exception e) {
+                System.out.println("Failed to load stock data... Retrying...");
+                e.printStackTrace();
+            }
+        }    
+        
+        stockData = stockDataNew;
+        
+        /*learningAgent.searchForStockEvent();
+        learningAgent.searchForNewsEvent();
+        */
     }
 
     // Decide action type based on action type decided by chatbot?
