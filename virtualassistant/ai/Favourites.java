@@ -7,7 +7,7 @@ import virtualassistant.misc.Pair;
 
 public class Favourites<K, V> extends LinkedHashMap<K, V> {
 
-  private final int maxFavourites = 30;
+  public static final int maxFavourites = 30;
 
   @Override
   protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
