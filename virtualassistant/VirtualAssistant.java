@@ -42,12 +42,21 @@ public class VirtualAssistant {
         //Instantiate everything
 
         loader = new Loader();
-        try {
-            stockData = new StockData();// Sloader.readStocks();
-        } catch (Exception e) {
-            e.printStackTrace();
+        
+        
+        // Try to load stockData again if this fails. We have no program without it
+        boolean loaded = false;
+        while(!loaded) {
+            try {
+                stockData = new StockData();// Sloader.readStocks();
+                loaded = true;
+            } catch (Exception e) {
+                System.out.println("Failed to load stock data... Retrying...");
+                e.printStackTrace();
+            }
         }
-        learningAgent = new LearningAgent(stockData, null);
+        
+        learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
         //systemStatus = loader.readSystemStatus();
         news = new NewsData();
         chatbot = new Chatbot();
