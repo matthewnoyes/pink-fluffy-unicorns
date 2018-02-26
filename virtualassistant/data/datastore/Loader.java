@@ -40,7 +40,68 @@ public class Loader {
       }
       return null;
     }
+    
+    public void writeFavourites(LinkedHashMap<String, Integer> favourites){
+    
+        JSONArray list = new JSONArray();
 
+        for(String str : favourites.keySet()){
+
+            JSONObject cObj = new JSONObject();
+
+            cObj.put("name", str);
+            cObj.put("integer", favourites.get(str));
+
+            list.add(cObj);
+        }
+        
+        // Write to file
+        try (FileWriter file = new FileWriter("favourites.json")) {
+
+            file.write(obj.toJSONString());
+            file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }  
+    }
+    
+    // Load high first
+    public readFavourites(){
+     
+        LinkedHashMap<String, Integer> favourites = new LinkedHashMap(Favourites.maxFavourites);
+        ArrayList<Pair<String, Integer>> arrayList = new ArrayList(Favourites.maxFavourites);
+        
+        try{
+            Object obj = parser.parse(new FileReader("favourites.json"));
+            
+            JSONArray list = (JSONArray) obj;
+            
+            for(Object o : list) {
+                
+                JSONObject jo = (JSONObject) o;
+                
+                Pair<String, Integer> p = new Pair((String) o.get("name"), (Integer) o.get("integer"));
+                
+                arrayList.add(p);
+            }
+            
+            // Sort arrayList
+            arrayList.sort();
+            
+            return favourites;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+        
+    }
     /*public StockData readStocks(){
 
         Map<String, Company> companies = new HashMap(100);
