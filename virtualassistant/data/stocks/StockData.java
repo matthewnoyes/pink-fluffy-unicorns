@@ -26,14 +26,14 @@ public class StockData implements IStockData {
     tickerToCompany = new HashMap<String, Company>();
     companiesInSector = new HashMap<String, Set<Company>>();
     nameToCompany = new HashMap<String, Company>();
-    
+
     System.out.println("Downloading sector data...");
-    
+
     HashMap<String, Integer> sectors = Scrapper.getSectors();
     int index = 1;
-    
+
     for (Map.Entry<String, Integer> sector : sectors.entrySet()) {
-      
+
       System.out.println("Loading " + sector.getKey() + " data(" + index++ + "/41)...");
       Set<Company> comInCurrSector = Scrapper.getSector(sector.getKey(), sector.getValue());
 
@@ -117,25 +117,111 @@ public class StockData implements IStockData {
   }
 
   public double getSectorChange(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getChange();
+    }
+
+    return total;
   }
 
   public double getSectorPercentageChange(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    return getSectorChange(sector) / getCurrentSectorPrice(sector);
   }
 
   public double sectorYearHigh(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    Calendar lastYear = Calendar.getInstance();
+    lastYear.add(Calendar.YEAR, -1);
+
+    double high = 0.0;
+    for (Calendar date = Calendar.getInstance(); date.before(lastYear); date.add(Calendar.DAY_OF_YEAR, -1)) {
+      double day = getSectorHighOnDate(sector, date);
+      if (day > high) {
+        high = day;
+      }
+    }
+
+    return high;
   }
+
   public double sectorYearLow(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    Calendar lastYear = Calendar.getInstance();
+    lastYear.add(Calendar.YEAR, -1);
+
+    double low = 0.0;
+    for (Calendar date = Calendar.getInstance(); date.before(lastYear); date.add(Calendar.DAY_OF_YEAR, -1)) {
+      double day = getSectorHighOnDate(sector, date);
+      if (day < low) {
+        low = day;
+      }
+    }
+
+    return low;
   }
+
   public double sectorYearAverageClose(String sector) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    Calendar lastYear = Calendar.getInstance();
+    lastYear.add(Calendar.YEAR, -1);
+
+    double total = 0.0;
+    double count = 0.0;
+    for (Calendar date = Calendar.getInstance(); date.before(lastYear); date.add(Calendar.DAY_OF_YEAR, -1)) {
+      total += getSectorClosePriceOnDate(sector, date);
+      count++;
+    }
+
+    return total / count;
   }
 
   public double getSectorClosePriceOnDate(String sector, Calendar date) {
-    return 0.0;
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getClosePriceOnDate(date);
+    }
+
+    return total;
+  }
+
+  public double getSectorHighOnDate(String sector, Calendar date) {
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getHighPriceOnDate(date);
+    }
+
+    return total;
+  }
+
+  public double getSectorLowOnDate(String sector, Calendar date) {
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getLowPriceOnDate(date);
+    }
+
+    return total;
   }
 
 }
