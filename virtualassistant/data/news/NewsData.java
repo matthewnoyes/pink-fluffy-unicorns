@@ -91,17 +91,11 @@ public class NewsData implements INewsData{
 			return articlesObjs;
 		}
 
-		public LinkedList<NewsObj> getYahooNews(String comapny) throws IOException, ParseException {
-	                Calendar calDate = Calendar.getInstance();
-			String companyName = "";
-			
-		if(comapny.charAt(comapny.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
-			companyName = comapny + "l";
-		}else{
-			companyName = comapny + ".l";
-		}
+		public LinkedList<NewsObj> getYahooNews(String companies) throws IOException, ParseException { // works by getting recent 20 news articles of companies in a sector
+	        //This method is only compatible with sectors now. Give users choice between alliance news and RNS news.
+	        Calendar calDate = Calendar.getInstance();  
 
-			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companyName+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
+			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companies+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
 			for(Element li: doc.select("item")){
 				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
 				final String title = li.select("title").text();
@@ -112,25 +106,51 @@ public class NewsData implements INewsData{
 		}
 
 		public LinkedList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
-			/* Sectors allowed here ::::    mining  oil-gas  utilities  banks  insurance  property  financial-services  health-care  pharmaceuticals  aerospace-defence
-			   automobiles  basic-resources  chemicals  construction  industrial-goods  support-services  accounting-consulting-services  legal-services  recruitment-services
-			   food-beverage  luxury-goods  personal-goods (<---contains household goods too)  retail  tobacco  travel-leisure  airlines  shipping  rail
+			final Document Ftse100 = Jsoup.connect("https://en.wikipedia.org/wiki/FTSE_100_Index").get(); // used to get all companies in a sector
+			String allCompaniesInSector = "";
+			String sectorWanted = sector;
+			int count = 0; // only matters if 0 as no company has been added.
 
-			   General sectors allowed :::: energy  financials  health  industrials  media  professional-services  retail-consumer  telecoms  transport  technology
-			*/
-			Calendar calDate = Calendar.getInstance();
-
-			final Document doc = Jsoup.connect("https://www.ft.com/companies/" + sector).get();
-
-			for(Element li: doc.select("#stream li")){ // going through each list item and adding the article into the arraylist
-				if(li.select(".stream-card__date .o-date.o-teaser__timestamp").text().length() >0){  // needed to prevent empty spaces from being added due to ads on the website
-					String headLine = li.select(".js-teaser-heading-link").text();
-					calDate.setTime(sectorNewsFormat.parse(li.select(".o-teaser__timestamp").first().attr("datetime"))); // the datetime of the article.
-					final String relHref = "https://www.ft.com" + li.select(".js-teaser-heading-link").first().attr("href"); // url of the article
-					articlesObjs.add(newsArrayAdder(calDate,headLine,relHref,"The Financial Times"));
+					switch(sector) // Some sector names on chatbot are different to wikipedias version
+				{
+					case "General Financial":
+					sectorWanted = "financial services";
+					break;
+					case "Household Goods":
+					sectorWanted = "Household Goods & Home Construction";
+					break;
+					case "Industrial Metals":
+					sectorWanted = "Industrial Metals & Mining";
+					break;
 				}
-			}
-			return articlesObjs;
+			
+			for(Element li: Ftse100.select(".wikitable.sortable tbody tr")){ // going through each company and adding its name to a string if its in the sector.
+				if(sectorWanted.equals(li.select("td:eq(2)").text())){
+					String company = li.select("td:eq(1)").text();
+
+					if(company.equals("BT.A")){ // BT'S name is different on yahoo
+					System.out.println(company);
+					company = "bt";
+				}
+
+							if(company.charAt(company.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
+								company = company + "L";		
+							}else{
+								company = company + ".L";	
+							}
+
+							if(count == 0){  // add to the string, each company is to be seperated with commas.
+								allCompaniesInSector = allCompaniesInSector + company;
+								count++;
+							}else{
+								allCompaniesInSector = allCompaniesInSector + "," + company;
+							}
+						}
+					}
+					System.out.println(allCompaniesInSector);
+
+					getYahooNews(allCompaniesInSector);
+					return articlesObjs;
 		}
 
 	private NewsObj newsArrayAdder(Calendar Datetime, String title, String url,String source){ // used to make objects of news articles.
