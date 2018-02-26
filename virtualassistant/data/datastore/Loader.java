@@ -3,6 +3,7 @@ package virtualassistant.data.datastore;
 import virtualassistant.data.stocks.*;
 import virtualassistant.ai.Favourites;
 import virtualassistant.misc.Pair;
+import virtualassistant.data.system.SystemStatus;
 
 import org.json.simple.*;
 import org.json.simple.JSONObject;
@@ -15,7 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import java.util.*;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Loader {
 
@@ -43,6 +45,60 @@ public class Loader {
       return null;
     }
     
+    public void writeSystemStatus(SystemStatus status){
+        
+        JSONObject obj = new JSONObject();
+        
+        obj.put("soundEnabled", status.getSoundEnabled());
+        obj.put("speechEnabled", status.getSpeechEnabled());
+        obj.put("volume", status.getVolume());
+        obj.put("lastUpdatedStocks", status.getLastUpdatedStocks().toString());
+        
+        //Write
+        try (FileWriter file = new FileWriter("virtualassistant/data/datastore/systemStatus.json")) {
+
+            file.write(obj.toJSONString());
+            file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+        
+    }
+    
+    public SystemStatus readSystemStatus(){
+        
+        try {
+            JSONObject obj = (JSONObject) parser.parse(new FileReader("virtualassistant/data/datastore/systemStatus.json"));
+            
+            boolean soundEnabled = (boolean) obj.get("soundEnabled");
+            boolean speechEnabled = (boolean) obj.get("speechEnabled");
+            double volume = (double) obj.get("volume");
+            
+            Date lastUpdatedStocks = null;
+            try {
+                
+                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+                lastUpdatedStocks = df.parse((String)obj.get("lastUpdatedStocks"));
+                
+            } catch (Exception e) {
+                e.toString();
+            }
+            
+      
+            return new SystemStatus(soundEnabled, speechEnabled, volume, lastUpdatedStocks);
+        
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
     public void writeFavourites(LinkedHashMap<String, Integer> favourites){
     
         JSONArray list = new JSONArray();
@@ -58,7 +114,7 @@ public class Loader {
         }
         
         // Write to file
-        try (FileWriter file = new FileWriter("favourites.json")) {
+        try (FileWriter file = new FileWriter("virtualassistant/data/datastore/favourites.json")) {
 
             file.write(list.toJSONString());
             file.flush();
@@ -75,7 +131,7 @@ public class Loader {
         ArrayList<Pair<String, Integer>> arrayList = new ArrayList(Favourites.maxFavourites);
         
         try{
-            Object obj = parser.parse(new FileReader("favourites.json"));
+            Object obj = parser.parse(new FileReader("virtualassistant/data/datastore/favourites.json"));
             
             JSONArray list = (JSONArray) obj;
             

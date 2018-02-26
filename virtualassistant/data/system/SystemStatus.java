@@ -12,10 +12,11 @@ public class SystemStatus {
     private static boolean speechEnabled;
     private static double volume; // [0.0, 1.0]
 
-    public SystemStatus(boolean soundEnabled, boolean speechEnabled, double volume){
+    public SystemStatus(boolean soundEnabled, boolean speechEnabled, double volume, Date lastUpdatedStocks){
         this.soundEnabled = soundEnabled;
         this.speechEnabled = speechEnabled;
         this.volume = volume;
+        this.lastUpdatedStocks = lastUpdatedStocks;
     }
 
     public static Date getLastUpdatedNews(){

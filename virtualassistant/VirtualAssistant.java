@@ -57,7 +57,7 @@ public class VirtualAssistant {
         }
         
         learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
-        //systemStatus = loader.readSystemStatus();
+        systemStatus = loader.readSystemStatus();
         news = new NewsData();
         chatbot = new Chatbot();
         calDate  = Calendar.getInstance();
