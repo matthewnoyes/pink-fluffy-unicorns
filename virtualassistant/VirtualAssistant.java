@@ -34,10 +34,10 @@ public class VirtualAssistant {
     private INewsData news;
     private Chatbot chatbot;
     private Calendar calDate;
-    
+
     // Set this for debugging
     private boolean verbose = false;
-    
+
     public VirtualAssistant(){
         //Instantiate everything
 
@@ -45,7 +45,7 @@ public class VirtualAssistant {
         try {
             stockData = new StockData();// Sloader.readStocks();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         learningAgent = new LearningAgent(stockData, null);
         //systemStatus = loader.readSystemStatus();
@@ -71,42 +71,42 @@ public class VirtualAssistant {
         JSONObject response = chatbot.getResponse(query);
 
         // Check if ALERT or DATA_REQUEST
-        if((long)response.get("action") == Action.ALERT) 
+        if((long)response.get("action") == Action.ALERT)
             return new Pair((String)response.get("message"), null);
-        
-        if((long)response.get("action") != Action.DATA_REQUEST) 
+
+        if((long)response.get("action") != Action.DATA_REQUEST)
             return null;//((String)response.get("message"), null);
-        
-        
+
+
         /// ADDD SPLITTING LOGICC HEREE
-        
+
         Pair result = new Pair("", new LinkedList<NewsObj>());
-        
+
         String names = (String) response.get("company1");
-        
+
         if(verbose) {
             System.out.println("VirtualAssistant.getResponse(): Names = " + names);
         }
-        
+
         String[] namesList = names.split(" and ");
-        
+
         for(String name : namesList){
-            
+
             if(verbose) {
                 System.out.println("VirtualAssistant.getResponse(): Company name = " + name);
             }
-            
+
             // Check whether company or sector
             ICompany company = stockData.getCompanyForTicker(name);
             if(company != null) {
-                
+
                 result = Pair.merge(result, getCompanyData(name, response));
             } else if (stockData.isSector(name)){
-                
+
                 result = Pair.merge(result, getSectorData(name, response));
-            } 
-        } 
-        
+            }
+        }
+
         // Return
         return result;
     }
@@ -117,9 +117,9 @@ public class VirtualAssistant {
     private Pair<String, LinkedList<NewsObj>> getCompanyData(String name, JSONObject parameters) throws IOException, java.text.ParseException {
 
         ICompany company = stockData.getCompanyForTicker(name);
-        // Add split logic on and, use a for loop to return 
-        
-      
+        // Add split logic on and, use a for loop to return
+
+
         // Try to get date
         try {
             if(parameters.get("date") != null){
@@ -129,7 +129,7 @@ public class VirtualAssistant {
         } catch (Exception e) {
             e.toString();
         }
-        
+
         switch((String)parameters.get("data1")) {
 
             case "currentPrice":
@@ -204,7 +204,7 @@ public class VirtualAssistant {
 
         INewsData news = new NewsData();
         Calendar calDate  = Calendar.getInstance();
-        
+
         try{
             if(parameters.get("date") != null){
                 DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
