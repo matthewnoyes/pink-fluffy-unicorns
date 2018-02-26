@@ -53,9 +53,18 @@ public class LearningAgent implements ILearningAgent {
 
   }
 
-  //Upate to have number be order
+  //Upate to have number be order - high last element
   public Favourites<String, Integer> getFavouriteStocks() {
-    return favouriteStocks.keySet();
+
+    int place = favouriteStocks.size() - 1;
+
+    //Iterates through oldest to newest
+    for (String ticker : tickers) {
+      favouriteStocks.put(ticker, place);
+      place--;
+    }
+
+    return favouriteStocks;
   }
 
   public void bookmarkStock(String ticker) {
@@ -82,9 +91,7 @@ public class LearningAgent implements ILearningAgent {
 
     int i = 0;
     ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favouriteStocks.size());
-
-    //Note: Goes backwards
-    //for (String ticker : tickers) {
+    
     while (iterator.hasPrevious()) {
       String ticker = iterator.previous();
       //Search for something interesting
