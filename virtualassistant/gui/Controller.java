@@ -126,14 +126,20 @@ public void makeQuery(String text) {
 				Task task = new Task<Message>() {
 						@Override
 						public Message call() {
-								String responseStr = "An error occured";
+                                Pair<String, LinkedList<NewsObj>> responsePair;
+                                String responseStr;
+                                LinkedList<NewsObj> responseNews;
 								try {
-										responseStr = virtualAssistant.getResponse(query.getMessage()).getFirst();
+										responsePair = virtualAssistant.getResponse(query.getMessage());
+                                        responseStr = responsePair.getFirst();
+                                        responseNews = responsePair.getSecond();
 								} catch (Exception e) {
+                                        responseStr = "An error occured";
+                                        responseNews = null;
 										e.printStackTrace();
 								}
-								LinkedList<NewsObj> news = null;     // this should be the news to be displayed with the response
-								Message response = new Response(responseStr, news);
+								
+                                Message response = new Response(responseStr, responseNews);
 								return response;
 						}
 				};
