@@ -268,9 +268,9 @@ public class VirtualAssistant {
                 return new Pair("" + , null); // Need sector low
             
             case "CurrentPrice":
-                return new Pair("" + stockData.getCurrentSectorPrice(sector), null); // Need sector CurrentPrice
+                return new Pair("" + stockData.getCurrentSectorPrice(sector), null);
                 
-            case "change":
+            case "Change":
                 return new Pair("" + stockData.getSectorChange(sector), null);
 
             case "PercentageChange":
