@@ -16,7 +16,6 @@ import java.text.ParseException;
 
 
 public class NewsData implements INewsData{
-	private LinkedList<NewsObj> articlesObjs = new LinkedList<NewsObj>(); // arraylist of news articles objects
 	private DateFormat MmultiUseFormat = new SimpleDateFormat("dd MMM yyyy HH:mm"); // date format for multiple news
 	private DateFormat rnsNewsDateFormat = new SimpleDateFormat("HH:mm dd-MMM-yyyy"); // date format for rns londonstockexchange news
 	private DateFormat yahooNewFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date format for yahoo news
@@ -25,20 +24,21 @@ public class NewsData implements INewsData{
 
 
 	public LinkedList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
+		LinkedList<NewsObj> articlesObjs = new LinkedList<NewsObj>(); // arraylist of news articles objects
 		for(int i=1;i<=6;i++){ // loop to go through each page and get the isin number of the company wanted.
 			final Document doc = Jsoup.connect("http://www.londonstockexchange.com/exchange/prices-and-markets/stocks/indices/constituents-indices.html?index=UKX&industrySector=&page=" + i).get();
 				for(Element li: doc.select(".table_dati tr")){ // going through each list item and adding the article into the arraylist
 					if(li.select(".name:eq(0)").text().equals(company)){
 						String kk = li.select(".name:eq(1)").first().select(".name a").attr("href");
-						rnsNewsArticleGetter(isinNumberGetter(kk)); // We've got the isin number, now get all the news from it
-						i=6; // break out of loop once the company has been found.
+						return rnsNewsArticleGetter(isinNumberGetter(kk)); // We've got the isin number, now get all the news from it
 					}
 				}
 			}
 			return articlesObjs;
 		}
 
-		private void rnsNewsArticleGetter(String webpage) throws IOException, ParseException {
+		private LinkedList<NewsObj> rnsNewsArticleGetter(String webpage) throws IOException, ParseException {
+		        LinkedList<NewsObj> tempArticlesObjs = new LinkedList<NewsObj>();
 			final Document doc = Jsoup.connect(webpage).get(); // all the articles from lse new analysis is gotten.
 			for(Element row: doc.select(".table_datinews tr")){ // loop of articles in the table row is done
 				Calendar calDate = Calendar.getInstance();
@@ -48,8 +48,9 @@ public class NewsData implements INewsData{
 				final String impact = row.select(".nowrap.text-left").get(2).text();
 				final String relHref = row.select(".text-left a").first().attr("href");
 				final String absurl=javascriptLinkToUrl(relHref); // html link is a javascript script so need to use regex to get the link out.
-				articlesObjs.add(newsArrayAdder(calDate,title,impact,absurl,source)); // news article object added to arraylist
+				tempArticlesObjs.add(newsArrayAdder(calDate,title,impact,absurl,source)); // news article object added to arraylist
 			}
+			return tempArticlesObjs;
 		}
 
 	private String isinNumberGetter(String webPageLink){	 // used to get the isin Number of the company and return the webpage for that company
@@ -73,6 +74,7 @@ public class NewsData implements INewsData{
 	}
 
 	public LinkedList<NewsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
+		LinkedList<NewsObj> articlesObjs = new LinkedList<NewsObj>();
 		Date date = new Date();		
 		String todaysDate= new SimpleDateFormat("dd MMM yyyy").format(date);
 
@@ -90,19 +92,20 @@ public class NewsData implements INewsData{
 
 		public LinkedList<NewsObj> getYahooNews(String companies) throws IOException, ParseException { // works by getting recent 20 news articles of companies in a sector
 	        //This method is only compatible with sectors now. Give users choice between alliance news and RNS news. 
-
+			LinkedList<NewsObj> tempArticlesObjs = new LinkedList<NewsObj>();
 			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companies+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
 			for(Element li: doc.select("item")){
 				Calendar calDate = Calendar.getInstance(); 
 				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
 				final String title = li.select("title").text();
 				final String url = li.select("link").text();
-				articlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Finance News"));
+				tempArticlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Finance News"));
 			}
-			return articlesObjs;
+			return tempArticlesObjs;
 		}
 
 		public LinkedList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
+			
 			final Document Ftse100 = Jsoup.connect("https://en.wikipedia.org/wiki/FTSE_100_Index").get(); // used to get all companies in a sector
 			String allCompaniesInSector = "";
 			String sectorWanted = sector;
@@ -144,10 +147,7 @@ public class NewsData implements INewsData{
 							}
 						}
 					}
-					System.out.println(allCompaniesInSector);
-
-					getYahooNews(allCompaniesInSector);
-					return articlesObjs;
+					return getYahooNews(allCompaniesInSector);
 		}
 
 	private NewsObj newsArrayAdder(Calendar Datetime, String title, String url,String source){ // used to make objects of news articles.
