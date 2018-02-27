@@ -59,8 +59,24 @@ public HBox getDisplay() {
 
 						Label heading = new Label(x.getTitle());
 						heading.setId("news_heading");
-
-						Label time = new Label(x.getDateTime().toString());
+						//Label time = new Label(news.get(x).getDateTime().toString());
+						String strtime = "";
+						Calendar date = x.getDateTime();
+                        
+                        // Beautify string
+                        StringBuilder sb = new StringBuilder();
+						sb.append(date.get(Calendar.HOUR));
+                        sb.append(":");
+						sb.append(date.get(Calendar.MINUTE));
+						sb.append(" ");
+						sb.append(date.get(Calendar.DAY_OF_MONTH));
+						sb.append("/");
+						sb.append(date.get(Calendar.MONTH));
+						sb.append("/");
+						sb.append(date.get(Calendar.YEAR));                  
+						Label time = new Label(sb.toString());
+                        
+                        
 						time.setId("news_data");
 						Hyperlink url = new Hyperlink(x.getUrl());
 						url.setOnAction(new EventHandler<ActionEvent>() {
