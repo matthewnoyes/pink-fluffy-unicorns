@@ -176,15 +176,15 @@ public class VirtualAssistant {
 
             case "currentPrice":
                 sb.append("current price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getCurrentPrice());
                 return new Pair(sb.toString(), null);
 
-            case "ClosePriceOnDate":
+            case "ClosePriceOnDate": //ALL DATES FUNCTIONS ARE NOT ON DIALOGFLOW
                 sb.append("closing price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getClosePriceOnDate(calDate));
                 return new Pair(sb.toString(), null);
                 
@@ -192,7 +192,7 @@ public class VirtualAssistant {
                 sb.append("opening price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£.");     
+                sb.append("£");     
                 sb.append(company.getOpenPriceOnDate(calDate));  
                 return new Pair(sb.toString(), null);
 
@@ -200,7 +200,7 @@ public class VirtualAssistant {
                 sb.append("highest price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£.");     
+                sb.append("£");     
                 sb.append(company.getHighPriceOnDate(calDate));  
                 return new Pair(sb.toString(), null);
 
@@ -208,7 +208,7 @@ public class VirtualAssistant {
                 sb.append("lowest price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£.");     
+                sb.append("£");     
                 sb.append(company.getLowPriceOnDate(calDate));  
                 return new Pair(sb.toString(), null);
 
@@ -216,13 +216,12 @@ public class VirtualAssistant {
                 sb.append("volume on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£.");     
                 sb.append(company.getVolumeOnDate(calDate));  
                 return new Pair(sb.toString(), null);
 
             case "Open":
                 sb.append("opening price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getOpen());
                 return new Pair(sb.toString(), null);
 
@@ -232,19 +231,18 @@ public class VirtualAssistant {
 
             case "High":
                 sb.append("highest price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getHigh());
                 return new Pair(sb.toString(), null);
 
             case "Low": 
                 sb.append("lowest price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getLow());
                 return new Pair(sb.toString(), null);
 
             case "Volume":
                 sb.append("volume: ");
-                sb.append("£.");
                 sb.append(company.getVolume());
                 return new Pair(sb.toString(), null);
 
@@ -256,37 +254,36 @@ public class VirtualAssistant {
 
             case "CurrentPrice":
                 sb.append("current price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getCurrentPrice());
                 return new Pair(sb.toString(), null);
 
             case "Change":
                 sb.append("current change: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.getChange());
                 return new Pair(sb.toString(), null);
 
             case "yearAverageClose":
                 sb.append("year average close: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.yearAverageClose());
                 return new Pair(sb.toString(), null);
 
             case "yearHigh":
                 sb.append("year high: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.yearHigh());
                 return new Pair(sb.toString(), null);
 
             case "yearLow":
                 sb.append("year low: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(company.yearLow());
                 return new Pair(sb.toString(), null);
 
             case "yearAverageVolume":
                 sb.append("year average volume: ");
-                sb.append("£.");
                 sb.append(company.yearAverageVolume());
                 return new Pair(sb.toString(), null);
 
@@ -330,44 +327,43 @@ public class VirtualAssistant {
             */
             case "Open":
                 sb.append("opening price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.getSectorOpen(sector));
                 return new Pair(sb.toString(), null);
                 
             case "High":
                 sb.append("highest price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.getSectorHigh(sector));
                 return new Pair(sb.toString(), null);
             
             case "Low":
                 sb.append("lowest price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.getSectorLow(sector));
                 return new Pair(sb.toString(), null);
 
             
             case "CurrentPrice":
                 sb.append("current price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.getCurrentSectorPrice(sector));
                 return new Pair(sb.toString(), null);
                 
             case "Change":
                 sb.append("change in price: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.getSectorChange(sector));
                 return new Pair(sb.toString(), null);
 
             case "PercentageChange":
                 sb.append("percentage change: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.getSectorPercentageChange(sector));
                 return new Pair(sb.toString(), null);
                 
             case "Volume":
                 sb.append("volume: ");
-                sb.append("£.");
                 sb.append(stockData.getSectorVolume(sector));
                 return new Pair(sb.toString(), null);
 
@@ -377,25 +373,24 @@ public class VirtualAssistant {
 
             case "yearHigh":
                 sb.append("year high: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.sectorYearHigh(sector));
                 return new Pair(sb.toString(), null);
 
             case "yearLow":
                 sb.append("year low: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.sectorYearLow(sector));
                 return new Pair(sb.toString(), null);
 
             case "yearAverageClose":
                 sb.append("year average close: ");
-                sb.append("£.");
+                sb.append("£");
                 sb.append(stockData.sectorYearAverageClose(sector));
                 return new Pair(sb.toString(), null);
                 
             case "yearAverageVolume":
                 sb.append("year average volume: ");
-                sb.append("£.");
                 sb.append(stockData.sectorAverageVolume(sector));
                 return new Pair(sb.toString(), null); 
 
