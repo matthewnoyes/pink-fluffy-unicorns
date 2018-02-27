@@ -180,7 +180,7 @@ public class VirtualAssistant {
         switch((String)parameters.get("data1")) {
 
             case "currentPrice":
-                sb.append("current price: @@@@ <3 <3 <3 <3");
+                sb.append("current price: ");
                 sb.append("\u00A3");
                 sb.append(company.getCurrentPrice());
                 return new Pair(sb.toString(), null);
