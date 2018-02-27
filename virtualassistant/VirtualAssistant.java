@@ -28,7 +28,7 @@ import java.util.LinkedList;
 public class VirtualAssistant {
 
     private StockData stockData;
-    private SystemStatus systemStatus;
+    public SystemStatus systemStatus;
     private Loader loader;
     private LearningAgent learningAgent;
     private INewsData news;

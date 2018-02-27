@@ -29,6 +29,17 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import java.io.IOException;
 
+// Text to speech
+import marytts.modules.synthesis.Voice;
+import marytts.signalproc.effects.JetPilotEffect;
+import marytts.signalproc.effects.LpcWhisperiserEffect;
+import marytts.signalproc.effects.RobotiserEffect;
+import marytts.signalproc.effects.StadiumEffect;
+import marytts.signalproc.effects.VocalTractLinearScalerEffect;
+import marytts.signalproc.effects.VolumeEffect;
+
+import virtualassistant.chatbot.TTS.src.model.TextToSpeech;
+
 public class Controller implements Initializable {
 
 @FXML
@@ -58,6 +69,7 @@ private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
 private static VirtualAssistant virtualAssistant;
+private static TextToSpeech tts;
 
 @Override
 public void initialize(URL location, ResourceBundle resources) {
@@ -73,12 +85,16 @@ public void initialize(URL location, ResourceBundle resources) {
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
 
 		// Run download of data in background
-		Task task = new Task<Void>() {
+		Task task1 = new Task<Void>() {
 				@Override
 				public Void call() {
-						System.out.println("Downloading data...");
+                        System.out.println("Starting text to speech...");
+                        tts = new TextToSpeech();
+                        tts.setVoice("dfki-poppy-hsmm");
+                        
+                        System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
-
+                        
 						ready = true;
 						changeWifiAccess(true);
 
@@ -88,8 +104,22 @@ public void initialize(URL location, ResourceBundle resources) {
 						return null;
 				}
 		};
+        new Thread(task1).start();
+        
+        // Run initialization of speech-to-text in background
+		Task task2 = new Task<Void>() {
+				@Override
+				public Void call() {
+						System.out.println("Starting speech to text...");
+						
+                        
+                        System.out.println("Speech to text... complete");
 
-		new Thread(task).start();
+						return null;
+				}
+		};
+        new Thread(task2).start();
+		
 
 		if(autoUpdate) {
 				final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -151,6 +181,8 @@ public void makeQuery(String text) {
 												        Message response = (Message)task.getValue();
 												        chatbot_message_list.add(response);
 												        addMessage(response);
+                                                        
+                                                        tts.speak(response.getMessage(), virtualAssistant.systemStatus.getVolume(), false, false);
 												}
 										});
 								}
