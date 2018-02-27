@@ -29,7 +29,6 @@ public LinkedList<NewsObj> getNews() {
 public HBox getDisplay() {
 		// container of message
 		HBox container = new HBox(0);
-		container.setPadding(new Insets(0,80,0,0));
 
 		// fill one side of message to decrease it's size
 		Region region = new Region();
@@ -48,20 +47,22 @@ public HBox getDisplay() {
 
 		content_contain.getChildren().add(label);
 
+		VBox news_articles_contain = new VBox(5);
 		// if the response contains news to display
 		if(news != null) {
 				// set to max width for message
 				//content_contain.setPrefWidth(Main.WIDTH);
 
-				for(int x = 0; x < 3 && x < news.size(); x++) {
+				for(NewsObj x : news) {
 						Separator separator = new Separator();
 						separator.setMaxWidth(200);
 
-						Label heading = new Label(news.get(x).getTitle());
+						Label heading = new Label(x.getTitle());
 						heading.setId("news_heading");
-						Label time = new Label(news.get(x).getDateTime().toString());
+
+						Label time = new Label(x.getDateTime().toString());
 						time.setId("news_data");
-						Hyperlink url = new Hyperlink(news.get(x).getUrl());
+						Hyperlink url = new Hyperlink(x.getUrl());
 						url.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent e) {
@@ -78,11 +79,15 @@ public HBox getDisplay() {
 						newsContain.setAlignment(Pos.CENTER_RIGHT);
 						newsContain.getChildren().addAll(separator, heading, time,url);
 
-						content_contain.getChildren().add(newsContain);
+						news_articles_contain.getChildren().add(newsContain);
 				}
 
+		} else {
+			container.setPadding(new Insets(0,80,0,0));
 		}
-		container.getChildren().addAll(content_contain, region);
+		ScrollPane news_scroll = new ScrollPane(news_articles_contain);
+		news_scroll.setPrefHeight(400);
+		container.getChildren().addAll(news_scroll, region);
 		return container;
 }
 
