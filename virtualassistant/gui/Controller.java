@@ -1,9 +1,7 @@
 package virtualassistant.gui;
 
 // TODO
-// Thread response
 // Open news url
-// while loading change prompt to say loading - disable send button
 
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
@@ -112,7 +110,7 @@ public void makeSystemQuery(){
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
-				closeHelp();
+				closeAll();
 		}
 
 		// add the query to the UI
@@ -162,7 +160,7 @@ public void makeQuery(String text) {
 }
 
 public static void saveStatus(){
-    virtualAssistant.saveStatus();
+		virtualAssistant.saveStatus();
 }
 
 public void startListening() {
@@ -223,7 +221,7 @@ private void handleSendQueryButtonClick(ActionEvent e) {
 @FXML
 private void handleHelpButtonClick(ActionEvent e) {
 		if(onHelp) {
-				closeHelp();
+				closeAll();
 		} else {
 				openHelp();
 		}
@@ -285,7 +283,7 @@ private void openHelp() {
 }
 
 // close help screen
-private void closeHelp() {
+private void closeAll() {
 		onHelp = false;
 		chatbot_container.getChildren().clear();
 		for(int i = 0; i < chatbot_message_list.size(); i++) {

@@ -5,7 +5,10 @@ import javafx.scene.control.*;
 import javafx.scene.text.*;
 import javafx.scene.control.Separator;
 import javafx.geometry.*;
+import javafx.event.*;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.*;
 import virtualassistant.data.news.NewsObj;
 
@@ -59,6 +62,16 @@ public HBox getDisplay() {
 						Label time = new Label(news.get(x).getDateTime().toString());
 						time.setId("news_data");
 						Hyperlink url = new Hyperlink(news.get(x).getUrl());
+						url.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent e) {
+								try {
+									Desktop.getDesktop().browse(new URI(url.getText()));
+								} catch(Exception ex) {
+									System.out.println("Error opening webpage");
+								}
+							}
+						});
 						url.setId("news_url");
 
 						VBox newsContain = new VBox(0);
