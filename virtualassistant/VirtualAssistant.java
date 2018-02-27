@@ -183,19 +183,19 @@ public class VirtualAssistant {
             case "VolumeOnDate":
                 return new Pair("" + company.getVolumeOnDate(calDate), null);
 
-            case "open":
+            case "Open":
                 return new Pair("" + company.getOpen(), null);
 
             case "news":
                 return new Pair("Here is the news that you wanted", news.getAllianceNews((String)parameters.get("company1")));
 
-            case "high":
+            case "High":
                 return new Pair("" + company.getHigh(), null);
 
-            case "low":
+            case "Low":
                 return new Pair("" + company.getLow(), null);
 
-            case "vol":
+            case "Volume":
                 return new Pair("" + company.getVolume(), null);
 
             case "PercentageChange":
@@ -207,7 +207,7 @@ public class VirtualAssistant {
             case "Change":
                 return new Pair("" + company.getChange(), null);
 
-            case "AverageClose":
+            case "yearAverageClose":
                 return new Pair("" + company.yearAverageClose(), null);
 
             case "yearHigh":
@@ -216,7 +216,7 @@ public class VirtualAssistant {
             case "yearLow":
                 return new Pair("" + company.yearLow(), null);
 
-            case "avgVol":
+            case "yearAverageVolume":
                 return new Pair("" + company.yearAverageVolume(), null);
 
            /* case "news":
@@ -254,12 +254,27 @@ public class VirtualAssistant {
                 chatbot.output(stockData.getSectorCurrentPrice(sector));
                 break;
             */
-
+                
+            case "Open":
+                return new Pair("" + , null); // Need sector open
+                
+            case "High":
+                return new Pair("" + , null); // Need sector High
+            
+            case "Low":
+                return new Pair("" + , null); // Need sector low
+            
+            case "CurrentPrice":
+                return new Pair("" + stockData.getCurrentSectorPrice(sector), null); // Need sector CurrentPrice
+                
             case "change":
                 return new Pair("" + stockData.getSectorChange(sector), null);
 
-            case "percentageChange":
+            case "PercentageChange":
                 return new Pair("" + stockData.getSectorPercentageChange(sector), null);
+                
+            case "Volume":
+                return new Pair("" + , null); // Need sector Volume
 
             case "news":
                 return new Pair("Here is the news that you wanted", news.sectorNews(sector));
@@ -272,12 +287,15 @@ public class VirtualAssistant {
 
             case "yearAverageClose":
                 return new Pair("" + stockData.sectorYearAverageClose(sector), null);
+                
+            case "yearAverageVolume":
+                return new Pair("" + , null);   // Need sector ChyearAverageVolumeange
 
-            case "closePriceOn":
+            case "closePriceOn":  // not on  dialogflow
                 // return stockData.sectorYearLow(sector);
                 break;
 
-            case "SectorClosePriceOnDate":
+            case "SectorClosePriceOnDate":  // not on dialogflow
                 return new Pair("" + stockData.getSectorClosePriceOnDate(sector,calDate), null);
         }
 
