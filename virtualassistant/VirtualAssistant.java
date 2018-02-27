@@ -219,7 +219,7 @@ public class VirtualAssistant {
                 sb.append(company.getVolumeOnDate(calDate));
                 return new Pair(sb.toString(), null);
 
-            case "Open":
+            case "OpenPrice":
                 sb.append("opening price: ");
                 sb.append("£");
                 sb.append(company.getOpen());
@@ -229,13 +229,13 @@ public class VirtualAssistant {
                 sb.append("news:");
                 return new Pair(sb.toString(), news.getAllianceNews(name));
 
-            case "High":
+            case "HighPrice":
                 sb.append("highest price: ");
                 sb.append("£");
                 sb.append(company.getHigh());
                 return new Pair(sb.toString(), null);
 
-            case "Low":
+            case "LowPrice":
                 sb.append("lowest price: ");
                 sb.append("£");
                 sb.append(company.getLow());
@@ -325,26 +325,26 @@ public class VirtualAssistant {
                 chatbot.output(stockData.getSectorCurrentPrice(sector));
                 break;
             */
-            case "Open":
+            case "OpenPrice":
                 sb.append("opening price: ");
                 sb.append("£");
                 sb.append(stockData.getSectorOpen(sector));
                 return new Pair(sb.toString(), null);
 
-            case "High":
+            case "HighPrice":
                 sb.append("highest price: ");
                 sb.append("£");
                 sb.append(stockData.getSectorHigh(sector));
                 return new Pair(sb.toString(), null);
 
-            case "Low":
+            case "LowPrice":
                 sb.append("lowest price: ");
                 sb.append("£");
                 sb.append(stockData.getSectorLow(sector));
                 return new Pair(sb.toString(), null);
 
 
-            case "currentPrice":
+            case "CurrentPrice":
                 sb.append("current price: ");
                 sb.append("£");
                 sb.append(stockData.getCurrentSectorPrice(sector));
