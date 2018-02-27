@@ -181,8 +181,8 @@ public void makeQuery(String text) {
 												        Message response = (Message)task.getValue();
 												        chatbot_message_list.add(response);
 												        addMessage(response);
-
-                                                        tts.speak(response.getMessage(), virtualAssistant.systemStatus.getVolume(), false, false);
+                                
+                                                        //tts.speak(response.getMessage(), (float)virtualAssistant.systemStatus.getVolume(), false, false);
 												}
 										});
 								}
