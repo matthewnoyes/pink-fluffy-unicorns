@@ -48,7 +48,7 @@ public class VirtualAssistant {
         boolean loaded = false;
         while(!loaded) {
             try {
-                stockData = new StockData();// Sloader.readStocks();
+                stockData = new StockData(true);// Sloader.readStocks();
                 loaded = true;
             } catch (Exception e) {
                 System.out.println("Failed to load stock data... Retrying...");
@@ -72,7 +72,7 @@ public class VirtualAssistant {
         boolean loaded = false, updated = false;
         while(!loaded) {
             try {
-                newStockData = new StockData();//stockData.clone();
+                newStockData = new StockData(false);//stockData.clone();
                 updated = true; //updateCurrentData(newStockData.tickerToCompany);
                 loaded = true;
             } catch (Exception e) {
