@@ -108,7 +108,7 @@ public class StockData implements IStockData {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
 
-      double total = 0.0;
+    double total = 0.0;
     for (Company company : companiesInSector.get(sector)) {
       total += company.getCurrentPrice();
     }
@@ -119,6 +119,11 @@ public class StockData implements IStockData {
   public double getSectorChange(String sector) {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
+
+    //Protect against divide by 0 errors
+    if (companiesInSector.get(sector).size() == 0) {
+      return 0.0;
+    }
 
     double total = 0.0;
     for (Company company : companiesInSector.get(sector)) {
@@ -132,7 +137,7 @@ public class StockData implements IStockData {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
 
-    return getSectorChange(sector) / getCurrentSectorPrice(sector);
+    return 100.0 * (getSectorChange(sector) / getCurrentSectorPrice(sector));
   }
 
   public double sectorYearHigh(String sector) {
