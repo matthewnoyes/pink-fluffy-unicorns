@@ -1,6 +1,6 @@
 cd "$(dirname "$0")"
 
-classpath='.:jsoup-1.11.2.jar:JSON-parser.jar';
+classpath='.:libraries/*';
 folders='./virtualassistant/ai/*.java ./virtualassistant/chatbot/*.java ./virtualassistant/data/news/*.java ./virtualassistant/data/system/*.java ./virtualassistant/data/stocks/*.java ./virtualassistant/data/datastore/*.java ./virtualassistant/gui/*.java ./virtualassistant/misc/*.java';
 #Compile all java files
 javac -cp $classpath $folders ./virtualassistant/IVirtualAssistant.java ./virtualassistant/VirtualAssistant.java || { echo 'Compiling Failed' ; exit 1; }

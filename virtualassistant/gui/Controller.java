@@ -38,7 +38,7 @@ import marytts.signalproc.effects.StadiumEffect;
 import marytts.signalproc.effects.VocalTractLinearScalerEffect;
 import marytts.signalproc.effects.VolumeEffect;
 
-import virtualassistant.chatbot.TTS.src.model.TextToSpeech;
+import model.TextToSpeech;
 
 public class Controller implements Initializable {
 
@@ -91,10 +91,10 @@ public void initialize(URL location, ResourceBundle resources) {
                         System.out.println("Starting text to speech...");
                         tts = new TextToSpeech();
                         tts.setVoice("dfki-poppy-hsmm");
-                        
+
                         System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
-                        
+
 						ready = true;
 						changeWifiAccess(true);
 
@@ -105,21 +105,21 @@ public void initialize(URL location, ResourceBundle resources) {
 				}
 		};
         new Thread(task1).start();
-        
+
         // Run initialization of speech-to-text in background
 		Task task2 = new Task<Void>() {
 				@Override
 				public Void call() {
 						System.out.println("Starting speech to text...");
-						
-                        
+
+
                         System.out.println("Speech to text... complete");
 
 						return null;
 				}
 		};
         new Thread(task2).start();
-		
+
 
 		if(autoUpdate) {
 				final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -166,7 +166,7 @@ public void makeQuery(String text) {
                                         responseNews = null;
 										e.printStackTrace();
 								}
-								
+
                                 Message response = new Response(responseStr, responseNews);
 								return response;
 						}
@@ -181,7 +181,7 @@ public void makeQuery(String text) {
 												        Message response = (Message)task.getValue();
 												        chatbot_message_list.add(response);
 												        addMessage(response);
-                                                        
+
                                                         tts.speak(response.getMessage(), virtualAssistant.systemStatus.getVolume(), false, false);
 												}
 										});
