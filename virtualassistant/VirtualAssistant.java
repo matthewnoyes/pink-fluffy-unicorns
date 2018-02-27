@@ -125,7 +125,7 @@ public class VirtualAssistant {
             System.out.println("VirtualAssistant.getResponse(): Names = " + names);
         }
 
-        String[] namesList = names.split(" and ");
+        String[] namesList = names.split("\sand\s|,\s");
 
         for(String name : namesList){
 
