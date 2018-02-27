@@ -20,7 +20,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class Loader {
-
+    
+    private boolean verbose = false;
     JSONParser parser;
 
     public Loader(){
@@ -123,17 +124,26 @@ public class Loader {
             
             JSONArray list = (JSONArray) obj;
             
+            if(verbose) System.out.println("Read array obj...");
+            
             for(Object o : list) {
                 
                 JSONObject jo = (JSONObject) o;
                 
-                Pair<String, Integer> p = new Pair((String) jo.get("name"), (Integer) jo.get("integer"));
+                Pair<String, Integer> p = new Pair((String) jo.get("name"), Math.toIntExact((Long) jo.get("integer")));
+                
+                if(verbose) System.out.println("Loading favourite: " + jo.get("name"));
                 
                 arrayList.add(p);
             }
             
             // Sort arrayList
             arrayList.sort(new SortBySecond()); 
+            
+            if(verbose) System.out.println("Sorted array...");
+            
+            
+            
             
             for(Pair<String,Integer> p : arrayList) {
                 favourites.put(p.getFirst(), p.getSecond());
@@ -146,6 +156,8 @@ public class Loader {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
 
