@@ -3,6 +3,9 @@ package virtualassistant.ai;
 import java.util.List;
 import java.util.Set;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 //The AI section
 public interface ILearningAgent {
 
@@ -21,5 +24,5 @@ public interface ILearningAgent {
   //Constantly search for stock anomalies
   public String searchForStockEvent();
   //Constantly search for news anomalies
-  public String searchForNewsEvent();
+  public String searchForNewsEvent() throws IOException, ParseException;
 }
