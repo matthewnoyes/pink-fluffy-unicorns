@@ -142,9 +142,6 @@ public class Loader {
             
             if(verbose) System.out.println("Sorted array...");
             
-            
-            
-            
             for(Pair<String,Integer> p : arrayList) {
                 favourites.put(p.getFirst(), p.getSecond());
             }
@@ -165,10 +162,8 @@ public class Loader {
         
     }
     
-    class SortBySecond implements Comparator<Pair<String, Integer>>
-    {
-        // Used for sorting in ascending order of
-        // roll number
+    class SortBySecond implements Comparator<Pair<String, Integer>> {
+        // Used for sorting in descending order 
         public int compare(Pair<String, Integer> a, Pair<String, Integer> b)
         {
             return b.getSecond() - a.getSecond();

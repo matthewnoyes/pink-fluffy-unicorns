@@ -24,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Comparator;
+import java.util.Collections;
 
 public class VirtualAssistant {
 
@@ -147,8 +149,10 @@ public class VirtualAssistant {
         }
 
         // Return
+        Collections.sort((LinkedList<NewsObj>)result.getSecond(), new SortByDate());
         return result;
     }
+    
 
     /* Company data
     */
@@ -410,7 +414,14 @@ public class VirtualAssistant {
         return null;
     }
 
-
+    class SortByDate implements Comparator<NewsObj> {
+        // Used for sorting in descending order of date
+        public int compare(NewsObj a, NewsObj b)
+        {
+            return b.getDateTime().compareTo(a.getDateTime());
+        }
+    }
+    
     class Action {
     static final short DATA_REQUEST = 0,
         ALERT = 1;
