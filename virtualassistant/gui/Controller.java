@@ -3,6 +3,7 @@ package virtualassistant.gui;
 // TODO
 // Thread response
 // Open news url
+// while loading change prompt to say loading - disable send button
 
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
@@ -41,6 +42,8 @@ public Label update_time;
 @FXML
 public TextField query_text_field;
 @FXML
+public Button send_query_button;
+@FXML
 public ImageView wifi_image_view;
 @FXML
 public Button round_mic_button;
@@ -48,7 +51,7 @@ public Timeline mic_button_timeline;
 
 private boolean listening;
 private boolean onHelp;
-private boolean ready;
+private boolean ready; // used to see if ready to recieve messages
 
 // IMPORTANT: Set to false only if it slows down your internet connection too much
 private boolean autoUpdate = true;
@@ -77,41 +80,35 @@ public void initialize(URL location, ResourceBundle resources) {
 				public Void call() {
 						System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
+
 						ready = true;
+						changeWifiAccess(true);
+
 						System.out.println("Success!");
 						System.out.println("===================================\n\n");
-						changeWifiAccess(true);
+
 						return null;
 				}
 		};
 
 		new Thread(task).start();
-        
-        if(autoUpdate) {
-            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                executorService.scheduleAtFixedRate(new Runnable(){ public void run() {virtualAssistant.scan();}}, 60, 60, TimeUnit.SECONDS);
-        }
+
+		if(autoUpdate) {
+				final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+				executorService.scheduleAtFixedRate(new Runnable(){
+								public void run() {
+								        virtualAssistant.scan();
+								}
+						}, 60, 60, TimeUnit.SECONDS);
+		}
 		System.out.println("Launching interface...");
 		openHelp();
 }
 
-/* ============ THINGS YOU NEED TO KNOW ============ */
-/*
-	variable:
-		boolean ready : "ready to recieve queries"
-*/
-/*
-    void changeUpdateTime(String time) :
-        changes displayed update time
- */
-/* void changeWifiAccess(boolean access) :
-    chnages displayed wifi access true = have connection
- */
+public void makeSystemQuery(){
 
- public void makeSystemQuery(){
-     
- }
- 
+}
+
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
@@ -156,7 +153,7 @@ public void makeQuery(String text) {
 						});
 				new Thread(task).start();
 
-		// If there is no connection established
+				// If there is no connection established
 		} else {
 				Message error_response = new Response("Connection error. Please try again later.",null);
 				chatbot_message_list.add(error_response);
@@ -184,6 +181,7 @@ private void generateHelpText() {
 		helptext_list.add("Open price of Barclays");
 		helptext_list.add("How do you feel about construction?");
 }
+
 private void generateAnimations() {
 		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt->round_mic_button.setStyle("-fx-background-color: #FF4339;")),
 		                                   new KeyFrame(Duration.seconds(1), evt->round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
@@ -231,6 +229,35 @@ private void handleHelpButtonClick(ActionEvent e) {
 		}
 }
 
+public void changeUpdateTime(String time) {
+		update_time.setText("Last updated: " + time);
+}
+
+public void changeWifiAccess(boolean access) {
+		if(access) {
+				ready = true;
+				query_text_field.setPromptText("Input a query here");
+				query_text_field.setDisable(false);
+				send_query_button.setDisable(false);
+
+				Image image = new Image(getClass().getResourceAsStream("images/wifi_access.png"));
+				wifi_image_view.setImage(image);
+		} else {
+				ready = false;
+				query_text_field.setPromptText("Connecting...");
+				query_text_field.setDisable(true);
+				send_query_button.setDisable(true);
+
+				Image image = new Image(getClass().getResourceAsStream("images/wifi_no_access.png"));
+				wifi_image_view.setImage(image);
+		}
+}
+
+private void addMessage(Message message) {
+		chatbot_container.getChildren().add(message.getDisplay());
+		scrollToBottom();
+}
+
 // open help screen
 private void openHelp() {
 		onHelp = true;
@@ -264,87 +291,6 @@ private void closeHelp() {
 		for(int i = 0; i < chatbot_message_list.size(); i++) {
 				addMessage(chatbot_message_list.get(i));
 		}
-}
-
-public void changeUpdateTime(String time) {
-		update_time.setText("Last updated: " + time);
-}
-
-public void changeWifiAccess(boolean access) {
-		if(access) {
-				ready = true;
-				Image image = new Image(getClass().getResourceAsStream("images/wifi_access.png"));
-				wifi_image_view.setImage(image);
-		} else {
-				ready = false;
-				Image image = new Image(getClass().getResourceAsStream("images/wifi_no_access.png"));
-				wifi_image_view.setImage(image);
-		}
-}
-
-private void addMessage(Message message) {
-		// container of message
-		HBox container = new HBox(0);
-
-		// fill one side of message to decrease it's size
-		Region region = new Region();
-		HBox.setHgrow(region, Priority.ALWAYS);
-
-		// contains the content in the message
-		VBox content_contain = new VBox(5);
-		content_contain.getStyleClass().add("chat_bubble");
-
-		// the main label for the message
-		Label label = new Label(message.getMessage());
-		label.setWrapText(true);
-
-		// set specifics of containers depending on query or response
-		if(message instanceof Query) {
-				label.setTextAlignment(TextAlignment.RIGHT);
-
-				content_contain.setAlignment(Pos.CENTER_RIGHT);
-				content_contain.setId("query_send");
-				content_contain.getChildren().add(label);
-				container.setPadding(new Insets(0,0,0,80));
-				container.getChildren().addAll(region, content_contain);
-		} else if(message instanceof Response) {
-				label.setTextAlignment(TextAlignment.LEFT);
-
-				content_contain.setAlignment(Pos.CENTER_LEFT);
-				content_contain.setId("query_recieve");
-				content_contain.getChildren().add(label);
-
-				// if the response contains news to display
-				LinkedList<NewsObj> news = message.getNews();
-				if(news != null) {
-						// set to max width for message
-						//content_contain.setPrefWidth(Main.WIDTH);
-
-						for(int x = 0; x < 3 && x < news.size(); x++) {
-								Separator separator = new Separator();
-								separator.setMaxWidth(200);
-
-								Label heading = new Label(news.get(x).getTitle());
-								heading.setId("news_heading");
-								Label time = new Label(news.get(x).getDateTime().toString());
-								time.setId("news_data");
-								Hyperlink url = new Hyperlink(news.get(x).getUrl());
-								url.setId("news_url");
-
-								VBox newsContain = new VBox(0);
-								newsContain.setAlignment(Pos.CENTER_RIGHT);
-								newsContain.getChildren().addAll(separator, heading, time,url);
-
-								content_contain.getChildren().add(newsContain);
-						}
-
-				}
-				container.setPadding(new Insets(0,80,0,0));
-				container.getChildren().addAll(content_contain, region);
-
-		}
-		chatbot_container.getChildren().add(container);
-		scrollToBottom();
 }
 
 }
