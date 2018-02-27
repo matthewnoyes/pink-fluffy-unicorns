@@ -39,11 +39,9 @@ public class NewsData implements INewsData{
 		}
 
 		private void rnsNewsArticleGetter(String webpage) throws IOException, ParseException {
-			
-			Calendar calDate = Calendar.getInstance();
-			
 			final Document doc = Jsoup.connect(webpage).get(); // all the articles from lse new analysis is gotten.
 			for(Element row: doc.select(".table_datinews tr")){ // loop of articles in the table row is done
+				Calendar calDate = Calendar.getInstance();
 				final String title = row.select(".text-left a").text();
 				calDate.setTime(rnsNewsDateFormat.parse((row.select(".datetime.nowrap").text()))); // with the date formatting
 				final String source = row.select(".nowrap.text-left").get(1).text();
@@ -77,11 +75,10 @@ public class NewsData implements INewsData{
 	public LinkedList<NewsObj> getAllianceNews(String company) throws IOException, ParseException { // COMPANY OFFICIAL NAME E.G BARCLAYS = BARC MUST BE IN CAPITALS LETTERS
 		Date date = new Date();		
 		String todaysDate= new SimpleDateFormat("dd MMM yyyy").format(date);
-		Calendar calDate = Calendar.getInstance();
 
 		final Document doc = Jsoup.connect("http://www.londonstockexchange.com/exchange/news/alliance-news/company-news.html?tidm=" + company).get();
-
 			for(Element li: doc.select("ul li")){ // going through each list item and adding the article into the arraylist
+					Calendar calDate = Calendar.getInstance();
 				final String title = (li.select("a").text());
 				final String url = "http://www.londonstockexchange.com" + li.select("a").first().attr("href");
 				final String dateGrabbed = li.select(".hour").text();
@@ -92,11 +89,11 @@ public class NewsData implements INewsData{
 		}
 
 		public LinkedList<NewsObj> getYahooNews(String companies) throws IOException, ParseException { // works by getting recent 20 news articles of companies in a sector
-	        //This method is only compatible with sectors now. Give users choice between alliance news and RNS news.
-	        Calendar calDate = Calendar.getInstance();  
+	        //This method is only compatible with sectors now. Give users choice between alliance news and RNS news. 
 
 			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companies+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
 			for(Element li: doc.select("item")){
+				Calendar calDate = Calendar.getInstance(); 
 				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
 				final String title = li.select("title").text();
 				final String url = li.select("link").text();
