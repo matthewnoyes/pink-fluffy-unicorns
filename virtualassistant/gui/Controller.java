@@ -166,7 +166,9 @@ public void makeQuery(String text) {
                                         responseNews = null;
 										e.printStackTrace();
 								}
-
+                                
+                                //tts.speak("Hello", 1.0f, false, false);
+                                
                                 Message response = new Response(responseStr, responseNews);
 								return response;
 						}
@@ -180,9 +182,11 @@ public void makeQuery(String text) {
 												public void run() {
 												        Message response = (Message)task.getValue();
 												        chatbot_message_list.add(response);
+                                                        tts.speak("Hello", 1.0f, false, false);
 												        addMessage(response);
-                                
-                                                        //tts.speak(response.getMessage(), (float)virtualAssistant.systemStatus.getVolume(), false, false);
+                                                        //(float)virtualAssistant.systemStatus.getVolume() 
+                                                        /// response.getMessage()
+                                                        
 												}
 										});
 								}
