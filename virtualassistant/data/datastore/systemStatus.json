@@ -1,5 +1,1 @@
-{
-    "soundEnabled" : true,
-    "speechEnabled" : false,
-    "volume" : 1.0
-}
+{"volume":0.0,"soundEnabled":false,"speechEnabled":false}

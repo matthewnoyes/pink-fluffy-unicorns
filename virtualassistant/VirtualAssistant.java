@@ -56,10 +56,16 @@ public class VirtualAssistant {
                 e.printStackTrace();
             }
         }
-
+        
+        System.out.println("Loading favourites...");
         learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
+        
+        System.out.println("Loading system status...");
         systemStatus = loader.readSystemStatus();
+        
         news = new NewsData();
+        
+        System.out.println("Setting up chatbot connection...");
         chatbot = new Chatbot();
         calDate  = Calendar.getInstance();
 
