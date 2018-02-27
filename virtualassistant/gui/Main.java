@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import virtualassistant.gui.Controller;
+
 public class Main extends Application {
 
 public static float WIDTH = 500;
@@ -35,6 +37,7 @@ public void start(Stage primaryStage) throws Exception {
 
 public void closeProgram() {
 		// save any data before if closes
+        //Controller.saveStatus();
 		System.exit(0);
 }
 

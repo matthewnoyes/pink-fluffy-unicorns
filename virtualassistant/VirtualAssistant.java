@@ -34,6 +34,7 @@ public class VirtualAssistant {
     private INewsData news;
     private Chatbot chatbot;
     private Calendar calDate;
+    
 
     // Set this for debugging
     private boolean verbose = false;
@@ -48,7 +49,7 @@ public class VirtualAssistant {
         boolean loaded = false;
         while(!loaded) {
             try {
-                stockData = new StockData();// Sloader.readStocks();
+                stockData = new StockData(true);// Sloader.readStocks();
                 loaded = true;
             } catch (Exception e) {
                 System.out.println("Failed to load stock data... Retrying...");
@@ -63,6 +64,11 @@ public class VirtualAssistant {
         calDate  = Calendar.getInstance();
 
     }
+    
+    public void saveStatus(){
+        loader.writeFavourites(learningAgent.getFavouriteStocks());
+        loader.writeSystemStatus(systemStatus);
+    }
 
     public void scan() {
 
@@ -72,7 +78,7 @@ public class VirtualAssistant {
         boolean loaded = false, updated = false;
         while(!loaded) {
             try {
-                newStockData = new StockData();//stockData.clone();
+                newStockData = new StockData(false);//stockData.clone();
                 updated = true; //updateCurrentData(newStockData.tickerToCompany);
                 loaded = true;
             } catch (Exception e) {
@@ -126,9 +132,11 @@ public class VirtualAssistant {
             if(company != null) {
 
                 result = Pair.merge(result, getCompanyData(name, response));
+                learningAgent.analyzeInput(name);
             } else if (stockData.isSector(name)){
 
                 result = Pair.merge(result, getSectorData(name, response));
+                learningAgent.analyzeInput(name);
             }
         }
 

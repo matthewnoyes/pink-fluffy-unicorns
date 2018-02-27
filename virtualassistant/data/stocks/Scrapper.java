@@ -339,7 +339,7 @@ public class Scrapper {
 
   public static void main(String[] args) throws IOException, ParseException {
     //getPastData("BT-A");
-    StockData data = new StockData();
+    StockData data = new StockData(true);
 
     System.out.println(data.getCompanyForTicker("BT.A").getOpen());
   }

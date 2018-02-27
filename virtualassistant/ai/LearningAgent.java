@@ -12,6 +12,9 @@ import virtualassistant.data.stocks.IStockData;
 import virtualassistant.data.stocks.ICompany;
 import virtualassistant.data.news.*;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 public class LearningAgent implements ILearningAgent {
 
   private Favourites<String, Integer> favouriteStocks;
@@ -30,27 +33,22 @@ public class LearningAgent implements ILearningAgent {
   }
 
   public LearningAgent(IStockData stocks, INewsData news, Favourites<String, Integer> favouriteStocks) {
-    this.favouriteStocks = favouriteStocks;
-
+    
+    if(favouriteStocks == null) {
+        favouriteStocks = new Favourites<String, Integer>();
+    } else {
+        this.favouriteStocks = favouriteStocks;
+    }
+    
     this.stocks = stocks;
-    this.news = news;
+    this.news = news; 
+    
   }
 
-  public void analyzeInput(List<String> tokenized, List<String> patternized) {
-
-    for (String item : tokenized) {
-
-      //See if item is a company
-      if (stocks.getCompanyTickers().contains(item)) {
-        favouriteStocks.addToBegining(item,1);
-        continue;
-      }
-      if (stocks.getCompanyNames().contains(item)) {
-        favouriteStocks.addToBegining(stocks.getCompanyForName(item).getTicker(),1);
-        continue;
-      }
-    }
-
+  public void analyzeInput(String ticker) {
+    
+    System.out.println("Analyze input name: " + ticker);
+    favouriteStocks.addToBegining(ticker, 1);
   }
 
   //Upate to have number be order - high last element
@@ -124,26 +122,66 @@ public class LearningAgent implements ILearningAgent {
 
     //Check sectors
 
-    return "";
+    return alerts;
 
   }
 
-  public String searchForNewsEvent() {
+  public String searchForNewsEvent() throws IOException, ParseException {
 
     String alerts = "";
     for (ICompany com : stocks.getAllCompanies()) {
-      // for (NewsObj article : news.getRnsNews(com.getTicker())) {
-      //   if (article.getImpact() > minNewsImapact) {
-      //     //Send a alert
-      //     alerts += "There is significant news: " + article.getTitle() + "\n";
-      //   }
-      // }
+      for (NewsObj article : news.getRnsNews(com.getTicker())) {
+        try {
+          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+            //Send a alert
+            alerts += "There is significant news: " + article.getTitle() + "\n";
+          }
+        } catch (Exception e) {
+          //Do nothing
+        }
+      }
 
+      for (NewsObj article : news.getAllianceNews(com.getTicker())) {
+        try {
+          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+            //Send a alert
+            alerts += "There is significant news: " + article.getTitle() + "\n";
+          }
+        } catch (Exception e) {
+          //Do nothing
+        }
+      }
+
+      for (NewsObj article : news.getYahooNews(com.getTicker())) {
+        try {
+          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+            //Send a alert
+            alerts += "There is significant news: " + article.getTitle() + "\n";
+          }
+        } catch (Exception e) {
+          //Do nothing
+        }
+      }
 
       //Check more sources
     }
 
-    return "";
+    for (String sector : stocks.getSectors()) {
+      for (NewsObj article : news.sectorNews(sector)) {
+        try {
+          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+            //Send a alert
+            alerts += "There is significant news: " + article.getTitle() + "\n";
+          }
+        } catch (Exception e) {
+          //Do nothing
+        }
+      }
+    }
+
+
+
+    return alerts;
 
   }
 
