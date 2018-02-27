@@ -1,5 +1,9 @@
 package virtualassistant.gui;
 
+import javafx.scene.layout.*;
+import javafx.geometry.*;
+import javafx.scene.text.*;
+
 import java.util.*;
 import virtualassistant.data.news.NewsObj;
 
@@ -17,6 +21,10 @@ public String getMessage() {
 
 public LinkedList<NewsObj> getNews() {
 				return null;
+}
+
+public HBox getDisplay() {
+	return null;
 }
 
 }
