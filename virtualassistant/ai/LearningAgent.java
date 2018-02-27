@@ -36,10 +36,10 @@ public class LearningAgent implements ILearningAgent {
     
     if(favouriteStocks == null) {
         favouriteStocks = new Favourites<String, Integer>();
-    } else {
-        this.favouriteStocks = favouriteStocks;
     }
     
+    this.favouriteStocks = favouriteStocks;
+ 
     this.stocks = stocks;
     this.news = news; 
     

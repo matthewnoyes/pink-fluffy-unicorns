@@ -37,7 +37,7 @@ public void start(Stage primaryStage) throws Exception {
 
 public void closeProgram() {
 		// save any data before if closes
-        //Controller.saveStatus();
+        Controller.saveStatus();
 		System.exit(0);
 }
 
