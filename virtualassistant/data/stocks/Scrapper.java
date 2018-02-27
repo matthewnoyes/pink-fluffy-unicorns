@@ -62,7 +62,11 @@ public class Scrapper {
       //Update prices
       company.updatePrice(Double.parseDouble(boxes.get(3).html().replace(",", "")));
       company.updateChange(Double.parseDouble(boxes.get(4).html().split("<")[0]));
-      company.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
+      try {
+        company.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
+      } catch (Exception e) {
+        company.updatePercentageChange(0.0);
+      }
 
       companies.add(company);
     }
