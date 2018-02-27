@@ -39,20 +39,9 @@ public class LearningAgent implements ILearningAgent {
     this.news = news;
   }
 
-  public void analyzeInput(List<String> tokenized, List<String> patternized) {
+  public void analyzeInput(String ticker) {
 
-    for (String item : tokenized) {
-
-      //See if item is a company
-      if (stocks.getCompanyTickers().contains(item)) {
-        favouriteStocks.addToBegining(item,1);
-        continue;
-      }
-      if (stocks.getCompanyNames().contains(item)) {
-        favouriteStocks.addToBegining(stocks.getCompanyForName(item).getTicker(),1);
-        continue;
-      }
-    }
+    favouriteStocks.addToBegining(ticker,1);
 
   }
 

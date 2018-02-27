@@ -10,7 +10,7 @@ import java.text.ParseException;
 public interface ILearningAgent {
 
   // Take tokenized string and patternized string and compare one against the other
-  public void analyzeInput(List<String> tokenized, List<String> patternized);
+  public void analyzeInput(String ticker);
 
   //?
   public Favourites<String, Integer> getFavouriteStocks();
