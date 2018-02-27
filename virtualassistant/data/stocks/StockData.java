@@ -46,7 +46,7 @@ public class StockData implements IStockData {
     }
 
   }
-
+    
   public StockData(Set<Company> companies) throws IOException {
 
     tickerToCompany = new HashMap<String, Company>();
