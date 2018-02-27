@@ -33,20 +33,20 @@ public class LearningAgent implements ILearningAgent {
   }
 
   public LearningAgent(IStockData stocks, INewsData news, Favourites<String, Integer> favouriteStocks) {
-    
+
     if(favouriteStocks == null) {
-        favouriteStocks = new Favourites<String, Integer>();
+        this.favouriteStocks = new Favourites<String, Integer>();
     } else {
         this.favouriteStocks = favouriteStocks;
     }
-    
+
     this.stocks = stocks;
-    this.news = news; 
-    
+    this.news = news;
+
   }
 
   public void analyzeInput(String ticker) {
-    
+
     System.out.println("Analyze input name: " + ticker);
     favouriteStocks.addToBegining(ticker, 1);
   }
