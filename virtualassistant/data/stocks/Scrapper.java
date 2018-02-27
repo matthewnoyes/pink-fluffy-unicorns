@@ -117,7 +117,81 @@ public class Scrapper {
   }
 
   public static void updateHistoricalData(HistoricalData pastData, String ticker) throws IOException {
-    //update data from latest entry
+
+    if (crumb == null || cookie == null) {
+      setupYahoo();
+    }
+
+    //weird regex
+    ticker = ticker.replaceAll("\\Q.\\E", "-");
+
+    //Remove trailing dashes
+    if (ticker.charAt(ticker.length() - 1) == '-') {
+      ticker = ticker.substring(0,ticker.length() - 1);
+    }
+
+    ticker += ".L";
+
+    //Setup the date range
+    Calendar cal = (Calendar)pastData.getLatestEntryDate().clone();
+
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    long pastDay = (long)cal.getTime().getTime()/1000;
+    cal = Calendar.getInstance();
+    cal.add(Calendar.MINUTE, -1);
+    long currentDay = (long)cal.getTime().getTime()/1000;
+
+    //Get csv file
+    Document doc = Jsoup.connect(yahoo1 + ticker + yahoo2 + pastDay + yahoo3 + currentDay + yahoo4 + crumb).userAgent("Mozilla").cookie("B", cookie).get();
+
+    //Split up the CSV file
+    String[] rawData = doc.html().split("[ ,]");
+
+    //Ignore the start and end of the CSV file (not data)
+    for (int i = 12; i < rawData.length-2; i += 7) {
+
+      //Date
+      String strDate = rawData[i];
+
+      Calendar date = Calendar.getInstance();
+      date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)) - 1, Integer.parseInt(strDate.substring(8, 10)));
+      date = Company.resetTime(date);
+      HistoricalData.Record entry = new HistoricalData.Record();
+
+      try {
+        entry.open = Double.parseDouble(rawData[i+1]);
+      } catch (NumberFormatException e) {
+        //Mark that there is no data for this day
+        entry.open = -1.0;
+      }
+      try {
+        entry.high = Double.parseDouble(rawData[i+2]);
+      } catch (NumberFormatException e) {
+        //Mark that there is no data for this day
+        entry.high = -1.0;
+      }
+      try {
+        entry.low = Double.parseDouble(rawData[i+3]);
+      } catch (NumberFormatException e) {
+        //Mark that there is no data for this day
+        entry.low = -1.0;
+      }
+      try {
+        entry.close = Double.parseDouble(rawData[i+4]);
+      } catch (NumberFormatException e) {
+        //Mark that there is no data for this day
+        entry.close = -1.0;
+      }
+      // 4 is ajusted close
+      try {
+        entry.volume = Integer.parseInt(rawData[i+6]);
+      } catch (NumberFormatException e) {
+        //Mark that there is no data for this day
+        entry.volume = -1;
+      }
+
+      pastData.put(date, entry);
+    }
   }
 
   /**
@@ -217,12 +291,8 @@ public class Scrapper {
     for (int i = 12; i < rawData.length-2; i += 7) {
 
       //Date
-      //System.out.println(rawData[i]);
       String strDate = rawData[i];
-      // System.out.println(strDate);
-      // System.out.println(strDate.substring(8, 10));
-      // System.out.println( strDate.substring(5, 7));
-      // System.out.println(strDate.substring(0, 4));
+
       Calendar date = Calendar.getInstance();
       date.set(Integer.parseInt(strDate.substring(0, 4)), Integer.parseInt(strDate.substring(5, 7)) - 1, Integer.parseInt(strDate.substring(8, 10)));
       date = Company.resetTime(date);
@@ -259,13 +329,7 @@ public class Scrapper {
         //Mark that there is no data for this day
         entry.volume = -1;
       }
-      // data[1][currRow] = Double.parseDouble(rawData[i+1]);
-      // data[2][currRow] = Double.parseDouble(rawData[i+2]);
-      // data[3][currRow] = Double.parseDouble(rawData[i+3]);
-      // data[4][currRow] = Double.parseDouble(rawData[i+4]);
 
-      //Volume - not working
-      // data[5][currRow] = Double.parseDouble(rawData[i+5]);
       data.put(date, entry);
     }
 

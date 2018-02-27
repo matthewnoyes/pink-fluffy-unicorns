@@ -15,15 +15,15 @@ public class HistoricalData extends HashMap<Calendar, HistoricalData.Record> {
       latestEntry = key;
     }
 
-    // Calendar yearAgo = key.copy();
-    // yearAgo.add(Calendar.YEAR, -1);
-    //
-    // //Check for dates from more than a year ago.
-    // for (Calendar entryDate : this.keySet()) {
-    //   if (entryDate.before(yearAgo)) {
-    //     this.remove(entryDate);
-    //   }
-    // }
+    Calendar yearAgo = (Calendar)key.clone();
+    yearAgo.add(Calendar.YEAR, -1);
+
+    //Check for dates from more than a year ago.
+    for (Calendar entryDate : this.keySet()) {
+      if (entryDate.before(yearAgo)) {
+        this.remove(entryDate);
+      }
+    }
 
     return previous;
   }
