@@ -25,9 +25,15 @@ public interface IStockData {
   public double getSectorChange(String sector);
   public double getSectorPercentageChange(String sector);
 
+  public double getSectorOpen(String sector);
+  public double getSectorHigh(String sector);
+  public double getSectorLow(String sector);
+  public int getSectorVolume(String sector);
+
   public double sectorYearHigh(String sector);
   public double sectorYearLow(String sector);
   public double sectorYearAverageClose(String sector);
+  public double sectorAverageVolume(String sector);
 
   public double getSectorClosePriceOnDate(String sector, Calendar date);
 

@@ -42,8 +42,8 @@ public class VirtualAssistant {
         //Instantiate everything
 
         loader = new Loader();
-        
-        
+
+
         // Try to load stockData again if this fails. We have no program without it
         boolean loaded = false;
         while(!loaded) {
@@ -55,7 +55,7 @@ public class VirtualAssistant {
                 e.printStackTrace();
             }
         }
-        
+
         learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
         systemStatus = loader.readSystemStatus();
         news = new NewsData();
@@ -79,11 +79,11 @@ public class VirtualAssistant {
                 System.out.println("Failed to load stock data... Retrying...");
                 e.printStackTrace();
             }
-        }    
-        
+        }
+
         if(updated) {
             stockData = newStockData;
-            
+
             /*learningAgent.searchForStockEvent();
             learningAgent.searchForNewsEvent();
             */
@@ -154,10 +154,10 @@ public class VirtualAssistant {
         } catch (Exception e) {
             e.toString();
         }
-        
+
         StringBuilder sb = new StringBuilder(name);
         sb.append(", ");
-        
+
         switch((String)parameters.get("data1")) {
 
             case "currentPrice":
@@ -173,7 +173,7 @@ public class VirtualAssistant {
                 sb.append(company.getClosePriceOnDate(calDate));
                 sb.append("£.");
                 return new Pair(sb.toString(), null);
-                
+
             case "OpenPriceOnDate":
                 return new Pair("" + company.getOpenPriceOnDate(calDate), null);
 
@@ -257,27 +257,27 @@ public class VirtualAssistant {
                 chatbot.output(stockData.getSectorCurrentPrice(sector));
                 break;
             */
-                
+
             case "Open":
-                return new Pair("" + , null); // Need sector open
-                
+                return new Pair("" + stockData.getSectorOpen(sector), null); // Need sector open
+
             case "High":
-                return new Pair("" + , null); // Need sector High
-            
+                return new Pair("" + stockData.getSectorHigh(sector), null); // Need sector High
+
             case "Low":
-                return new Pair("" + , null); // Need sector low
-            
+                return new Pair("" + stockData.getSectorLow(sector), null); // Need sector low
+
             case "CurrentPrice":
                 return new Pair("" + stockData.getCurrentSectorPrice(sector), null);
-                
+
             case "Change":
                 return new Pair("" + stockData.getSectorChange(sector), null);
 
             case "PercentageChange":
                 return new Pair("" + stockData.getSectorPercentageChange(sector), null);
-                
+
             case "Volume":
-                return new Pair("" + , null); // Need sector Volume
+                return new Pair("" + stockData.getSectorVolume(sector), null); // Need sector Volume
 
             case "news":
                 return new Pair("Here is the news that you wanted", news.sectorNews(sector));
@@ -290,9 +290,9 @@ public class VirtualAssistant {
 
             case "yearAverageClose":
                 return new Pair("" + stockData.sectorYearAverageClose(sector), null);
-                
+
             case "yearAverageVolume":
-                return new Pair("" + , null);   // Need sector ChyearAverageVolumeange
+                return new Pair("" + stockData.sectorAverageVolume(sector), null);   // Need sector ChyearAverageVolumeange
 
             case "closePriceOn":  // not on  dialogflow
                 // return stockData.sectorYearLow(sector);
