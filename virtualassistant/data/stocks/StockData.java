@@ -21,20 +21,23 @@ public class StockData implements IStockData {
   //<Sector, Set of tickers>
   private HashMap<String, Set<Company>> companiesInSector;
 
-  public StockData() throws IOException {
+  public StockData(boolean verbose) throws IOException {
 
     tickerToCompany = new HashMap<String, Company>();
     companiesInSector = new HashMap<String, Set<Company>>();
     nameToCompany = new HashMap<String, Company>();
 
+    //if (verbose) {
     System.out.println("Downloading sector data...");
+    //}
 
     HashMap<String, Integer> sectors = Scrapper.getSectors();
     int index = 1;
 
     for (Map.Entry<String, Integer> sector : sectors.entrySet()) {
-
-      System.out.println("Loading " + sector.getKey() + " data(" + index++ + "/41)...");
+      if (verbose) {
+        System.out.println("Loading " + sector.getKey() + " data (" + index++ + "/41)...");
+      }
       Set<Company> comInCurrSector = Scrapper.getSector(sector.getKey(), sector.getValue());
 
       companiesInSector.put(sector.getKey(), comInCurrSector);
