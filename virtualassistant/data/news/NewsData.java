@@ -30,19 +30,19 @@ public class NewsData implements INewsData{
 				for(Element li: doc.select(".table_dati tr")){ // going through each list item and adding the article into the arraylist
 					if(li.select(".name:eq(0)").text().equals(company)){
 						String kk = li.select(".name:eq(1)").first().select(".name a").attr("href");
-						return rnsNewsArticleGetter(isinNumberGetter(kk)); // We've got the isin number, now get all the news from it
+						return rnsNewsArticleGetter(isinNumberGetter(kk),company); // We've got the isin number, now get all the news from it
 					}
 				}
 			}
 			return articlesObjs;
 		}
 
-		private LinkedList<NewsObj> rnsNewsArticleGetter(String webpage) throws IOException, ParseException {
+		private LinkedList<NewsObj> rnsNewsArticleGetter(String webpage,String company) throws IOException, ParseException {
 		        LinkedList<NewsObj> tempArticlesObjs = new LinkedList<NewsObj>();
 			final Document doc = Jsoup.connect(webpage).get(); // all the articles from lse new analysis is gotten.
 			for(Element row: doc.select(".table_datinews tr")){ // loop of articles in the table row is done
 				Calendar calDate = Calendar.getInstance();
-				final String title = row.select(".text-left a").text();
+				final String title =  company + " - "+ row.select(".text-left a").text();
 				calDate.setTime(rnsNewsDateFormat.parse((row.select(".datetime.nowrap").text()))); // with the date formatting
 				final String source = row.select(".nowrap.text-left").get(1).text();
 				final String impact = row.select(".nowrap.text-left").get(2).text();
@@ -80,8 +80,8 @@ public class NewsData implements INewsData{
 
 		final Document doc = Jsoup.connect("http://www.londonstockexchange.com/exchange/news/alliance-news/company-news.html?tidm=" + company).get();
 			for(Element li: doc.select("ul li")){ // going through each list item and adding the article into the arraylist
-					Calendar calDate = Calendar.getInstance();
-				final String title = (li.select("a").text());
+				Calendar calDate = Calendar.getInstance();
+				final String title = company + " - " + (li.select("a").text());
 				final String url = "http://www.londonstockexchange.com" + li.select("a").first().attr("href");
 				final String dateGrabbed = li.select(".hour").text();
 				calDate.setTime(MmultiUseFormat.parse(dateGrabbed.length() == 5 ? todaysDate + " " + dateGrabbed : dateGrabbed)); // at times the article may be posted today, which will only contain the time need to then add the date to it
@@ -90,22 +90,45 @@ public class NewsData implements INewsData{
 			return articlesObjs;
 		}
 
-		public LinkedList<NewsObj> getYahooNews(String companies) throws IOException, ParseException { // works by getting recent 20 news articles of companies in a sector
-	        //This method is only compatible with sectors now. Give users choice between alliance news and RNS news. 
+		public LinkedList<NewsObj> getYahooNews(String company) throws IOException, ParseException { // works by getting recent 20 news articles of a company.
+	        //This method is only compatible with companies now.
+			String companyIncorectFormat = company;
+			if(company.equals("BT.A")){ // BT'S name is different on yahoo
+				companyIncorectFormat = "bt";
+		      	}
+			
+			if(company.charAt(company.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
+				companyIncorectFormat = company + "L";		
+			}else{
+				companyIncorectFormat = company + ".L";	
+			}
 			LinkedList<NewsObj> tempArticlesObjs = new LinkedList<NewsObj>();
-			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companies+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
+			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+company+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
 			for(Element li: doc.select("item")){
 				Calendar calDate = Calendar.getInstance(); 
 				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
-				final String title = li.select("title").text();
+				final String title = company + " - " + li.select("title").text();
 				final String url = li.select("link").text();
 				tempArticlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Finance News"));
 			}
 			return tempArticlesObjs;
 		}
 
-		public LinkedList<NewsObj> sectorNews(String sector) throws IOException, ParseException {
-			
+			private LinkedList<NewsObj> sectorNewsGrabber(String sector, String companies) throws IOException, ParseException { // works by getting recent 20 news articles of companies in a sector				
+	        	//This method is only compatible with sectors now. Give users choice between alliance news and RNS news. 
+			LinkedList<NewsObj> tempArticlesObjs = new LinkedList<NewsObj>();
+			Document doc = Jsoup.parse(new URL("https://feeds.finance.yahoo.com/rss/2.0/headline?s="+companies+"&region=US&lang=en-US").openStream(), "UTF-8", "", Parser.xmlParser()); // xml retrieved to be parsed
+			for(Element li: doc.select("item")){
+				Calendar calDate = Calendar.getInstance(); 
+				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
+				final String title = sector + " - " + li.select("title").text();
+				final String url = li.select("link").text();
+				tempArticlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Finance News"));
+			}
+			return tempArticlesObjs;
+		}
+	
+		public LinkedList<NewsObj> sectorNews(String sector) throws IOException, ParseException {			
 			final Document Ftse100 = Jsoup.connect("https://en.wikipedia.org/wiki/FTSE_100_Index").get(); // used to get all companies in a sector
 			String allCompaniesInSector = "";
 			String sectorWanted = sector;
@@ -129,7 +152,6 @@ public class NewsData implements INewsData{
 					String company = li.select("td:eq(1)").text();
 
 					if(company.equals("BT.A")){ // BT'S name is different on yahoo
-					System.out.println(company);
 					company = "bt";
 				}
 
@@ -147,7 +169,7 @@ public class NewsData implements INewsData{
 							}
 						}
 					}
-					return getYahooNews(allCompaniesInSector);
+					return sectorNewsGrabber(sector,allCompaniesInSector);
 		}
 
 	private NewsObj newsArrayAdder(Calendar Datetime, String title, String url,String source){ // used to make objects of news articles.
