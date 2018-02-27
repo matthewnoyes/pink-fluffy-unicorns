@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import virtualassistant.data.stocks.IStockData;
 import virtualassistant.data.stocks.ICompany;
-import virtualassistant.data.news.INewsData;
+import virtualassistant.data.news.*;
 
 public class LearningAgent implements ILearningAgent {
 
@@ -113,14 +113,16 @@ public class LearningAgent implements ILearningAgent {
 
   public String searchForStockEvent() {
 
-
+    String alerts = "";
 
     for (ICompany com : stocks.getAllCompanies()) {
       if (com.getPercentageChange() > minStockImapact && favouriteStocks.containsKey(com.getTicker())) {
         //Send a alert
-        //xxx.alert(com.getName() + " is changing price quickly");
+        alerts += com.getName() + " is changing price quickly\n";
       }
     }
+
+    //Check sectors
 
     return "";
 
@@ -128,12 +130,18 @@ public class LearningAgent implements ILearningAgent {
 
   public String searchForNewsEvent() {
 
-    // for (NewsObj article : new news) {
-    //   if (article.getImapct() > minNewsImapact && favourites.containsKey(article.com)) {
-    //     //Send a alert
-    //     //xxx.alert("There is significant news on: " + article.com);
-    //   }
-    // }
+    String alerts = "";
+    for (ICompany com : stocks.getAllCompanies()) {
+      // for (NewsObj article : news.getRnsNews(com.getTicker())) {
+      //   if (article.getImpact() > minNewsImapact) {
+      //     //Send a alert
+      //     alerts += "There is significant news: " + article.getTitle() + "\n";
+      //   }
+      // }
+
+
+      //Check more sources
+    }
 
     return "";
 
