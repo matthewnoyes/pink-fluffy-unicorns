@@ -52,7 +52,6 @@ public class Loader {
         obj.put("soundEnabled", status.getSoundEnabled());
         obj.put("speechEnabled", status.getSpeechEnabled());
         obj.put("volume", status.getVolume());
-        obj.put("lastUpdatedStocks", status.getLastUpdatedStocks().toString());
         
         //Write
         try (FileWriter file = new FileWriter("virtualassistant/data/datastore/systemStatus.json")) {
@@ -74,19 +73,8 @@ public class Loader {
             boolean soundEnabled = (boolean) obj.get("soundEnabled");
             boolean speechEnabled = (boolean) obj.get("speechEnabled");
             double volume = (double) obj.get("volume");
-            
-            Date lastUpdatedStocks = null;
-            try {
-                
-                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-                lastUpdatedStocks = df.parse((String)obj.get("lastUpdatedStocks"));
-                
-            } catch (Exception e) {
-                e.toString();
-            }
-            
-      
-            return new SystemStatus(soundEnabled, speechEnabled, volume, lastUpdatedStocks);
+    
+            return new SystemStatus(soundEnabled, speechEnabled, volume);
         
         } catch (FileNotFoundException e) {
             e.printStackTrace();

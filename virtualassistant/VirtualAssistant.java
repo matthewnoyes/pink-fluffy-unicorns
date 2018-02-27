@@ -34,6 +34,7 @@ public class VirtualAssistant {
     private INewsData news;
     private Chatbot chatbot;
     private Calendar calDate;
+    
 
     // Set this for debugging
     private boolean verbose = false;
@@ -62,6 +63,11 @@ public class VirtualAssistant {
         chatbot = new Chatbot();
         calDate  = Calendar.getInstance();
 
+    }
+    
+    public void saveStatus(){
+        loader.writeFavourites(learningAgent.getFavouriteStocks());
+        loader.writeSystemStatus(systemStatus);
     }
 
     public void scan() {
@@ -126,9 +132,11 @@ public class VirtualAssistant {
             if(company != null) {
 
                 result = Pair.merge(result, getCompanyData(name, response));
+                learningAgent.analyzeInput(name);
             } else if (stockData.isSector(name)){
 
                 result = Pair.merge(result, getSectorData(name, response));
+                learningAgent.analyzeInput(name);
             }
         }
 

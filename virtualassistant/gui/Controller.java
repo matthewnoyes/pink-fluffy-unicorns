@@ -56,7 +56,7 @@ private boolean autoUpdate = true;
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
-private VirtualAssistant virtualAssistant;
+private static VirtualAssistant virtualAssistant;
 
 @Override
 public void initialize(URL location, ResourceBundle resources) {
@@ -108,6 +108,10 @@ public void initialize(URL location, ResourceBundle resources) {
     chnages displayed wifi access true = have connection
  */
 
+ public void makeSystemQuery(){
+     
+ }
+ 
 // make a query
 public void makeQuery(String text) {
 		if(onHelp) {
@@ -158,6 +162,10 @@ public void makeQuery(String text) {
 				chatbot_message_list.add(error_response);
 				addMessage(error_response);
 		}
+}
+
+public static void saveStatus(){
+    virtualAssistant.saveStatus();
 }
 
 public void startListening() {
