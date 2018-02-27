@@ -75,7 +75,7 @@ public class Scrapper {
    *
    * Returns true if all updated, false means list has changed
    */
-  public static Boolean updateCurrentData(HashMap<String, Company> companies) throws IOException {
+  public static boolean updateCurrentData(HashMap<String, Company> companies) throws IOException {
     int count = 0;
     for (int page = 1; page < 7; page++) {
 
@@ -116,6 +116,9 @@ public class Scrapper {
 
   }
 
+  public static void updateHistoricalData(HistoricalData pastData, String ticker) throws IOException {
+    //update data from latest entry
+  }
 
   /**
    * Returns all the sectors and the corresponding number for LSE's website
@@ -161,7 +164,7 @@ public class Scrapper {
 	  int q1 = page.html().indexOf("\"", cl + 1);
 	  int q2 = page.html().indexOf("\"", q1 + 1);
     String test = page.html().substring(q1+1,q2);
-    
+
     test = test.replaceAll("\\\\u002F", "/");
     crumb = Jsoup.parse(new String(test.getBytes(), "UTF-8")).text();
 
