@@ -1,2 +1,4 @@
 *.class
 *.jar
+virtualassistant/data/datastore/favourites.json
+virtualassistant/data/datastore/systemStatus.json
