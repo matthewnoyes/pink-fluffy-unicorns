@@ -74,7 +74,7 @@ public class Loader {
             boolean soundEnabled = (boolean) obj.get("soundEnabled");
             boolean speechEnabled = (boolean) obj.get("speechEnabled");
             double volume = (double) obj.get("volume");
-    
+            volume = (double)1.0;
             return new SystemStatus(soundEnabled, speechEnabled, volume);
         
         } catch (FileNotFoundException e) {

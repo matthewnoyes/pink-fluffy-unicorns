@@ -46,7 +46,18 @@ public class VirtualAssistant {
 
         loader = new Loader();
 
+        System.out.println("Loading favourites...");
+        learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
 
+        System.out.println("Loading system status...");
+        systemStatus = loader.readSystemStatus();
+
+        news = new NewsData();
+
+        System.out.println("Setting up chatbot connection...");
+        chatbot = new Chatbot();
+        
+        
         // Try to load stockData again if this fails. We have no program without it
         boolean loaded = false;
         while(!loaded) {
@@ -59,16 +70,6 @@ public class VirtualAssistant {
             }
         }
 
-        System.out.println("Loading favourites...");
-        learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
-
-        System.out.println("Loading system status...");
-        systemStatus = loader.readSystemStatus();
-
-        news = new NewsData();
-
-        System.out.println("Setting up chatbot connection...");
-        chatbot = new Chatbot();
         calDate  = Calendar.getInstance();
 
     }
@@ -179,7 +180,7 @@ public class VirtualAssistant {
         switch((String)parameters.get("data1")) {
 
             case "currentPrice":
-                sb.append("current price: ");
+                sb.append("current price: @@@@ <3 <3 <3 <3");
                 sb.append("\u00A3");
                 sb.append(company.getCurrentPrice());
                 return new Pair(sb.toString(), null);

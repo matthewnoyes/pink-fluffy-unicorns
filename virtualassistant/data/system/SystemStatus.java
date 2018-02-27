@@ -5,12 +5,9 @@ import java.util.Date;
 
 public class SystemStatus {
 
-    private static Date lastUpdatedNews;
-    private static Date lastUpdatedStocks;
-
-    private static boolean soundEnabled;
-    private static boolean speechEnabled;
-    private static double volume; // [0.0, 1.0]
+    private boolean soundEnabled;
+    private boolean speechEnabled;
+    private double volume; // [0.0, 1.0]
 
     public SystemStatus(boolean soundEnabled, boolean speechEnabled, double volume){
         this.soundEnabled = soundEnabled;
@@ -18,53 +15,35 @@ public class SystemStatus {
         this.volume = volume;
     }
 
-    public static Date getLastUpdatedNews(){
-        return lastUpdatedNews;
-    }
-
-    public static Date getLastUpdatedStocks(){
-        return lastUpdatedStocks;
-    }
-
-    public static void setLastUpdatedNews(Date lastUpdatedNews){
-        //this.lastUpdatedNews = lastUpdatedNews;
-    }
-
-    public static void setLastUpdatedStocks(Date lastUpdatedStocks){
-        //this.lastUpdatedStocks = lastUpdatedStocks;
-    }
-
-    public static void toggleSound(){
+    public void toggleSound(){
         soundEnabled = !soundEnabled;
     }
 
-    public static void toggleSpeech(){
+    public void toggleSpeech(){
         speechEnabled = !speechEnabled;
     }
 
-    public static void setVolume(){
-
+    public void setVolume(double volume){
+        this.volume = volume;
     }
 
-    public static void setSoundEnabled(){
-
+    public void setSoundEnabled(boolean soundEnabled){
+        this.soundEnabled = soundEnabled;
     }
 
-    public static void setSpeechEnabled(){
-
+    public void setSpeechEnabled(boolean speechEnabled){
+        this.speechEnabled = speechEnabled;
     }
 
-    public static boolean getSpeechEnabled(){
-      return false;
-
+    public boolean getSpeechEnabled(){
+        return speechEnabled;
     }
 
-    public static boolean getSoundEnabled(){
-      return false;
+    public boolean getSoundEnabled(){
+        return soundEnabled;
     }
 
     public double getVolume(){
-      return 0.0;
-
+        return volume;
     }
 }
