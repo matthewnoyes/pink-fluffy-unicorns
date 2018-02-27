@@ -10,8 +10,8 @@
   </ScrollPane>
   <Region VBox.Vgrow="ALWAYS"/>
   <HBox fx:id="textInput" alignment="bottom_center">
-    <TextField fx:id="query_text_field" promptText="Input a query here" prefWidth="${root.width}" onAction="#handleSendQueryButtonClick"/>
-    <Button fx:id="send_query_button" text="Send" prefWidth="${root.width * 0.33}" onAction="#handleSendQueryButtonClick"/>
+    <TextField fx:id="query_text_field" promptText="Connecting..." prefWidth="${root.width}" onAction="#handleSendQueryButtonClick" disable="true"/>
+    <Button fx:id="send_query_button" text="Send" prefWidth="${root.width * 0.33}" onAction="#handleSendQueryButtonClick" disable="true"/>
   </HBox>
   <HBox fx:id="buttons">
     <StackPane alignment="bottom_left" prefWidth="${root.width * 0.5}">

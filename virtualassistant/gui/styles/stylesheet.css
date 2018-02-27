@@ -21,7 +21,7 @@
 }
 
 #round_mic_button:focused {
-  -fx-background-color: #a9a9a9, white, white;
+  -fx-background-color: #a9a9a9, #a9a9a9, #a9a9a9;
 }
 
 #update_time {
@@ -45,7 +45,7 @@
 }
 
 #help_button:focused {
-  -fx-background-color: #a9a9a9, white, white;
+  -fx-background-color: #a9a9a9, #a9a9a9, #a9a9a9;
 }
 
 #help_button: hover {
