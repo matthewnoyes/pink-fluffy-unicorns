@@ -13,7 +13,7 @@ import marytts.signalproc.effects.VolumeEffect;
 
 public class Main {
 	public static void main(String[] args) {
-		/*//Create TextToSpeech
+		//Create TextToSpeech
 		TextToSpeech tts = new TextToSpeech();
 		
 		//print all available voices we have added on class path
@@ -23,8 +23,8 @@ public class Main {
 		tts.setVoice("dfki-poppy-hsmm");
 		
 		//tts says what we tell it to say
-		tts.speak("Hello.", 1.0f, false, false);
-		*/
+		tts.speak("Sorry, I didn't catch that.", 1.0f, false, false);
+		
 		
 	}
 	
