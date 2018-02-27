@@ -47,9 +47,9 @@ public HBox getDisplay() {
 
 		content_contain.getChildren().add(label);
 
-		VBox news_articles_contain = new VBox(5);
+		VBox news_articles_contain = new VBox(0);
 		// if the response contains news to display
-		if(news != null) {
+		if(news != null && news.size() > 0) {
 				// set to max width for message
 				//content_contain.setPrefWidth(Main.WIDTH);
 
@@ -58,11 +58,12 @@ public HBox getDisplay() {
 						separator.setMaxWidth(200);
 
 						Label heading = new Label(x.getTitle());
+						heading.setWrapText(true);
 						heading.setId("news_heading");
 						//Label time = new Label(news.get(x).getDateTime().toString());
 						String strtime = "";
 						Calendar date = x.getDateTime();
-                        
+
                         // Beautify string
                         StringBuilder sb = new StringBuilder();
 						sb.append(date.get(Calendar.HOUR));
@@ -73,12 +74,13 @@ public HBox getDisplay() {
 						sb.append("/");
 						sb.append(date.get(Calendar.MONTH));
 						sb.append("/");
-						sb.append(date.get(Calendar.YEAR));                  
+						sb.append(date.get(Calendar.YEAR));
 						Label time = new Label(sb.toString());
-                        
-                        
+
+
 						time.setId("news_data");
 						Hyperlink url = new Hyperlink(x.getUrl());
+						url.setWrapText(true);
 						url.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent e) {
@@ -98,6 +100,8 @@ public HBox getDisplay() {
 						news_articles_contain.getChildren().add(newsContain);
 				}
 				ScrollPane news_scroll = new ScrollPane(news_articles_contain);
+				news_scroll.setFitToWidth(true);
+				news_scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 				news_scroll.setStyle("-fx-background: transparent");
 				news_scroll.setPrefHeight(250);
 				content_contain.getChildren().add(news_scroll);
