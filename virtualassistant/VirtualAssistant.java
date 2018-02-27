@@ -34,7 +34,7 @@ public class VirtualAssistant {
     private INewsData news;
     private Chatbot chatbot;
     private Calendar calDate;
-    
+
 
     // Set this for debugging
     private boolean verbose = false;
@@ -56,21 +56,21 @@ public class VirtualAssistant {
                 e.printStackTrace();
             }
         }
-        
+
         System.out.println("Loading favourites...");
         learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
-        
+
         System.out.println("Loading system status...");
         systemStatus = loader.readSystemStatus();
-        
+
         news = new NewsData();
-        
+
         System.out.println("Setting up chatbot connection...");
         chatbot = new Chatbot();
         calDate  = Calendar.getInstance();
 
     }
-    
+
     public void saveStatus(){
         loader.writeFavourites(learningAgent.getFavouriteStocks());
         loader.writeSystemStatus(systemStatus);
@@ -187,36 +187,36 @@ public class VirtualAssistant {
                 sb.append("£");
                 sb.append(company.getClosePriceOnDate(calDate));
                 return new Pair(sb.toString(), null);
-                
+
             case "OpenPriceOnDate":
                 sb.append("opening price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£");     
-                sb.append(company.getOpenPriceOnDate(calDate));  
+                sb.append("£");
+                sb.append(company.getOpenPriceOnDate(calDate));
                 return new Pair(sb.toString(), null);
 
             case "HighPriceOnDate":
                 sb.append("highest price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£");     
-                sb.append(company.getHighPriceOnDate(calDate));  
+                sb.append("£");
+                sb.append(company.getHighPriceOnDate(calDate));
                 return new Pair(sb.toString(), null);
 
             case "LowPriceOnDate":
                 sb.append("lowest price on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append("£");     
-                sb.append(company.getLowPriceOnDate(calDate));  
+                sb.append("£");
+                sb.append(company.getLowPriceOnDate(calDate));
                 return new Pair(sb.toString(), null);
 
             case "VolumeOnDate":
                 sb.append("volume on ");
                 sb.append(calDate.toString());
                 sb.append(": ");
-                sb.append(company.getVolumeOnDate(calDate));  
+                sb.append(company.getVolumeOnDate(calDate));
                 return new Pair(sb.toString(), null);
 
             case "Open":
@@ -235,7 +235,7 @@ public class VirtualAssistant {
                 sb.append(company.getHigh());
                 return new Pair(sb.toString(), null);
 
-            case "Low": 
+            case "Low":
                 sb.append("lowest price: ");
                 sb.append("£");
                 sb.append(company.getLow());
@@ -314,12 +314,12 @@ public class VirtualAssistant {
         } catch (Exception e) {
             e.toString();
         }
-        
+
          StringBuilder sb = new StringBuilder(sector);
         sb.append(", ");
 
 
-        switch((String)parameters.get("data")) {
+        switch((String)parameters.get("data1")) {
 
             /*case "price":
                 chatbot.output(stockData.getSectorCurrentPrice(sector));
@@ -330,26 +330,26 @@ public class VirtualAssistant {
                 sb.append("£");
                 sb.append(stockData.getSectorOpen(sector));
                 return new Pair(sb.toString(), null);
-                
+
             case "High":
                 sb.append("highest price: ");
                 sb.append("£");
                 sb.append(stockData.getSectorHigh(sector));
                 return new Pair(sb.toString(), null);
-            
+
             case "Low":
                 sb.append("lowest price: ");
                 sb.append("£");
                 sb.append(stockData.getSectorLow(sector));
                 return new Pair(sb.toString(), null);
 
-            
-            case "CurrentPrice":
+
+            case "currentPrice":
                 sb.append("current price: ");
                 sb.append("£");
                 sb.append(stockData.getCurrentSectorPrice(sector));
                 return new Pair(sb.toString(), null);
-                
+
             case "Change":
                 sb.append("change in price: ");
                 sb.append("£");
@@ -361,7 +361,7 @@ public class VirtualAssistant {
                 sb.append("£");
                 sb.append(stockData.getSectorPercentageChange(sector));
                 return new Pair(sb.toString(), null);
-                
+
             case "Volume":
                 sb.append("volume: ");
                 sb.append(stockData.getSectorVolume(sector));
@@ -388,11 +388,11 @@ public class VirtualAssistant {
                 sb.append("£");
                 sb.append(stockData.sectorYearAverageClose(sector));
                 return new Pair(sb.toString(), null);
-                
+
             case "yearAverageVolume":
                 sb.append("year average volume: ");
                 sb.append(stockData.sectorAverageVolume(sector));
-                return new Pair(sb.toString(), null); 
+                return new Pair(sb.toString(), null);
 
             case "closePriceOn":  // not on  dialogflow
                 // return stockData.sectorYearLow(sector);
@@ -400,11 +400,11 @@ public class VirtualAssistant {
 
             case "SectorClosePriceOnDate":  // not on dialogflow
                 sb.append("close price on ");
-                sb.append(calDate.toString());  
+                sb.append(calDate.toString());
                 sb.append(": ");
                 sb.append(stockData.getSectorClosePriceOnDate(sector,calDate));
-                return new Pair(sb.toString(), null); 
-           
+                return new Pair(sb.toString(), null);
+
         }
 
         return null;
