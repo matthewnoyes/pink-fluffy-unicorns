@@ -18,8 +18,6 @@ import marytts.modules.synthesis.Voice;
 import marytts.signalproc.effects.AudioEffect;
 import marytts.signalproc.effects.AudioEffects;
 
-import virtualassistant.chatbot.TTS.src.model.AudioPlayer;
-
 /**
  * @author GOXR3PLUS
  *
