@@ -81,13 +81,14 @@ public HBox getDisplay() {
 
 						news_articles_contain.getChildren().add(newsContain);
 				}
-
+				ScrollPane news_scroll = new ScrollPane(news_articles_contain);
+				news_scroll.setStyle("-fx-background: transparent");
+				news_scroll.setPrefHeight(250);
+				content_contain.getChildren().add(news_scroll);
 		} else {
 			container.setPadding(new Insets(0,80,0,0));
 		}
-		ScrollPane news_scroll = new ScrollPane(news_articles_contain);
-		news_scroll.setPrefHeight(400);
-		container.getChildren().addAll(news_scroll, region);
+		container.getChildren().addAll(content_contain, region);
 		return container;
 }
 
