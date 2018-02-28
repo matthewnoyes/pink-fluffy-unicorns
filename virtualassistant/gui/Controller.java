@@ -72,6 +72,8 @@ private boolean muted;
 
 // IMPORTANT: Set to false only if it slows down your internet connection too much
 private boolean autoUpdate = true;
+private boolean virtualAssistantFinished = false;
+private boolean sstFinished = false;
 
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
@@ -101,7 +103,12 @@ public void initialize(URL location, ResourceBundle resources) {
 
 						System.out.println("Success!");
 						System.out.println("===================================\n\n");
-
+                        
+                        virtualAssistantFinished = true;
+                        
+                        if(sstFinished)
+                            round_mic_button.setDisable(false);
+                        
 						return null;
 				}
 		};
@@ -118,7 +125,11 @@ public void initialize(URL location, ResourceBundle resources) {
 						stt.ignoreSpeechRecognitionResults();
                         System.out.println("Speech to text... complete");
                         
-						round_mic_button.setDisable(false);
+                        sstFinished = true;
+                        
+                        if(virtualAssistantFinished)
+                            round_mic_button.setDisable(false);
+                        
 						return null;
 				}
 		};
@@ -204,29 +215,32 @@ public void makeQuery(String text) {
 				Task task = new Task<Message>() {
 						@Override
 						public Message call() {
-
-								Pair<String, LinkedList<NewsObj> > responsePair;
-								String responseStr;
-								LinkedList<NewsObj> responseNews;
+                                
+                                Message response;
 
 								try {
 
-										responsePair = virtualAssistant.getResponse(query.getMessage());
-										responseStr = responsePair.getFirst();
-										responseNews = responsePair.getSecond();
+                                    Pair<String, LinkedList<NewsObj>> responsePair = 
+                                        virtualAssistant.getResponse(query.getMessage());
+                                        
+                                    String responseStr = responsePair.getFirst();
+                                    
+                                    LinkedList<NewsObj> responseNews = responsePair.getSecond();
+                                    
+                                    if(responseStr != null && !responseStr.equals(""))
+                                        tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
+
+                                    response = new Response(responseStr, responseNews);
 
 								} catch (Exception e) {
 
-										responseStr = "An error occured";
-										responseNews = null;
-										e.printStackTrace();
-
+                                    //e.printStackTrace();
+                                    
+                                    String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";                 
+                                    String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
+                                    response = new URLMessage(message, url);
 								}
-
-								if(responseStr != null && !responseStr.equals(""))
-										tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
-
-								Message response = new Response(responseStr, responseNews);
+								
 								return response;
 						}
 				};

@@ -149,11 +149,11 @@ public class VirtualAssistant {
                 
                 result = Pair.merge(result, new Pair("RDSA", null));
                 result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSA"), dataList, calDate));
-                result = Pair.merge(result, new Pair(". ", null));
+                result = Pair.merge(result, new Pair(".\n", null));
                 
                 result = Pair.merge(result, new Pair("RDSB", null));
                 result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSB"), dataList, calDate));
-                result = Pair.merge(result, new Pair(". ", null));
+                result = Pair.merge(result, new Pair(".\n", null));
                 
                 learningAgent.analyzeInput("RDS");
                 
@@ -165,13 +165,13 @@ public class VirtualAssistant {
                     
                     result = Pair.merge(result, new Pair(company.getTicker(), null));
                     result = Pair.merge(result, formatCompanyData((Company) company, dataList, calDate));
-                     result = Pair.merge(result, new Pair(". ", null));
+                     result = Pair.merge(result, new Pair(".\n", null));
                     learningAgent.analyzeInput(name);
                 } else if (stockData.isSector(name)){
                     
                     result = Pair.merge(result, new Pair(name, null));
                     result = Pair.merge(result, formatSectorData(name, dataList, calDate));
-                     result = Pair.merge(result, new Pair(". ", null));
+                     result = Pair.merge(result, new Pair(".\n", null));
                     learningAgent.analyzeInput(name);
                 }
             }
@@ -188,8 +188,8 @@ public class VirtualAssistant {
         Pair result = new Pair("", new LinkedList<NewsObj>());
         
         for(String d : data){
-            result = Pair.merge(result, getCompanyData(company, d, calDate));
             result = Pair.merge(result, new Pair(", ", null));
+            result = Pair.merge(result, getCompanyData(company, d, calDate)); 
         }
             
         return result;
@@ -325,6 +325,7 @@ public class VirtualAssistant {
         Pair result = new Pair("", new LinkedList<NewsObj>());
         
         for(String d : data){
+            result = Pair.merge(result, new Pair(", ", null));
             result = Pair.merge(result, getSectorData(sector, d, calDate));
         }
             
