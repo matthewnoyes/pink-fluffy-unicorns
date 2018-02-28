@@ -121,7 +121,13 @@ public class NewsData implements INewsData{
 			for(Element li: doc.select("item")){
 				Calendar calDate = Calendar.getInstance(); 
 				calDate.setTime(yahooNewFormat.parse(li.select("pubDate").text()));
-				final String title = sector + " - " + li.select("title").text();
+				String title = li.select("title").text();
+				if(title.substring(0,4).equals("[$$]")){
+					title = sector + " - " + title.substring(4);
+				}else{
+					title = sector + " - " + title;
+				
+				}
 				final String url = li.select("link").text();
 				tempArticlesObjs.add(newsArrayAdder(calDate,title,url,"Yahoo Finance News"));
 			}
@@ -144,6 +150,9 @@ public class NewsData implements INewsData{
 					break;
 					case "Industrial Metals":
 					sectorWanted = "Industrial Metals & Mining";
+					break;
+					case "Oil Equipment Services":
+					sectorWanted = "Oil Equipment, Services & Distribution";
 					break;
 				}
 			
