@@ -277,7 +277,9 @@ public void startListening() {
 // End listening to voice input
 public void stopListening() {
 
+		
 		stt.ignoreSpeechRecognitionResults();
+		System.out.println("stop listening");
 		//String text = "";
 		//makeQuery(text);
 }

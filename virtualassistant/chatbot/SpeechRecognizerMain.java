@@ -7,6 +7,9 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.*;
 
+import java.lang.*;
+import javafx.application.Platform;
+
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Port;
 
@@ -74,7 +77,7 @@ public class SpeechRecognizerMain {
 		}
 
 		// Loading Message
-		logger.log(Level.INFO, "Loading Speech Recognizer...\n");
+		//logger.log(Level.INFO, "Loading Speech Recognizer...\n");
 
 		// Configuration
 		Configuration configuration = new Configuration();
@@ -97,8 +100,8 @@ public class SpeechRecognizerMain {
 		//====================================================================================
 
 		// Grammar
-		configuration.setGrammarPath("resource:/virtualassistant/chatbot/grammars/grammar1.gram");
-		configuration.setGrammarName("grammar1");
+		configuration.setGrammarPath("virtualassistant/chatbot/grammars");
+		configuration.setGrammarName("grammar");
 		configuration.setUseGrammar(true);
         System.out.println("Set Grammar");
 
@@ -136,17 +139,26 @@ public class SpeechRecognizerMain {
 			System.out.println("Speech Recognition Thread already running...\n");
 		else
 			//Submit to ExecutorService
+			System.out.println("Line 139");
 			eventsExecutorService.submit(() -> {
+			System.out.println("Line 141");
 
 				//locks
 				speechRecognizerThreadRunning = true;
-				ignoreSpeechRecognitionResults = false;
+			System.out.println("Line 145");
+				ignoreSpeechRecognitionResults = true;
+			System.out.println("Line 147");
 
 				//Start Recognition
-				recognizer.startRecognition(true);
+				try {
+					recognizer.startRecognition(true);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 
 				//Information
-				System.out.println("You can start to speak...\n");
+				//System.out.println("You can start to speak...\n");
 
 				try {
 					while (speechRecognizerThreadRunning) {
@@ -171,6 +183,7 @@ public class SpeechRecognizerMain {
 
 								//Call the appropriate method
 								makeDecision(speechRecognitionResult, speechResult.getWords());
+								System.out.println("Decision made!");
 
 							}
 						} else
@@ -195,6 +208,7 @@ public class SpeechRecognizerMain {
 
 		//Stop ignoring speech recognition results
 		ignoreSpeechRecognitionResults = false;
+		System.out.println("No longer ignoring speech recognition results");
 	}
 
 	/**
@@ -204,6 +218,7 @@ public class SpeechRecognizerMain {
 
 		//Instead of stopping the speech recognition we are ignoring it's results
 		ignoreSpeechRecognitionResults = true;
+		System.out.println("Ignoring speech recognition results");
 
 	}
 
@@ -251,8 +266,16 @@ public class SpeechRecognizerMain {
 	public void makeDecision(String speech , List<WordResult> speechWords) {
         
         System.out.println("Made decision: " + speech);
-		controller.makeQuery(speech);
-
+		try {
+			Platform.runLater(new Runnable() {
+				@Override public void run() {
+					controller.makeQuery(speech);
+				}
+			});
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 
 	public boolean getIgnoreSpeechRecognitionResults() {
