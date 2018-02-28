@@ -129,10 +129,11 @@ public class SpeechRecognizerMain {
 	 * Starts the Speech Recognition Thread
 	 */
 	public synchronized void startSpeechRecognition() {
-
+        
+        System.out.println("Entered startSpeechRecognition...\n");
 		//Check lock
 		if (speechRecognizerThreadRunning)
-			logger.log(Level.INFO, "Speech Recognition Thread already running...\n");
+			System.out.println("Speech Recognition Thread already running...\n");
 		else
 			//Submit to ExecutorService
 			eventsExecutorService.submit(() -> {
@@ -145,7 +146,7 @@ public class SpeechRecognizerMain {
 				recognizer.startRecognition(true);
 
 				//Information
-				logger.log(Level.INFO, "You can start to speak...\n");
+				System.out.println("You can start to speak...\n");
 
 				try {
 					while (speechRecognizerThreadRunning) {
@@ -159,7 +160,7 @@ public class SpeechRecognizerMain {
 
 							//Check the result
 							if (speechResult == null)
-								logger.log(Level.INFO, "I can't understand what you said.\n");
+								System.out.println("I can't understand what you said.\n");
 							else {
 
 								//Get the hypothesis
@@ -173,15 +174,16 @@ public class SpeechRecognizerMain {
 
 							}
 						} else
-							logger.log(Level.INFO, "Ingoring Speech Recognition Results...");
+							System.out.println("Ingoring Speech Recognition Results...");
 
 					}
 				} catch (Exception ex) {
-					logger.log(Level.WARNING, null, ex);
+					//logger.log(Level.WARNING, null, ex);
+                     ex.toString();
 					speechRecognizerThreadRunning = false;
-				}
+				} 
 
-				logger.log(Level.INFO, "SpeechThread has exited...");
+				//logger.log(Level.INFO, "SpeechThread has exited...");
 
 			});
 	}
@@ -247,7 +249,8 @@ public class SpeechRecognizerMain {
 	 * @param speechWords
 	 */
 	public void makeDecision(String speech , List<WordResult> speechWords) {
-
+        
+        System.out.println("Made decision: " + speech);
 		controller.makeQuery(speech);
 
 	}
