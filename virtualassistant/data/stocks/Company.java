@@ -100,6 +100,12 @@ public class Company implements ICompany {
     return getVolumeOnDate(Calendar.getInstance());
   }
 
+  public double getClose() {
+    Calendar date = Calendar.getInstance();
+    date.add(Calendar.DAY_OF_YEAR, -1);
+    return getClosePriceOnDate(date);
+  }
+
   //----------------- Past data ----------------
 
   private void updateCalculatedData() {

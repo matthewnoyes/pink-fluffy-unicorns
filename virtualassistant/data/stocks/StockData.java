@@ -191,6 +191,18 @@ public class StockData implements IStockData {
     return total;
   }
 
+  public double getSectorClose(String sector) {
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getClose();
+    }
+
+    return total;
+  }
+
   public double sectorYearHigh(String sector) {
     if (!companiesInSector.containsKey(sector))
       return -1.0;

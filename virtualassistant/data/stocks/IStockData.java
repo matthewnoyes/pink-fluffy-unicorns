@@ -29,6 +29,7 @@ public interface IStockData {
   public double getSectorHigh(String sector);
   public double getSectorLow(String sector);
   public int getSectorVolume(String sector);
+  public double getSectorClose(String sector);
 
   public double sectorYearHigh(String sector);
   public double sectorYearLow(String sector);

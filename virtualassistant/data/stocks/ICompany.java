@@ -20,6 +20,7 @@ public interface ICompany {
   public double getHigh();
   public double getLow();
   public double getVolume();
+  public double getClose();
 
   //Data from last year
   public double yearHigh();
