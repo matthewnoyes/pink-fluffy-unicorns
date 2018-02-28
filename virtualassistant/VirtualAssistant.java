@@ -146,7 +146,7 @@ public class VirtualAssistant {
         // Try to get date
         try {
             if(response.get("date") != null){
-                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 calDate.setTime(df.parse((String)response.get("date")));
             }
         } catch (Exception e) {
@@ -221,7 +221,11 @@ public class VirtualAssistant {
 
             case "OnDateClosePrice": //ALL DATES FUNCTIONS ARE NOT ON DIALOGFLOW
                 sb.append("closing price on ");
-                sb.append(calDate.toString());
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", company.getClosePriceOnDate(calDate)));
@@ -229,7 +233,11 @@ public class VirtualAssistant {
 
             case "OnDateOpenPrice":
                 sb.append("opening price on ");
-                sb.append(calDate.toString());
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", company.getOpenPriceOnDate(calDate)));
@@ -237,7 +245,11 @@ public class VirtualAssistant {
 
             case "OnDateHighPrice":
                 sb.append("highest price on ");
-                sb.append(calDate.toString());
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", company.getHighPriceOnDate(calDate)));
@@ -245,7 +257,11 @@ public class VirtualAssistant {
 
             case "OnDateLowPrice":
                 sb.append("lowest price on ");
-                sb.append(calDate.toString());
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", company.getLowPriceOnDate(calDate)));
@@ -253,7 +269,11 @@ public class VirtualAssistant {
 
             case "OnDateVolume":
                 sb.append("volume on ");
-                sb.append(calDate.toString());
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append(company.getVolumeOnDate(calDate));
                 return new Pair(sb.toString(), null);
@@ -437,13 +457,17 @@ public class VirtualAssistant {
                 sb.append(stockData.sectorAverageVolume(sector));
                 return new Pair(sb.toString(), null);
 
-            case "OnDateClosePrice":  // not on  dialogflow
+            //case "OnDateClosePrice":  // not on  dialogflow
                 // return stockData.sectorYearLow(sector);
-                break;
+                //break;
 
-            case "OnDateSectorClosePrice":  // not on dialogflow
+            case "OnDateClosePrice":  // not on dialogflow
                 sb.append("close price on ");
-                sb.append(calDate.toString());
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append(String.format("%.2f", stockData.getSectorClosePriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
