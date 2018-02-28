@@ -120,9 +120,9 @@ public void initialize(URL location, ResourceBundle resources) {
 				public Void call() {
 			
                         stt = new SpeechRecognizerMain(Controller.this);
-                        stt.startSpeechRecognition();
-                        stt.ignoreSpeechRecognitionResults();
                         System.out.println("Speech to text... complete");
+                        stt.ignoreSpeechRecognitionResults();
+                        
 
 						round_mic_button.setDisable(false);
 
@@ -178,8 +178,9 @@ public void makeQuery(String text) {
 										responseNews = null;
 										e.printStackTrace();
 								}
-
-								tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
+                                
+                                if(responseStr != null && !responseStr.equals("")) 
+                                    tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
 
 								Message response = new Response(responseStr, responseNews);
 								return response;

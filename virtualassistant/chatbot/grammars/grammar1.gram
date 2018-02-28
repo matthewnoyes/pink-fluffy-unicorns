@@ -1,0 +1,9 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar 
+ */
+
+grammar grammar1;
+
+public <speech> = (the | of )+;

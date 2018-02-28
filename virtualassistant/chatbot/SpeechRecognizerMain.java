@@ -74,9 +74,10 @@ public class SpeechRecognizerMain {
 		Configuration configuration = new Configuration();
 
 		// Load model from the jar
-		configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
-		configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
-
+		configuration.setAcousticModelPath("resource:edu/cmu/sphinx/models/en-us/en-us");
+        //System.out.println("Set Acoustic Model Path");
+		configuration.setDictionaryPath("resource:edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
+        //System.out.println("Set Dictionary Path");
 		//====================================================================================
 		//=====================READ THIS!!!===============================================
 		//Uncomment this line of code if you want the recognizer to recognize every word of the language
@@ -90,23 +91,30 @@ public class SpeechRecognizerMain {
 		//====================================================================================
 
 		// Grammar
-		configuration.setGrammarPath("resource:/grammars");
-		configuration.setGrammarName("grammar");
+		configuration.setGrammarPath("resource:virtualassistant/chatbot/grammars");
+		configuration.setGrammarName("grammar1");
 		configuration.setUseGrammar(true);
+        System.out.println("Set Grammar");
 
 		try {
 			recognizer = new LiveSpeechRecognizer(configuration);
+            System.out.println("Set Recognizer");
 		} catch (IOException ex) {
-			logger.log(Level.SEVERE, null, ex);
-		}
+			//logger.log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+		} catch (Exception e){
+            e.printStackTrace();
+        }
 
 		// Start recognition process pruning previously cached data.
 		// recognizer.startRecognition(true);
 
 		//Check if needed resources are available
 		startResourcesThread();
+        System.out.println("Started Resources Thread");
 		//Start speech recognition thread
 		startSpeechRecognition();
+        System.out.println("Started speech  recognition");
 	}
 
 	//-----------------------------------------------------------------------------------------------
