@@ -112,11 +112,12 @@ public void initialize(URL location, ResourceBundle resources) {
 				@Override
 				public Void call() {
 						stt = new SpeechRecognizerMain(Controller.this);
-						System.out.println("Speech to text... complete");
+						
+                        //stt.startSpeechRecognition();
 						stt.ignoreSpeechRecognitionResults();
-
+                        System.out.println("Speech to text... complete");
+                        
 						round_mic_button.setDisable(false);
-
 						return null;
 				}
 		};
