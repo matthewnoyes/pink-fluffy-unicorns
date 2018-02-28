@@ -352,44 +352,44 @@ public class VirtualAssistant {
             */
             case "OpenPrice":
                 sb.append("opening price: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorOpen(sector)));
                 return new Pair(sb.toString(), null);
 
             case "ClosePrice":
                 sb.append("closing price: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorClose(sector)));
                 return new Pair(sb.toString(), null);
 
             case "HighPrice":
                 sb.append("highest price: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorHigh(sector)));
                 return new Pair(sb.toString(), null);
 
             case "LowPrice":
                 sb.append("lowest price: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorLow(sector)));
                 return new Pair(sb.toString(), null);
 
 
             case "CurrentPrice":
                 sb.append("current price: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getCurrentSectorPrice(sector)));
                 return new Pair(sb.toString(), null);
 
             case "Change":
                 sb.append("change in price: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorChange(sector)));
                 return new Pair(sb.toString(), null);
 
             case "PercentageChange":
                 sb.append("percentage change: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(stockData.getSectorPercentageChange(sector));
                 return new Pair(sb.toString(), null);
 
@@ -404,19 +404,19 @@ public class VirtualAssistant {
 
             case "YearHigh":
                 sb.append("year high: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.sectorYearHigh(sector)));
                 return new Pair(sb.toString(), null);
 
             case "YearLow":
                 sb.append("year low: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.sectorYearLow(sector)));
                 return new Pair(sb.toString(), null);
 
             case "YearAverageClose":
                 sb.append("year average close: ");
-                sb.append("£");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.sectorYearAverageClose(sector)));
                 return new Pair(sb.toString(), null);
 
