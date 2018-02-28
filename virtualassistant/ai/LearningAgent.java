@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Calendar;
 //For testing
 import java.util.Arrays;
 
@@ -18,15 +20,17 @@ import java.text.ParseException;
 public class LearningAgent implements ILearningAgent {
 
   private Favourites<String, Integer> favouriteStocks;
+  private HashMap<String, Calendar> stockNotifications;
 
   private IStockData stocks;
   private INewsData news;
 
-  private final double minStockImapact = 20.0;
-  private final double minNewsImapact = 20.0;
+  private final double minStockImpact = 20.0;
+  private final double minNewsImpact = 20.0;
 
   public LearningAgent(IStockData stocks, INewsData news) {
     favouriteStocks = new Favourites<String, Integer>();
+    stockNotifications = new HashMap<String, Calendar>();
 
     this.stocks = stocks;
     this.news = news;
@@ -37,9 +41,10 @@ public class LearningAgent implements ILearningAgent {
     if(favouriteStocks == null) {
         favouriteStocks = new Favourites<String, Integer>();
     }
-    
+    stockNotifications = new HashMap<String, Calendar>();
+
     this.favouriteStocks = favouriteStocks;
- 
+
     this.stocks = stocks;
     this.news = news;
 
@@ -113,14 +118,42 @@ public class LearningAgent implements ILearningAgent {
 
     String alerts = "";
 
+    Calendar removeTime = Calendar.getInstance();
+    //Send notification every 3 hours
+    removeTime.add(Calendar.HOUR, -3);
+
+    //Check sectors
+    for (String sector : stocks.getSectors()) {
+      if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
+        //Make sure the user has not been notified recently
+        if (!stockNotifications.containsKey(sector)) {
+          alerts += sector + " is changing price quickly\n";
+          stockNotifications.put(sector, Calendar.getInstance());
+        } else {
+          if (stockNotifications.get(sector).before(removeTime)) {
+            stockNotifications.remove(sector);
+          }
+        }
+      }
+    }
+
     for (ICompany com : stocks.getAllCompanies()) {
-      if (com.getPercentageChange() > minStockImapact && favouriteStocks.containsKey(com.getTicker())) {
+      if (com.getPercentageChange() > minStockImpact && favouriteStocks.containsKey(com.getTicker())) {
+        if (!stockNotifications.containsKey(com.getTicker())) {
+          alerts += com.getName() + " is changing price quickly\n";
+          stockNotifications.put(com.getTicker(), Calendar.getInstance());
+        } else {
+          if (stockNotifications.get(com.getTicker()).before(removeTime)) {
+            stockNotifications.remove(com.getTicker());
+          }
+        }
+
         //Send a alert
         alerts += com.getName() + " is changing price quickly\n";
       }
     }
 
-    //Check sectors
+
 
     return alerts;
 
@@ -132,7 +165,7 @@ public class LearningAgent implements ILearningAgent {
     for (ICompany com : stocks.getAllCompanies()) {
       for (NewsObj article : news.getRnsNews(com.getTicker())) {
         try {
-          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+          if (Integer.parseInt(article.getImpact()) > minNewsImpact) {
             //Send a alert
             alerts += "There is significant news: " + article.getTitle() + "\n";
           }
@@ -143,7 +176,7 @@ public class LearningAgent implements ILearningAgent {
 
       for (NewsObj article : news.getAllianceNews(com.getTicker())) {
         try {
-          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+          if (Integer.parseInt(article.getImpact()) > minNewsImpact) {
             //Send a alert
             alerts += "There is significant news: " + article.getTitle() + "\n";
           }
@@ -154,7 +187,7 @@ public class LearningAgent implements ILearningAgent {
 
       for (NewsObj article : news.getYahooNews(com.getTicker())) {
         try {
-          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+          if (Integer.parseInt(article.getImpact()) > minNewsImpact) {
             //Send a alert
             alerts += "There is significant news: " + article.getTitle() + "\n";
           }
@@ -169,7 +202,7 @@ public class LearningAgent implements ILearningAgent {
     for (String sector : stocks.getSectors()) {
       for (NewsObj article : news.sectorNews(sector)) {
         try {
-          if (Integer.parseInt(article.getImpact()) > minNewsImapact) {
+          if (Integer.parseInt(article.getImpact()) > minNewsImpact) {
             //Send a alert
             alerts += "There is significant news: " + article.getTitle() + "\n";
           }
