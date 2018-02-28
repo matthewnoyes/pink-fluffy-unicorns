@@ -83,7 +83,6 @@ private static TextToSpeech tts;
 @Override
 public void initialize(URL location, ResourceBundle resources) {
 		init_variables();
-		//displayFavourites();
 
 		// Run download of data in background
 		Task task1 = new Task<Void>() {
@@ -95,6 +94,7 @@ public void initialize(URL location, ResourceBundle resources) {
 
 						System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
+						// displayFavourites(virtualAssistant.learningAgent.suggestQueries(3));
 
 						ready = true;
 						changeWifiAccess(true);
@@ -112,6 +112,7 @@ public void initialize(URL location, ResourceBundle resources) {
 				@Override
 				public Void call() {
 						stt = new SpeechRecognizerMain(Controller.this);
+
 						
                         //stt.startSpeechRecognition();
 						stt.ignoreSpeechRecognitionResults();
@@ -155,7 +156,6 @@ public void init_variables() {
 		generateAnimations();
 
 		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
-		chatbot_message_list.add(new URLMessage("Message","https://www.google.co.uk"));
 }
 
 // Add help text to list
@@ -341,14 +341,14 @@ private void handleHelpButtonClick(ActionEvent e) {
 /* ============ Change User Inteface ============= */
 /* =============================================== */
 
-private void displayFavourites() {
-		String[] suggested = virtualAssistant.learningAgent.suggestQueries(3);
-
+private void displayFavourites(String[] suggested) {
 		Message display = new Response("Here are some suggested queries",null);
 		chatbot_message_list.add(display);
 		addMessage(display);
+		System.out.println("Length = " + suggested.length);
 
 		for(String x : suggested) {
+				System.out.println(x);
 				Message query = new Response(x,null);
 				chatbot_message_list.add(query);
 				addMessage(query);
