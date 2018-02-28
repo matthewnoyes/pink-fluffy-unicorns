@@ -19,10 +19,11 @@ import javafx.animation.*;
 import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.net.URL;
 import java.util.*;
-import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -109,11 +110,11 @@ public void initialize(URL location, ResourceBundle resources) {
 				@Override
 				public Void call() {
 
-						stt = new SpeechRecognizerMain(Controller.this);
-						stt.startSpeechRecognition();
-						stt.ignoreSpeechRecognitionResults();
-						System.out.println("Speech to text... complete");
-
+			
+                        stt = new SpeechRecognizerMain(Controller.this);
+                        System.out.println("Speech to text... complete");
+                        stt.ignoreSpeechRecognitionResults();
+                        
 						round_mic_button.setDisable(false);
 
 						return null;
@@ -217,8 +218,9 @@ public void makeQuery(String text) {
 										e.printStackTrace();
 
 								}
-
-								tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
+                                
+                                if(responseStr != null && !responseStr.equals("")) 
+                                    tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
 
 								Message response = new Response(responseStr, responseNews);
 								return response;

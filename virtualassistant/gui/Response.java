@@ -68,7 +68,7 @@ public HBox getDisplay() {
                         StringBuilder sb = new StringBuilder();
 						sb.append(date.get(Calendar.HOUR));
                         sb.append(":");
-						sb.append(date.get(Calendar.MINUTE));
+						sb.append(String.format("%02d", date.get(Calendar.MINUTE)));
 						sb.append(" ");
 						sb.append(date.get(Calendar.DAY_OF_MONTH));
 						sb.append("/");
