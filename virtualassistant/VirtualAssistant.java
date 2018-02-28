@@ -469,6 +469,7 @@ public class VirtualAssistant {
                 sb.append("/");
                 sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
+                sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorClosePriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
