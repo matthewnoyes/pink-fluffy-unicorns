@@ -115,7 +115,7 @@ public void initialize(URL location, ResourceBundle resources) {
 				public Void call() {
 						System.out.println("Starting speech to text...");
 
-                        stt = new SpeechRecognizerMain(this);
+                        stt = new SpeechRecognizerMain(Controller.this);
                         stt.startSpeechRecognition();
                         stt.ignoreSpeechRecognitionResults();
                         System.out.println("Speech to text... complete");
