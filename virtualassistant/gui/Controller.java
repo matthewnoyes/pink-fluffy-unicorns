@@ -83,6 +83,7 @@ private static TextToSpeech tts;
 @Override
 public void initialize(URL location, ResourceBundle resources) {
 		init_variables();
+		displayFavourites();
 
 		// Run download of data in background
 		Task task1 = new Task<Void>() {
@@ -336,6 +337,9 @@ private void handleHelpButtonClick(ActionEvent e) {
 /* =============================================== */
 /* ============ Change User Inteface ============= */
 /* =============================================== */
+
+private void displayFavourites() {
+}
 
 private void scrollToBottom() {
 		Animation animation = new Timeline(
