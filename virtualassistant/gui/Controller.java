@@ -119,18 +119,12 @@ public void initialize(URL location, ResourceBundle resources) {
 				@Override
 				public Void call() {
 						System.out.println("Starting speech to text...");
-
-<<<<<<< HEAD
-
+						stt = new SpeechRecognizerMain(this);
+						stt.startSpeechRecognition();
+						stt.ignoreSpeechRecognitionResults();
 						System.out.println("Speech to text... complete");
-=======
-                        stt = new SpeechRecognizerMain(this);
-                        stt.startSpeechRecognition();
-                        stt.ignoreSpeechRecognitionResults();
-                        System.out.println("Speech to text... complete");
->>>>>>> 6035e0f81b11780460d87b6475769c79e027cc8e
 
-                        round_mic_button.setDisable(false);
+						round_mic_button.setDisable(false);
 
 						return null;
 				}
@@ -225,12 +219,12 @@ public static void saveStatus(){
 
 public void startListening() {
 
-    stt.stopIgnoreSpeechRecognitionResults();
+		stt.stopIgnoreSpeechRecognitionResults();
 
 }
 
 public void stopListening() {
-    stt.ignoreSpeechRecognitionResults();
+		stt.ignoreSpeechRecognitionResults();
 		//String text = "";
 		//makeQuery(text);
 }
@@ -259,19 +253,19 @@ private void scrollToBottom() {
 
 @FXML
 private void handleMuteButtonClick() {
-	if(muted) {
-		// un mute the voice
+		if(muted) {
+				// un mute the voice
 
-		Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
-		mute_control_image_view.setImage(image);
-		muted = false;
-	} else {
-		// mute the voice
+				Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
+				mute_control_image_view.setImage(image);
+				muted = false;
+		} else {
+				// mute the voice
 
-		Image image = new Image(getClass().getResourceAsStream("images/muted.png"));
-		mute_control_image_view.setImage(image);
-		muted = true;
-	}
+				Image image = new Image(getClass().getResourceAsStream("images/muted.png"));
+				mute_control_image_view.setImage(image);
+				muted = true;
+		}
 }
 
 // handle when the mic button is clicked
