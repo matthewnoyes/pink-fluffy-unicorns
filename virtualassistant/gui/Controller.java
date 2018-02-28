@@ -266,7 +266,8 @@ public static void saveStatus(){
 
 // Start listening to voice input
 public void startListening() {
-
+        
+        System.out.println("start listening");
 		stt.stopIgnoreSpeechRecognitionResults();
 
 }
