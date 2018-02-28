@@ -35,7 +35,6 @@ public class VirtualAssistant {
     public LearningAgent learningAgent;
     private INewsData news;
     private Chatbot chatbot;
-    private Calendar calDate;
 
 
     // Set this for debugging
@@ -69,8 +68,6 @@ public class VirtualAssistant {
                 e.printStackTrace();
             }
         }
-
-        calDate  = Calendar.getInstance();
 
     }
 
@@ -114,78 +111,95 @@ public class VirtualAssistant {
         if((long)response.get("action") == Action.ALERT)
             return new Pair((String)response.get("message"), null);
 
-        if((long)response.get("action") != Action.DATA_REQUEST)
-            return null;//((String)response.get("message"), null);
+        if((long)response.get("action") == Action.DATA_REQUEST)
+            return getDataRequest(response);
+        
+        if((long)response.get("action") == Action.SECTOR_COMPARISON)
+            return getSectorComparison(response);
 
-
-        /// ADDD SPLITTING LOGICC HEREE
-
-        Pair result = new Pair("", new LinkedList<NewsObj>());
-
-        String names = (String) response.get("company1");
-
-        if(verbose) {
-            System.out.println("VirtualAssistant.getResponse(): Names = " + names);
-        }
-
-        String[] namesList = names.split("\\sand\\s|,\\s");
-
-        for(String name : namesList){
-
-            if(verbose) {
-                System.out.println("VirtualAssistant.getResponse(): Company name = " + name);
-            }
-
-
-            //Treat edge case "RDS" separately
-            if(name.equals("RDS")){
-                result = Pair.merge(result, getCompanyData("RDSA", response));
-                result = Pair.merge(result, getCompanyData("RDSB", response));
-                learningAgent.analyzeInput("RDS");
-            } else { // Company not "RDS"
-
-                // Check whether company or sector
-                ICompany company = stockData.getCompanyForTicker(name);
-                if(company != null) {
-                    result = Pair.merge(result, getCompanyData(name, response));
-                    learningAgent.analyzeInput(name);
-                } else if (stockData.isSector(name)){
-
-                    result = Pair.merge(result, getSectorData(name, response));
-                    learningAgent.analyzeInput(name);
-                }
-            }
-            }
-
-        // Return
-        Collections.sort((LinkedList<NewsObj>)result.getSecond(), new SortByDate());
-        return result;
+        return null;
     }
-
-
-    /* Company data
-    */
-
-    private Pair<String, LinkedList<NewsObj>> getCompanyData(String name, JSONObject parameters) throws IOException, java.text.ParseException {
-
-        ICompany company = stockData.getCompanyForTicker(name);
-        // Add split logic on and, use a for loop to return
-
-
+    // =========================  DATA REQUEST =================================
+    public Pair<String, LinkedList<NewsObj>> getDataRequest(JSONObject response) throws IOException, java.text.ParseException, ParseException {
+        
+        Pair result = new Pair("", new LinkedList<NewsObj>());
+        
+        Calendar calDate = Calendar.getInstance();
+        
+        String names = (String) response.get("company");
+        String datas = (String) response.get("data");
+        String[] namesList = names.split("\\sand\\s|,\\s");
+        String[] dataList = datas.split("\\sand\\s|,\\s");
+        
         // Try to get date
         try {
-            if(parameters.get("date") != null){
+            if(response.get("date") != null){
                 DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-                calDate.setTime(df.parse((String)parameters.get("date")));
+                calDate.setTime(df.parse((String)response.get("date")));
             }
         } catch (Exception e) {
             e.toString();
         }
 
-        StringBuilder sb = new StringBuilder(name);
-        sb.append(", ");
+        for(String name : namesList){
 
-        switch((String)parameters.get("data1")) {
+ 
+            //Treat edge case "RDS" separately
+            if(name.equals("RDS")){
+                
+                result = Pair.merge(result, new Pair("RDSA", null));
+                result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSA"), dataList, calDate));
+                result = Pair.merge(result, new Pair(". ", null));
+                
+                result = Pair.merge(result, new Pair("RDSB", null));
+                result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSB"), dataList, calDate));
+                result = Pair.merge(result, new Pair(". ", null));
+                
+                learningAgent.analyzeInput("RDS");
+                
+            } else { // Company not "RDS"
+
+                // Check whether company or sector
+                ICompany company = stockData.getCompanyForTicker(name);
+                if(company != null) {
+                    
+                    result = Pair.merge(result, new Pair(company.getTicker(), null));
+                    result = Pair.merge(result, formatCompanyData((Company) company, dataList, calDate));
+                     result = Pair.merge(result, new Pair(". ", null));
+                    learningAgent.analyzeInput(name);
+                } else if (stockData.isSector(name)){
+                    
+                    result = Pair.merge(result, new Pair(name, null));
+                    result = Pair.merge(result, formatSectorData(name, dataList, calDate));
+                     result = Pair.merge(result, new Pair(". ", null));
+                    learningAgent.analyzeInput(name);
+                }
+            }
+        }
+
+        // Return
+        Collections.sort((LinkedList<NewsObj>)result.getSecond(), new SortByDate());
+        return result;
+    }
+    
+    /* Company data
+    */
+    private Pair<String, LinkedList<NewsObj>> formatCompanyData(Company company, String[] data, Calendar calDate) throws IOException, java.text.ParseException {
+        Pair result = new Pair("", new LinkedList<NewsObj>());
+        
+        for(String d : data){
+            result = Pair.merge(result, getCompanyData(company, d, calDate));
+            result = Pair.merge(result, new Pair(", ", null));
+        }
+            
+        return result;
+    }
+    
+    private Pair<String, LinkedList<NewsObj>> getCompanyData(Company company, String data ,Calendar calDate) throws IOException, java.text.ParseException {
+
+        StringBuilder sb = new StringBuilder(" ");
+
+        switch(data) {
 
             case "CurrentPrice":
                 sb.append("current price: ");
@@ -240,7 +254,7 @@ public class VirtualAssistant {
 
             case "News":
                 sb.append("news:");
-                return new Pair(sb.toString(), news.getAllianceNews(name));
+                return new Pair(sb.toString(), news.getAllianceNews(company.getTicker()));
 
             case "HighPrice":
                 sb.append("highest price: ");
@@ -307,26 +321,23 @@ public class VirtualAssistant {
 
     /* Sector data
     */
-
-    private Pair<String, LinkedList<NewsObj>> getSectorData(String sector, JSONObject parameters) throws IOException, ParseException, java.text.ParseException {
+    private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, String[] data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
+        Pair result = new Pair("", new LinkedList<NewsObj>());
+        
+        for(String d : data){
+            result = Pair.merge(result, getSectorData(sector, d, calDate));
+        }
+            
+        return result;
+    }
+    
+    private Pair<String, LinkedList<NewsObj>> getSectorData(String sector, String data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
 
         INewsData news = new NewsData();
-        Calendar calDate  = Calendar.getInstance();
+        
+        StringBuilder sb = new StringBuilder(" ");
 
-        try{
-            if(parameters.get("date") != null){
-                DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-                calDate.setTime(df.parse((String)parameters.get("date")));
-            }
-        } catch (Exception e) {
-            e.toString();
-        }
-
-         StringBuilder sb = new StringBuilder(sector);
-        sb.append(", ");
-
-
-        switch((String)parameters.get("data1")) {
+        switch(data) {
 
             /*case "price":
                 chatbot.output(stockData.getSectorCurrentPrice(sector));
@@ -416,7 +427,16 @@ public class VirtualAssistant {
 
         return null;
     }
-
+    // ========================= DATA REQUEST END ======================================
+    
+    
+    // ========================= SECTOR COMPARISON =====================================
+    private Pair<String, LinkedList<NewsObj>> getSectorComparison(JSONObject result) {
+        return null;
+    }
+    // ========================= SECTOR COMPARISON END =================================
+    
+    
     class SortByDate implements Comparator<NewsObj> {
         // Used for sorting in descending order of date
         public int compare(NewsObj a, NewsObj b)
@@ -427,7 +447,8 @@ public class VirtualAssistant {
 
     class Action {
     static final short DATA_REQUEST = 0,
-        ALERT = 1;
+        SECTOR_COMPARISON = 1,
+        ALERT = 2;
     }
 
 }
