@@ -25,7 +25,7 @@ public class LearningAgent implements ILearningAgent {
   private IStockData stocks;
   private INewsData news;
 
-  private final double minStockImpact = 5.0;
+  private final double minStockImpact = 1.0;
   private final double minNewsImpact = 20.0;
 
   public LearningAgent(IStockData stocks, INewsData news) {
@@ -149,8 +149,7 @@ public class LearningAgent implements ILearningAgent {
           }
         }
 
-        //Send a alert
-        alerts += com.getName() + " is changing price quickly\n";
+
       }
     }
 

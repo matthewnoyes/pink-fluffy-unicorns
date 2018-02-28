@@ -45,9 +45,6 @@ public class VirtualAssistant {
 
         loader = new Loader();
 
-        System.out.println("Loading favourites...");
-        learningAgent = new LearningAgent(stockData, null, loader.readFavourites());
-
         System.out.println("Loading system status...");
         systemStatus = loader.readSystemStatus();
 
@@ -69,6 +66,17 @@ public class VirtualAssistant {
             }
         }
 
+        System.out.println("Loading favourites...");
+        learningAgent = new LearningAgent(stockData, news, loader.readFavourites());
+
+        try {
+          System.out.println(learningAgent.searchForStockEvent());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+            //learningAgent.searchForNewsEvent();
+        System.out.println("Finished");
+
     }
 
     public void saveStatus(){
@@ -80,11 +88,13 @@ public class VirtualAssistant {
 
         // Try to update data, if working, fire learning agent
         //if(loader.updateData(stockData)) {
+        System.out.println("Running");
+
         StockData newStockData = null;
         boolean loaded = false, updated = false;
         while(!loaded) {
             try {
-                newStockData = new StockData(false);//stockData.clone();
+                newStockData = new StockData(true);//stockData.clone();
                 updated = true; //updateCurrentData(newStockData.tickerToCompany);
                 loaded = true;
             } catch (Exception e) {
@@ -96,9 +106,10 @@ public class VirtualAssistant {
         if(updated) {
             stockData = newStockData;
 
-            /*learningAgent.searchForStockEvent();
-            learningAgent.searchForNewsEvent();
-            */
+        System.out.println(learningAgent.searchForStockEvent());
+            //learningAgent.searchForNewsEvent();
+        System.out.println("Finished");
+
         }
     }
 
@@ -150,11 +161,11 @@ public class VirtualAssistant {
                 result = Pair.merge(result, new Pair("RDSA", null));
                 result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSA"), dataList, calDate));
                 result = Pair.merge(result, new Pair(".\n", null));
-                
+
                 result = Pair.merge(result, new Pair("RDSB", null));
                 result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSB"), dataList, calDate));
                 result = Pair.merge(result, new Pair(".\n", null));
-                
+
                 learningAgent.analyzeInput("RDS");
 
             } else { // Company not "RDS"
@@ -189,7 +200,7 @@ public class VirtualAssistant {
 
         for(String d : data){
             result = Pair.merge(result, new Pair(", ", null));
-            result = Pair.merge(result, getCompanyData(company, d, calDate)); 
+            result = Pair.merge(result, getCompanyData(company, d, calDate));
         }
 
         return result;
