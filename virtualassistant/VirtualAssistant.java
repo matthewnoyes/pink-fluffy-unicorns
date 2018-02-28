@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.Set;
 
 public class VirtualAssistant {
 
@@ -444,8 +445,58 @@ public class VirtualAssistant {
 
 
     // ========================= SECTOR COMPARISON =====================================
-    private Pair<String, LinkedList<NewsObj>> getSectorComparison(JSONObject result) {
-        return null;
+    private Pair<String, LinkedList<NewsObj>> getSectorComparison(JSONObject json) {
+        
+        String sector = (String) json.get("sector");
+        
+        Pair<String, LinkedList<NewsObj>> result = new Pair("", null); 
+        
+        Set<Company> companies = null;
+        
+        System.out.println((String) json.get("data"));
+        
+        switch((String) json.get("data")){
+            
+            case "Up" :
+                System.out.println("Case Up");
+                companies = stockData.getRisingInSector(sector);
+                if(companies.isEmpty()){
+                    result = Pair.merge(result, new Pair("No rising companies in " + sector + ".", null));
+                } else {
+                    result = Pair.merge(result, new Pair("Rising companies: ", null));
+                }
+                break;
+                
+            case "Down" :
+                System.out.println("Case down");
+                companies = stockData.getFallingInSector(sector);
+                if(companies.isEmpty()){
+                    result = Pair.merge(result, new Pair("No falling companies in " + sector + ".", null));
+                } else {
+                    result = Pair.merge(result, new Pair("Falling companies: ", null));
+                }
+                break;
+        }
+        
+        if(companies == null) {
+            System.out.println("is null");
+            return null;
+        }
+        
+        if(companies.isEmpty()) return result;
+        
+        boolean ok = false;
+        
+        for(Company c : companies){
+            System.out.println("Company: " + c.getName());
+            if(ok) result = Pair.merge(result, new Pair(", ", null));
+            ok = true;
+            result = Pair.merge(result, new Pair(c.getName(), null));
+        }
+        
+        result = Pair.merge(result, new Pair(".", null));
+        
+        return result;
     }
     // ========================= SECTOR COMPARISON END =================================
 
