@@ -19,14 +19,14 @@ import javafx.animation.*;
 import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 import java.net.URL;
 import java.util.*;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.Calendar;
 
 import java.io.IOException;
 
@@ -118,11 +118,11 @@ public void initialize(URL location, ResourceBundle resources) {
 		Task task2 = new Task<Void>() {
 				@Override
 				public Void call() {
-			
-                        stt = new SpeechRecognizerMain(Controller.this);
-                        stt.startSpeechRecognition();
-                        stt.ignoreSpeechRecognitionResults();
-                        System.out.println("Speech to text... complete");
+
+						stt = new SpeechRecognizerMain(Controller.this);
+						stt.startSpeechRecognition();
+						stt.ignoreSpeechRecognitionResults();
+						System.out.println("Speech to text... complete");
 
 						round_mic_button.setDisable(false);
 
@@ -139,6 +139,7 @@ public void initialize(URL location, ResourceBundle resources) {
 								        virtualAssistant.scan();
 								}
 						}, 60, 60, TimeUnit.SECONDS);
+
 		}
 
 		System.out.println("Launching interface...");
@@ -302,7 +303,10 @@ private void handleHelpButtonClick(ActionEvent e) {
 		}
 }
 
-public void changeUpdateTime(String time) {
+public void changeUpdateTime() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		String time = sdf.format(cal.getTime()).toString();
 		update_time.setText("Last updated: " + time);
 }
 
