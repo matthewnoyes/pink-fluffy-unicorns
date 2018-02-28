@@ -103,6 +103,29 @@ public class StockData implements IStockData {
     return companiesInSector.get(sector);
   }
 
+  public Set<Company> getRisingInSector(String sector) {
+    HashSet<Company> rising = new HashSet<Company>();
+
+    for (Company com : getCompaniesInSector(sector)) {
+      if (com.getChange() > 0) {
+        rising.add(com);
+      }
+    }
+
+    return rising;
+  }
+  public Set<Company> getFallingInSector(String sector) {
+    HashSet<Company> falling = new HashSet<Company>();
+
+    for (Company com : getCompaniesInSector(sector)) {
+      if (com.getChange() < 0) {
+        falling.add(com);
+      }
+    }
+
+    return falling;
+  }
+
   public Collection<Company> getAllCompanies() {
     return tickerToCompany.values();
   }

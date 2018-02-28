@@ -18,6 +18,8 @@ public interface IStockData {
   public boolean isSector(String sector);
 
   public Set<Company> getCompaniesInSector(String sector);
+  public Set<Company> getRisingInSector(String sector);
+  public Set<Company> getFallingInSector(String sector);
   public Collection<Company> getAllCompanies();
 
   //Sector info
