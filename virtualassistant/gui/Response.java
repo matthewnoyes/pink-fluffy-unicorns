@@ -66,13 +66,13 @@ public HBox getDisplay() {
 
                         // Beautify string
                         StringBuilder sb = new StringBuilder();
-						sb.append(date.get(Calendar.HOUR));
+						sb.append(String.format("%02d", date.get(Calendar.HOUR_OF_DAY)));
                         sb.append(":");
 						sb.append(String.format("%02d", date.get(Calendar.MINUTE)));
 						sb.append(" ");
-						sb.append(date.get(Calendar.DAY_OF_MONTH));
+						sb.append(String.format("%02d", date.get(Calendar.DAY_OF_MONTH)));
 						sb.append("/");
-						sb.append(date.get(Calendar.MONTH));
+						sb.append(String.format("%02d", (date.get(Calendar.MONTH) + 1)));
 						sb.append("/");
 						sb.append(date.get(Calendar.YEAR));
 						Label time = new Label(sb.toString());
