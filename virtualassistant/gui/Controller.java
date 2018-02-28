@@ -41,6 +41,8 @@ import marytts.signalproc.effects.VolumeEffect;
 
 import model.TextToSpeech;
 
+import virtualassistant.chatbot.SpeechRecognizerMain;
+
 public class Controller implements Initializable {
 
 @FXML
@@ -73,6 +75,7 @@ private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
 private static VirtualAssistant virtualAssistant;
+private static SpeechRecognizerMain stt;
 private static TextToSpeech tts;
 
 @Override
@@ -117,8 +120,17 @@ public void initialize(URL location, ResourceBundle resources) {
 				public Void call() {
 						System.out.println("Starting speech to text...");
 
+<<<<<<< HEAD
 
 						System.out.println("Speech to text... complete");
+=======
+                        stt = new SpeechRecognizerMain(this);
+                        stt.startSpeechRecognition();
+                        stt.ignoreSpeechRecognitionResults();
+                        System.out.println("Speech to text... complete");
+>>>>>>> 6035e0f81b11780460d87b6475769c79e027cc8e
+
+                        round_mic_button.setDisable(false);
 
 						return null;
 				}
@@ -207,16 +219,26 @@ public void makeQuery(String text) {
 
 public static void saveStatus(){
 
+<<<<<<< HEAD
 		if(virtualAssistant == null) return;
 
 		virtualAssistant.saveStatus();
+=======
+    if(virtualAssistant == null) return;
+
+    virtualAssistant.saveStatus();
+>>>>>>> 6035e0f81b11780460d87b6475769c79e027cc8e
 }
 
 public void startListening() {
+
+    stt.stopIgnoreSpeechRecognitionResults();
+
 }
 
 public void stopListening() {
-		String text = "";
+    stt.ignoreSpeechRecognitionResults();
+		//String text = "";
 		//makeQuery(text);
 }
 
