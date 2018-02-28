@@ -15,7 +15,19 @@
   </HBox>
   <HBox fx:id="buttons">
     <StackPane alignment="bottom_left" prefWidth="${root.width * 0.5}">
-      <Button fx:id="help_button" text="?" onAction="#handleHelpButtonClick"/>
+      <VBox spacing="5">
+        <Region VBox.Vgrow="ALWAYS"/>
+        <Button fx:id="mute_button" onAction="#handleMuteButtonClick">
+          <graphic>
+            <ImageView fx:id="mute_control_image_view" fitHeight="15" preserveRatio="true">
+              <image>
+                <Image url="@images/not_muted.png"/>
+              </image>
+            </ImageView>
+          </graphic>
+        </Button>
+        <Button fx:id="help_button" text="?" onAction="#handleHelpButtonClick"/>
+      </VBox>
     </StackPane>
     <StackPane>
       <Button fx:id="round_mic_button" disable="true" onAction="#handleMicButtonClick">

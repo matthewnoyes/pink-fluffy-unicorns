@@ -31,6 +31,26 @@
   -fx-font-family: "Segoe UI Semibold";
 }
 
+#mute_button {
+  -fx-background-color: #a9a9a9;
+  -fx-background-radius: 5em;
+  -fx-margin: 0 0 0 0;
+  -fx-min-width: 30px;
+  -fx-min-height: 30px;
+  -fx-max-width: 30px;
+  -fx-max-height: 30px;
+  -fx-text-fill: black;
+  -fx-font-size: 11pt;
+  -fx-font-family: "Segoe UI Semibold";
+}
+#mute_button:focused {
+  -fx-background-color: #a9a9a9, #a9a9a9, #a9a9a9;
+}
+
+#mute_button: hover {
+  -fx-opacity: 0.7;
+}
+
 #help_button {
   -fx-background-color: #a9a9a9;
   -fx-background-radius: 5em;
@@ -93,7 +113,8 @@
   -fx-font-family: "Segoe UI Semibold";
   -fx-text-fill: #605E71;
 }
-#news_url : hover {
+
+#news_url: hover {
   -fx-font-size: 10pt;
   -fx-font-family: "Segoe UI Semibold";
   -fx-text-fill: blue;
@@ -148,12 +169,11 @@
   -fx-background-color: transparent;
 }
 
-.scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow {
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-shape: " ";
-	-fx-padding:0;
+  -fx-padding: 0;
 }
 
 .scroll-bar:horizontal .track {
@@ -178,10 +198,8 @@
   -fx-background-radius: 5em;
 }
 
-.scroll-bar:vertical .increment-button ,
-.scroll-bar:vertical .decrement-button {
-  -fx-background-color:transparent;
-	-fx-background-radius: 0em;
-	-fx-padding:0 10 0 0;
-
+.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0em;
+  -fx-padding: 0 10 0 0;
 }

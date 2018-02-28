@@ -1,7 +1,6 @@
 package virtualassistant.gui;
 
 // TODO
-// Open news url
 
 import virtualassistant.VirtualAssistant;
 import virtualassistant.misc.Pair;
@@ -20,6 +19,8 @@ import javafx.animation.*;
 import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.net.URL;
 import java.util.*;
@@ -57,12 +58,15 @@ public Button send_query_button;
 @FXML
 public ImageView wifi_image_view;
 @FXML
+public ImageView mute_control_image_view;
+@FXML
 public Button round_mic_button;
 public Timeline mic_button_timeline;
 
 private boolean listening;
 private boolean onHelp;
 private boolean ready; // used to see if ready to recieve messages
+private boolean muted;
 
 // IMPORTANT: Set to false only if it slows down your internet connection too much
 private boolean autoUpdate = true;
@@ -79,6 +83,7 @@ public void initialize(URL location, ResourceBundle resources) {
 		listening = false;
 		onHelp = false;
 		ready = false;
+		muted = false;
 		chatbot_message_list = new ArrayList<>();
 		helptext_list = new ArrayList<>();
 
@@ -91,11 +96,11 @@ public void initialize(URL location, ResourceBundle resources) {
 		Task task1 = new Task<Void>() {
 				@Override
 				public Void call() {
-                        System.out.println("Starting text to speech...");
-                        tts = new TextToSpeech();
-                        tts.setVoice("dfki-poppy-hsmm");
+						System.out.println("Starting text to speech...");
+						tts = new TextToSpeech();
+						tts.setVoice("dfki-poppy-hsmm");
 
-                        System.out.println("Downloading data...");
+						System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
 
 						ready = true;
@@ -107,25 +112,24 @@ public void initialize(URL location, ResourceBundle resources) {
 						return null;
 				}
 		};
-        new Thread(task1).start();
+		new Thread(task1).start();
 
-        // Run initialization of speech-to-text in background
+		// Run initialization of speech-to-text in background
 		Task task2 = new Task<Void>() {
 				@Override
 				public Void call() {
-						System.out.println("Starting speech to text...");
-
+			
                         stt = new SpeechRecognizerMain(Controller.this);
                         stt.startSpeechRecognition();
                         stt.ignoreSpeechRecognitionResults();
                         System.out.println("Speech to text... complete");
 
-                        round_mic_button.setDisable(false);
+						round_mic_button.setDisable(false);
 
 						return null;
 				}
 		};
-        new Thread(task2).start();
+		new Thread(task2).start();
 
 
 		if(autoUpdate) {
@@ -136,6 +140,7 @@ public void initialize(URL location, ResourceBundle resources) {
 								}
 						}, 60, 60, TimeUnit.SECONDS);
 		}
+
 		System.out.println("Launching interface...");
 		openHelp();
 }
@@ -161,22 +166,22 @@ public void makeQuery(String text) {
 				Task task = new Task<Message>() {
 						@Override
 						public Message call() {
-                                Pair<String, LinkedList<NewsObj>> responsePair;
-                                String responseStr;
-                                LinkedList<NewsObj> responseNews;
+								Pair<String, LinkedList<NewsObj> > responsePair;
+								String responseStr;
+								LinkedList<NewsObj> responseNews;
 								try {
 										responsePair = virtualAssistant.getResponse(query.getMessage());
-                                        responseStr = responsePair.getFirst();
-                                        responseNews = responsePair.getSecond();
+										responseStr = responsePair.getFirst();
+										responseNews = responsePair.getSecond();
 								} catch (Exception e) {
-                                        responseStr = "An error occured";
-                                        responseNews = null;
+										responseStr = "An error occured";
+										responseNews = null;
 										e.printStackTrace();
 								}
 
-                                tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
+								tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
 
-                                Message response = new Response(responseStr, responseNews);
+								Message response = new Response(responseStr, responseNews);
 								return response;
 						}
 				};
@@ -207,20 +212,19 @@ public void makeQuery(String text) {
 }
 
 public static void saveStatus(){
+		if(virtualAssistant == null) return;
 
-    if(virtualAssistant == null) return;
-
-    virtualAssistant.saveStatus();
+		virtualAssistant.saveStatus();
 }
 
 public void startListening() {
 
-    stt.stopIgnoreSpeechRecognitionResults();
+		stt.stopIgnoreSpeechRecognitionResults();
 
 }
 
 public void stopListening() {
-    stt.ignoreSpeechRecognitionResults();
+		stt.ignoreSpeechRecognitionResults();
 		//String text = "";
 		//makeQuery(text);
 }
@@ -245,6 +249,23 @@ private void scrollToBottom() {
 				new KeyFrame(Duration.seconds(1),
 				             new KeyValue(scrollpane.vvalueProperty(), 1)));
 		animation.play();
+}
+
+@FXML
+private void handleMuteButtonClick() {
+		if(muted) {
+				// un mute the voice
+
+				Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
+				mute_control_image_view.setImage(image);
+				muted = false;
+		} else {
+				// mute the voice
+
+				Image image = new Image(getClass().getResourceAsStream("images/muted.png"));
+				mute_control_image_view.setImage(image);
+				muted = true;
+		}
 }
 
 // handle when the mic button is clicked
