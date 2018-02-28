@@ -32,7 +32,7 @@ public class VirtualAssistant {
     private StockData stockData;
     public SystemStatus systemStatus;
     private Loader loader;
-    private LearningAgent learningAgent;
+    public LearningAgent learningAgent;
     private INewsData news;
     private Chatbot chatbot;
     private Calendar calDate;
@@ -56,8 +56,8 @@ public class VirtualAssistant {
 
         System.out.println("Setting up chatbot connection...");
         chatbot = new Chatbot();
-        
-        
+
+
         // Try to load stockData again if this fails. We have no program without it
         boolean loaded = false;
         while(!loaded) {
@@ -135,15 +135,15 @@ public class VirtualAssistant {
             if(verbose) {
                 System.out.println("VirtualAssistant.getResponse(): Company name = " + name);
             }
-            
-            
+
+
             //Treat edge case "RDS" separately
             if(name.equals("RDS")){
                 result = Pair.merge(result, getCompanyData("RDSA", response));
                 result = Pair.merge(result, getCompanyData("RDSB", response));
                 learningAgent.analyzeInput("RDS");
             } else { // Company not "RDS"
-            
+
                 // Check whether company or sector
                 ICompany company = stockData.getCompanyForTicker(name);
                 if(company != null) {
@@ -161,7 +161,7 @@ public class VirtualAssistant {
         Collections.sort((LinkedList<NewsObj>)result.getSecond(), new SortByDate());
         return result;
     }
-    
+
 
     /* Company data
     */
@@ -186,7 +186,7 @@ public class VirtualAssistant {
         sb.append(", ");
 
         switch((String)parameters.get("data1")) {
-            
+
             case "CurrentPrice":
                 sb.append("current price: ");
                 sb.append("\u00A3");
@@ -424,7 +424,7 @@ public class VirtualAssistant {
             return b.getDateTime().compareTo(a.getDateTime());
         }
     }
-    
+
     class Action {
     static final short DATA_REQUEST = 0,
         ALERT = 1;
