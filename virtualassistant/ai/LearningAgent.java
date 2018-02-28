@@ -25,7 +25,7 @@ public class LearningAgent implements ILearningAgent {
   private IStockData stocks;
   private INewsData news;
 
-  private final double minStockImpact = 20.0;
+  private final double minStockImpact = 5.0;
   private final double minNewsImpact = 20.0;
 
   public LearningAgent(IStockData stocks, INewsData news) {
@@ -139,11 +139,12 @@ public class LearningAgent implements ILearningAgent {
 
     for (ICompany com : stocks.getAllCompanies()) {
       if (com.getPercentageChange() > minStockImpact && favouriteStocks.containsKey(com.getTicker())) {
-        if (!stockNotifications.containsKey(com.getTicker())) {
+        //Check the user has not recently recieved notification of company or its sector
+        if (!stockNotifications.containsKey(com.getTicker()) && !stockNotifications.containsKey(com.getSector())) {
           alerts += com.getName() + " is changing price quickly\n";
           stockNotifications.put(com.getTicker(), Calendar.getInstance());
         } else {
-          if (stockNotifications.get(com.getTicker()).before(removeTime)) {
+          if (stockNotifications.containsKey(com.getTicker()) && stockNotifications.get(com.getTicker()).before(removeTime)) {
             stockNotifications.remove(com.getTicker());
           }
         }
@@ -152,8 +153,6 @@ public class LearningAgent implements ILearningAgent {
         alerts += com.getName() + " is changing price quickly\n";
       }
     }
-
-
 
     return alerts;
 

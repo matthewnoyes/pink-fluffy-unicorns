@@ -1,3 +1,4 @@
+
 *.class
 *.jar
 virtualassistant/data/datastore/favourites.json

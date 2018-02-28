@@ -74,9 +74,9 @@ public class SpeechRecognizerMain {
 		Configuration configuration = new Configuration();
 
 		// Load model from the jar
-		configuration.setAcousticModelPath("resource:edu/cmu/sphinx/models/en-us/en-us");
+		configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
         //System.out.println("Set Acoustic Model Path");
-		configuration.setDictionaryPath("resource:edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
+		configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
         //System.out.println("Set Dictionary Path");
 		//====================================================================================
 		//=====================READ THIS!!!===============================================
@@ -91,7 +91,7 @@ public class SpeechRecognizerMain {
 		//====================================================================================
 
 		// Grammar
-		configuration.setGrammarPath("resource:virtualassistant/chatbot/grammars");
+		configuration.setGrammarPath("resource:/virtualassistant/chatbot/grammars/grammar1.gram");
 		configuration.setGrammarName("grammar1");
 		configuration.setUseGrammar(true);
         System.out.println("Set Grammar");
@@ -222,7 +222,7 @@ public class SpeechRecognizerMain {
 
 						//Is the Microphone Available
 						if (!AudioSystem.isLineSupported(Port.Info.MICROPHONE))
-							logger.log(Level.INFO, "Microphone is not available.\n");
+							//logger.log(Level.INFO, "Microphone is not available.\n");
 
 						// Sleep some period
 						Thread.sleep(350);
