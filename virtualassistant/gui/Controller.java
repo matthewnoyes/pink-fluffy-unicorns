@@ -218,16 +218,9 @@ public void makeQuery(String text) {
 }
 
 public static void saveStatus(){
-
-<<<<<<< HEAD
 		if(virtualAssistant == null) return;
 
 		virtualAssistant.saveStatus();
-=======
-    if(virtualAssistant == null) return;
-
-    virtualAssistant.saveStatus();
->>>>>>> 6035e0f81b11780460d87b6475769c79e027cc8e
 }
 
 public void startListening() {
