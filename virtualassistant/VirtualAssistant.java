@@ -135,19 +135,27 @@ public class VirtualAssistant {
             if(verbose) {
                 System.out.println("VirtualAssistant.getResponse(): Company name = " + name);
             }
+            
+            
+            //Treat edge case "RDS" separately
+            if(name.equals("RDS")){
+                result = Pair.merge(result, getCompanyData("RDSA", response));
+                result = Pair.merge(result, getCompanyData("RDSB", response));
+                learningAgent.analyzeInput("RDS");
+            } else { // Company not "RDS"
+            
+                // Check whether company or sector
+                ICompany company = stockData.getCompanyForTicker(name);
+                if(company != null) {
+                    result = Pair.merge(result, getCompanyData(name, response));
+                    learningAgent.analyzeInput(name);
+                } else if (stockData.isSector(name)){
 
-            // Check whether company or sector
-            ICompany company = stockData.getCompanyForTicker(name);
-            if(company != null) {
-
-                result = Pair.merge(result, getCompanyData(name, response));
-                learningAgent.analyzeInput(name);
-            } else if (stockData.isSector(name)){
-
-                result = Pair.merge(result, getSectorData(name, response));
-                learningAgent.analyzeInput(name);
+                    result = Pair.merge(result, getSectorData(name, response));
+                    learningAgent.analyzeInput(name);
+                }
             }
-        }
+            }
 
         // Return
         Collections.sort((LinkedList<NewsObj>)result.getSecond(), new SortByDate());
@@ -178,7 +186,7 @@ public class VirtualAssistant {
         sb.append(", ");
 
         switch((String)parameters.get("data1")) {
-
+            
             case "CurrentPrice":
                 sb.append("current price: ");
                 sb.append("\u00A3");
@@ -255,12 +263,6 @@ public class VirtualAssistant {
                 sb.append("percentage change: ");
                 sb.append(company.getPercentageChange());
                 sb.append("%");
-                return new Pair(sb.toString(), null);
-
-            case "CurrentPrice":
-                sb.append("current price: ");
-                sb.append("\u00A3");
-                sb.append(company.getCurrentPrice());
                 return new Pair(sb.toString(), null);
 
             case "Change":
