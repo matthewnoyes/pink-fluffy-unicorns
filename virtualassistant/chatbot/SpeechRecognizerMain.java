@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Port;
@@ -66,6 +66,12 @@ public class SpeechRecognizerMain {
 	public SpeechRecognizerMain(Controller controller) {
 
 		this.controller = controller;
+
+		Logger rootLogger = LogManager.getLogManager().getLogger("");
+		rootLogger.setLevel(Level.WARNING);
+		for (Handler h : rootLogger.getHandlers()) {
+		    h.setLevel(Level.WARNING);
+		}
 
 		// Loading Message
 		logger.log(Level.INFO, "Loading Speech Recognizer...\n");
