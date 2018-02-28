@@ -35,14 +35,15 @@ public class Pair<K, V> {
         
         if(p2 == null) return p1;
         
-        if(p2.second == null) 
-            return new Pair(p1.first + " " + p2.first, p1.second);
+        if(p2.second == null) {
+            return new Pair(p1.first + p2.first, p1.second);
+        }
         
         if(p2.first == null){
             p1.second.addAll(p2.second);
             return new Pair(p1.first, p1.second);
         }
         p1.second.addAll(p2.second);
-        return new Pair(p1.first + " " + p2.first, p1.second );
+        return new Pair(p1.first + p2.first, p1.second );
     }
 }
