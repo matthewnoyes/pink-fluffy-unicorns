@@ -110,11 +110,9 @@ public void initialize(URL location, ResourceBundle resources) {
 		Task task2 = new Task<Void>() {
 				@Override
 				public Void call() {
-
-
-                        stt = new SpeechRecognizerMain(Controller.this);
-                        System.out.println("Speech to text... complete");
-                        stt.ignoreSpeechRecognitionResults();
+						stt = new SpeechRecognizerMain(Controller.this);
+						System.out.println("Speech to text... complete");
+						stt.ignoreSpeechRecognitionResults();
 
 						round_mic_button.setDisable(false);
 
@@ -179,8 +177,10 @@ private void generateAnimations() {
 /* =============== ChatBot queries =============== */
 /* =============================================== */
 
-public void makeSystemQuery(){
-
+public void makeSystemQuery(String message){
+		Message system = new Response(message, null);
+		chatbot_message_list.add(system);
+		addMessage(system);
 }
 
 // Make a query to the chatbot
@@ -220,8 +220,8 @@ public void makeQuery(String text) {
 
 								}
 
-                                if(responseStr != null && !responseStr.equals(""))
-                                    tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
+								if(responseStr != null && !responseStr.equals(""))
+										tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
 
 								Message response = new Response(responseStr, responseNews);
 								return response;
