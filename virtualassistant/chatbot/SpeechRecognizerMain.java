@@ -91,8 +91,8 @@ public class SpeechRecognizerMain {
 		//====================================================================================
 
 		// Grammar
-		configuration.setGrammarPath("resource:/virtualassistant/chatbot/grammars/grammar1.gram");
-		configuration.setGrammarName("grammar1");
+		configuration.setGrammarPath("resource:/virtualassistant/chatbot/grammars/grammar.gram");
+		configuration.setGrammarName("grammar");
 		configuration.setUseGrammar(true);
         System.out.println("Set Grammar");
 
@@ -153,7 +153,7 @@ public class SpeechRecognizerMain {
 
 							//Check the result
 							if (speechResult == null)
-								logger.log(Level.INFO, "I can't understand what you said.\n");
+								System.out.println("I can't understand what you said.\n");
 							else {
 
 								//Get the hypothesis
@@ -241,7 +241,8 @@ public class SpeechRecognizerMain {
 	 * @param speechWords
 	 */
 	public void makeDecision(String speech , List<WordResult> speechWords) {
-
+        
+        System.out.println("Made decision: " + speech);
 		controller.makeQuery(speech);
 
 	}
