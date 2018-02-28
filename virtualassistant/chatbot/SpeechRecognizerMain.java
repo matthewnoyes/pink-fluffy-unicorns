@@ -222,7 +222,7 @@ public class SpeechRecognizerMain {
 
 						//Is the Microphone Available
 						if (!AudioSystem.isLineSupported(Port.Info.MICROPHONE))
-							logger.log(Level.INFO, "Microphone is not available.\n");
+							//logger.log(Level.INFO, "Microphone is not available.\n");
 
 						// Sleep some period
 						Thread.sleep(350);
