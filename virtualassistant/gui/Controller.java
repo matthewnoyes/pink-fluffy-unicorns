@@ -80,17 +80,7 @@ private static TextToSpeech tts;
 
 @Override
 public void initialize(URL location, ResourceBundle resources) {
-		listening = false;
-		onHelp = false;
-		ready = false;
-		muted = false;
-		chatbot_message_list = new ArrayList<>();
-		helptext_list = new ArrayList<>();
-
-		generateHelpText();
-		generateAnimations();
-
-		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
+		init_variables();
 
 		// Run download of data in background
 		Task task1 = new Task<Void>() {
@@ -146,12 +136,54 @@ public void initialize(URL location, ResourceBundle resources) {
 		openHelp();
 }
 
+/* =============================================== */
+/* =============== Initialisation ================ */
+/* =============================================== */
+
+// Initialise variables
+public void init_variables() {
+		listening = false;
+		onHelp = false;
+		ready = false;
+		muted = false;
+		chatbot_message_list = new ArrayList<>();
+		helptext_list = new ArrayList<>();
+
+		generateHelpText();
+		generateAnimations();
+
+		chatbot_message_list.add(new Response("Hi, ask me anything!", null));
+}
+
+// Add help text to list
+private void generateHelpText() {
+
+		helptext_list.add("How are the banks doing?");
+		helptext_list.add("Any news on Coca Cola?");
+		helptext_list.add("What is the high price of Just Eat?");
+		helptext_list.add("Is LLoyds positive?");
+		helptext_list.add("Open price of Barclays");
+		helptext_list.add("How do you feel about construction?");
+
+}
+
+private void generateAnimations() {
+		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt->round_mic_button.setStyle("-fx-background-color: #FF4339;")),
+		                                   new KeyFrame(Duration.seconds(1), evt->round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
+		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
+}
+
+/* =============================================== */
+/* =============== ChatBot queries =============== */
+/* =============================================== */
+
 public void makeSystemQuery(){
 
 }
 
-// make a query
+// Make a query to the chatbot
 public void makeQuery(String text) {
+		// if we are on the help page, close it
 		if(onHelp) {
 				closeAll();
 		}
@@ -167,17 +199,23 @@ public void makeQuery(String text) {
 				Task task = new Task<Message>() {
 						@Override
 						public Message call() {
+
 								Pair<String, LinkedList<NewsObj> > responsePair;
 								String responseStr;
 								LinkedList<NewsObj> responseNews;
+
 								try {
+
 										responsePair = virtualAssistant.getResponse(query.getMessage());
 										responseStr = responsePair.getFirst();
 										responseNews = responsePair.getSecond();
+
 								} catch (Exception e) {
+
 										responseStr = "An error occured";
 										responseNews = null;
 										e.printStackTrace();
+
 								}
 
 								tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
@@ -186,13 +224,15 @@ public void makeQuery(String text) {
 								return response;
 						}
 				};
-				// once task completed add it to the UI
+
+				// Once response is recieved add it to the UI
 				task.setOnSucceeded(new EventHandler() {
 								@Override
 								public void handle(Event event) {
 								        Platform.runLater(new Runnable() {
 												@Override
 												public void run() {
+
 												        Message response = (Message)task.getValue();
 												        chatbot_message_list.add(response);
 
@@ -206,9 +246,11 @@ public void makeQuery(String text) {
 
 				// If there is no connection established
 		} else {
+				// Add error message as response
 				Message error_response = new Response("Connection error. Please try again later.",null);
 				chatbot_message_list.add(error_response);
 				addMessage(error_response);
+
 		}
 }
 
@@ -218,39 +260,24 @@ public static void saveStatus(){
 		virtualAssistant.saveStatus();
 }
 
+// Start listening to voice input
 public void startListening() {
 
 		stt.stopIgnoreSpeechRecognitionResults();
 
 }
 
+// End listening to voice input
 public void stopListening() {
+
 		stt.ignoreSpeechRecognitionResults();
 		//String text = "";
 		//makeQuery(text);
 }
 
-private void generateHelpText() {
-		helptext_list.add("How are the banks doing?");
-		helptext_list.add("Any news on Coca Cola?");
-		helptext_list.add("What is the high price of Just Eat?");
-		helptext_list.add("Is LLoyds positive?");
-		helptext_list.add("Open price of Barclays");
-		helptext_list.add("How do you feel about construction?");
-}
-
-private void generateAnimations() {
-		mic_button_timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), evt->round_mic_button.setStyle("-fx-background-color: #FF4339;")),
-		                                   new KeyFrame(Duration.seconds(1), evt->round_mic_button.setStyle("-fx-background-color: #a9a9a9;")));
-		mic_button_timeline.setCycleCount(Animation.INDEFINITE);
-}
-
-private void scrollToBottom() {
-		Animation animation = new Timeline(
-				new KeyFrame(Duration.seconds(1),
-				             new KeyValue(scrollpane.vvalueProperty(), 1)));
-		animation.play();
-}
+/* =============================================== */
+/* ============ Handle Button Clicks ============= */
+/* =============================================== */
 
 @FXML
 private void handleMuteButtonClick() {
@@ -303,6 +330,17 @@ private void handleHelpButtonClick(ActionEvent e) {
 		}
 }
 
+/* =============================================== */
+/* ============ Change User Inteface ============= */
+/* =============================================== */
+
+private void scrollToBottom() {
+		Animation animation = new Timeline(
+				new KeyFrame(Duration.seconds(1),
+				             new KeyValue(scrollpane.vvalueProperty(), 1)));
+		animation.play();
+}
+
 public void changeUpdateTime() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -335,7 +373,7 @@ private void addMessage(Message message) {
 		scrollToBottom();
 }
 
-// open help screen
+// Display the help screen to the user
 private void openHelp() {
 		onHelp = true;
 		chatbot_container.getChildren().clear();
@@ -344,13 +382,16 @@ private void openHelp() {
 		helpTitle.setPrefWidth(Main.WIDTH);
 		helpTitle.setAlignment(Pos.CENTER);
 		helpTitle.setId("help_title");
+
 		chatbot_container.getChildren().add(helpTitle);
 
 		for(int i = 0; i < 4 && i < helptext_list.size(); i++) {
+
 				Label text_label = new Label('"'+helptext_list.get(i)+'"');
 				text_label.setPrefWidth(Main.WIDTH);
 				text_label.setAlignment(Pos.CENTER);
 				text_label.setId("help_text");
+
 				chatbot_container.getChildren().add(text_label);
 		}
 
@@ -358,6 +399,7 @@ private void openHelp() {
 		ellipsis.setPrefWidth(Main.WIDTH);
 		ellipsis.setAlignment(Pos.CENTER);
 		ellipsis.setId("help_text");
+
 		chatbot_container.getChildren().add(ellipsis);
 }
 
@@ -365,6 +407,7 @@ private void openHelp() {
 private void closeAll() {
 		onHelp = false;
 		chatbot_container.getChildren().clear();
+
 		for(int i = 0; i < chatbot_message_list.size(); i++) {
 				addMessage(chatbot_message_list.get(i));
 		}
