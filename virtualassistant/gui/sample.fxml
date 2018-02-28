@@ -18,7 +18,7 @@
       <Button fx:id="help_button" text="?" onAction="#handleHelpButtonClick"/>
     </StackPane>
     <StackPane>
-      <Button fx:id="round_mic_button" onAction="#handleMicButtonClick">
+      <Button fx:id="round_mic_button" disable="true" onAction="#handleMicButtonClick">
         <graphic>
           <ImageView fitHeight="45.0" fitWidth="34.0" preserveRatio="false">
             <image>

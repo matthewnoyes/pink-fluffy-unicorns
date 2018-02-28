@@ -40,6 +40,8 @@ import marytts.signalproc.effects.VolumeEffect;
 
 import model.TextToSpeech;
 
+import model.SpeechRecognizerMain;
+
 public class Controller implements Initializable {
 
 @FXML
@@ -69,6 +71,7 @@ private List<Message> chatbot_message_list;
 private List<String> helptext_list;
 
 private static VirtualAssistant virtualAssistant;
+private static SpeechRecognizerMain stt;
 private static TextToSpeech tts;
 
 @Override
@@ -78,7 +81,7 @@ public void initialize(URL location, ResourceBundle resources) {
 		ready = false;
 		chatbot_message_list = new ArrayList<>();
 		helptext_list = new ArrayList<>();
-
+        
 		generateHelpText();
 		generateAnimations();
 
@@ -112,9 +115,13 @@ public void initialize(URL location, ResourceBundle resources) {
 				public Void call() {
 						System.out.println("Starting speech to text...");
 
-
+                        stt = new SpeechRecognizerMain(this);
+                        stt.startSpeechRecognition();
+                        stt.ignoreSpeechRecognitionResults();
                         System.out.println("Speech to text... complete");
-
+                        
+                        round_mic_button.setDisable(false);
+                        
 						return null;
 				}
 		};
@@ -207,10 +214,14 @@ public static void saveStatus(){
 }
 
 public void startListening() {
+    
+    stt.stopIgnoreSpeechRecognitionResults();
+    
 }
 
 public void stopListening() {
-		String text = "";
+    stt.ignoreSpeechRecognitionResults();
+		//String text = "";
 		//makeQuery(text);
 }
 
