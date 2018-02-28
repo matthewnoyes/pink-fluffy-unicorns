@@ -40,7 +40,7 @@ import marytts.signalproc.effects.VolumeEffect;
 
 import model.TextToSpeech;
 
-import model.SpeechRecognizerMain;
+import virtualassistant.chatbot.SpeechRecognizerMain;
 
 public class Controller implements Initializable {
 
@@ -81,7 +81,7 @@ public void initialize(URL location, ResourceBundle resources) {
 		ready = false;
 		chatbot_message_list = new ArrayList<>();
 		helptext_list = new ArrayList<>();
-        
+
 		generateHelpText();
 		generateAnimations();
 
@@ -119,9 +119,9 @@ public void initialize(URL location, ResourceBundle resources) {
                         stt.startSpeechRecognition();
                         stt.ignoreSpeechRecognitionResults();
                         System.out.println("Speech to text... complete");
-                        
+
                         round_mic_button.setDisable(false);
-                        
+
 						return null;
 				}
 		};
@@ -173,9 +173,9 @@ public void makeQuery(String text) {
                                         responseNews = null;
 										e.printStackTrace();
 								}
-                                
+
                                 tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
-                                
+
                                 Message response = new Response(responseStr, responseNews);
 								return response;
 						}
@@ -189,9 +189,9 @@ public void makeQuery(String text) {
 												public void run() {
 												        Message response = (Message)task.getValue();
 												        chatbot_message_list.add(response);
-                                                       
+
 												        addMessage(response);
-                                 
+
 												}
 										});
 								}
@@ -207,16 +207,16 @@ public void makeQuery(String text) {
 }
 
 public static void saveStatus(){
-    
+
     if(virtualAssistant == null) return;
-    
+
     virtualAssistant.saveStatus();
 }
 
 public void startListening() {
-    
+
     stt.stopIgnoreSpeechRecognitionResults();
-    
+
 }
 
 public void stopListening() {
