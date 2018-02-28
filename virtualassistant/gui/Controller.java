@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.Calendar;
 
 import java.io.IOException;
 
@@ -118,12 +119,12 @@ public void initialize(URL location, ResourceBundle resources) {
 		Task task2 = new Task<Void>() {
 				@Override
 				public Void call() {
+
 			
                         stt = new SpeechRecognizerMain(Controller.this);
                         System.out.println("Speech to text... complete");
                         stt.ignoreSpeechRecognitionResults();
                         
-
 						round_mic_button.setDisable(false);
 
 						return null;
@@ -139,6 +140,7 @@ public void initialize(URL location, ResourceBundle resources) {
 								        virtualAssistant.scan();
 								}
 						}, 60, 60, TimeUnit.SECONDS);
+
 		}
 
 		System.out.println("Launching interface...");
@@ -303,7 +305,10 @@ private void handleHelpButtonClick(ActionEvent e) {
 		}
 }
 
-public void changeUpdateTime(String time) {
+public void changeUpdateTime() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		String time = sdf.format(cal.getTime()).toString();
 		update_time.setText("Last updated: " + time);
 }
 
