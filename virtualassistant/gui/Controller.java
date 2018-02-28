@@ -68,7 +68,6 @@ public Timeline mic_button_timeline;
 private boolean listening;
 private boolean onHelp;
 private boolean ready; // used to see if ready to recieve messages
-private boolean muted;
 
 // IMPORTANT: Set to false only if it slows down your internet connection too much
 private boolean autoUpdate = true;
@@ -97,8 +96,13 @@ public void initialize(URL location, ResourceBundle resources) {
 						System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
 						// displayFavourites(virtualAssistant.learningAgent.suggestQueries(3));
-
-						ready = true;
+                        
+                        // Change mute button
+                        changeMuteButtonIcon();   
+                        //.setDisable(false);
+						
+                        //
+                        ready = true;
 						changeWifiAccess(true);
 
 						System.out.println("Success!");
@@ -134,8 +138,8 @@ public void initialize(URL location, ResourceBundle resources) {
 				}
 		};
 		new Thread(task2).start();
-
-
+        
+  
 		if(autoUpdate) {
 				final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 				executorService.scheduleAtFixedRate(new Runnable(){
@@ -159,7 +163,6 @@ public void init_variables() {
 		listening = false;
 		onHelp = false;
 		ready = false;
-		muted = false;
 		chatbot_message_list = new ArrayList<>();
 		helptext_list = new ArrayList<>();
 
@@ -227,8 +230,8 @@ public void makeQuery(String text) {
                                     
                                     LinkedList<NewsObj> responseNews = responsePair.getSecond();
                                     
-                                    if(responseStr != null && !responseStr.equals(""))
-                                        tts.speak(responseStr, (float)virtualAssistant.systemStatus.getVolume(), false, false);
+                                    if(responseStr != null && !responseStr.equals("") && virtualAssistant.systemStatus.getSoundEnabled())
+                                        tts.speak(responseStr, 1.0f, false, false);
 
                                     response = new Response(responseStr, responseNews);
 
@@ -304,18 +307,19 @@ public void stopListening() {
 
 @FXML
 private void handleMuteButtonClick() {
-		if(muted) {
-				// un mute the voice
+		changeMuteButtonIcon();      
+        virtualAssistant.systemStatus.toggleSound();
+}
 
+private void changeMuteButtonIcon(){
+        if(!virtualAssistant.systemStatus.getSoundEnabled()) {
+				// un mute the voice
 				Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
 				mute_control_image_view.setImage(image);
-				muted = false;
 		} else {
 				// mute the voice
-
 				Image image = new Image(getClass().getResourceAsStream("images/muted.png"));
-				mute_control_image_view.setImage(image);
-				muted = true;
+				mute_control_image_view.setImage(image);		
 		}
 }
 
