@@ -175,12 +175,41 @@ public void init_variables() {
 // Add help text to list
 private void generateHelpText() {
 
-		helptext_list.add("How are the banks doing?");
-		helptext_list.add("Any news on Coca Cola?");
-		helptext_list.add("What is the high price of Just Eat?");
-		helptext_list.add("Is LLoyds positive?");
-		helptext_list.add("Open price of Barclays");
-		helptext_list.add("How do you feel about construction?");
+		helptext_list.add("Current price of BT?");
+		helptext_list.add("Coca Cola close price yesterday?");
+		helptext_list.add("BP open price yesterday?");
+		helptext_list.add("What was the highest price of barc yesterday?");
+		helptext_list.add("Lowest price of Sainsbury's?");
+		helptext_list.add("BATS volume 1 feb?");
+		helptext_list.add("BT's open price today?");
+		helptext_list.add("Any news on BKG?");
+		helptext_list.add("What is the high price of barc?");
+		helptext_list.add("Tesco low?");
+		helptext_list.add("Volume of Glencore?");
+		helptext_list.add("Vodafone percentage change?");
+		helptext_list.add("How much has ITV changed in price?");
+		helptext_list.add("CNA year average close?");
+		helptext_list.add("GKN year high?");
+		helptext_list.add("What was RBS lowest price this year?");
+		helptext_list.add("Average volume for RTO last year?");
+		helptext_list.add("Open prices of automobile?");
+		helptext_list.add("High prices of aerospace?");
+		helptext_list.add("Banks lowest prices?");
+		helptext_list.add("Current prices of oil?");
+		helptext_list.add("How much has chemicals changed?");
+		helptext_list.add("Percentage change of gas?");
+		helptext_list.add("Volume of media?");
+		helptext_list.add("News on chemicals?");
+		helptext_list.add("Yearly highs of tobacco?");
+		helptext_list.add("Yearly lows of tobacco?");
+		helptext_list.add("2017 average close real estate?");
+		helptext_list.add("2018 average volume of banks?");
+		helptext_list.add("Closing price on banks?");
+		helptext_list.add("Closing price of tobacco yesterday?");
+		helptext_list.add("Which companies are falling in automobiles?");
+		helptext_list.add("Which chemicals are falling right now?");
+		helptext_list.add("Which aerospace companies are rising?");
+		helptext_list.add("Which tobacco companies are falling right now?");
 
 }
 
@@ -293,7 +322,6 @@ public void startListening() {
 
 // End listening to voice input
 public void stopListening() {
-
 
 		stt.ignoreSpeechRecognitionResults();
 		System.out.println("stop listening");
@@ -425,9 +453,19 @@ private void openHelp() {
 
 		chatbot_container.getChildren().add(helpTitle);
 
+		Set<Integer> stated = new HashSet<>();
+
 		for(int i = 0; i < 4 && i < helptext_list.size(); i++) {
 
-				Label text_label = new Label('"'+helptext_list.get(i)+'"');
+				int rand_index = (int)(Math.random() * helptext_list.size());
+
+				while (stated.contains(rand_index)) {
+					rand_index = (int)(Math.random() * helptext_list.size());
+				}
+
+				stated.add(rand_index);
+
+				Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
 				text_label.setPrefWidth(Main.WIDTH);
 				text_label.setAlignment(Pos.CENTER);
 				text_label.setId("help_text");
