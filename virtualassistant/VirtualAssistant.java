@@ -29,12 +29,13 @@ import java.util.Collections;
 import java.util.Set;
 
 public class VirtualAssistant {
-
-    private StockData stockData;
-    public SystemStatus systemStatus;
-    private Loader loader;
+    
     public LearningAgent learningAgent;
-    private INewsData news;
+    public SystemStatus systemStatus;
+    
+    private StockData stockData;
+    private Loader loader;
+    private INewsData newsData;
     private Chatbot chatbot;
 
 
@@ -49,7 +50,7 @@ public class VirtualAssistant {
         System.out.println("Loading system status...");
         systemStatus = loader.readSystemStatus();
 
-        news = new NewsData();
+        newsData = new NewsData();
 
         System.out.println("Setting up chatbot connection...");
         chatbot = new Chatbot();
@@ -68,7 +69,7 @@ public class VirtualAssistant {
         }
 
         System.out.println("Loading favourites...");
-        learningAgent = new LearningAgent(stockData, news, loader.readFavourites());
+        learningAgent = new LearningAgent(stockData, newsData, loader.readFavourites());
 
         try {
           System.out.println(learningAgent.searchForStockEvent());
@@ -135,7 +136,7 @@ public class VirtualAssistant {
         return null;
     }
     // =========================  DATA REQUEST =================================
-    public Pair<String, LinkedList<NewsObj>> getDataRequest(JSONObject response) throws IOException, java.text.ParseException, ParseException {
+    private Pair<String, LinkedList<NewsObj>> getDataRequest(JSONObject response) throws IOException, java.text.ParseException, ParseException {
 
         Pair result = new Pair("", new LinkedList<NewsObj>());
 
@@ -295,7 +296,7 @@ public class VirtualAssistant {
 
             case "News":
                 sb.append("news:");
-                return new Pair(sb.toString(), news.getAllianceNews(company.getTicker()));
+                return new Pair(sb.toString(), newsData.getAllianceNews(company.getTicker()));
 
             case "HighPrice":
                 sb.append("highest price: ");
@@ -375,8 +376,6 @@ public class VirtualAssistant {
 
     private Pair<String, LinkedList<NewsObj>> getSectorData(String sector, String data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
 
-        INewsData news = new NewsData();
-
         StringBuilder sb = new StringBuilder(" ");
 
         switch(data) {
@@ -435,7 +434,7 @@ public class VirtualAssistant {
 
             case "News":
                 sb.append("news: ");
-                return new Pair(sb.toString(), news.sectorNews(sector));
+                return new Pair(sb.toString(), newsData.sectorNews(sector));
 
             case "YearHigh":
                 sb.append("year high: ");

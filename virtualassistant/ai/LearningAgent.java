@@ -50,10 +50,10 @@ public class LearningAgent implements ILearningAgent {
 
   }
 
-  public void analyzeInput(String ticker) {
+  public void analyzeInput(String name) {
 
-    System.out.println("Analyze input name: " + ticker);
-    favouriteStocks.addToBegining(ticker, 1);
+    System.out.println("Analyze input name: " + name);
+    favouriteStocks.addToBegining(name, 1);
   }
 
   //Upate to have number be order - high last element
@@ -110,7 +110,7 @@ public class LearningAgent implements ILearningAgent {
       }
 
     }
-
+    
     return queries;
   }
 
@@ -216,7 +216,7 @@ public class LearningAgent implements ILearningAgent {
 
   }
 
-  public static void main(String[] args) {
+  /*public static void main(String[] args) {
     // Favourites<String, Integer> test = new Favourites<String, Integer>();
     // String[] values = new String[]{"a", "b", "c", "d", "a", "e", "f", "g", "g", "f"};
     // for (int i = 0; i < values.length; i++) {
@@ -240,7 +240,7 @@ public class LearningAgent implements ILearningAgent {
     //   System.out.println(output[i]);
     // }
 
-  }
+  }*/
 
 
 }
