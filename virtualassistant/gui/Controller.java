@@ -96,23 +96,23 @@ public void initialize(URL location, ResourceBundle resources) {
 						System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
 						// displayFavourites(virtualAssistant.learningAgent.suggestQueries(3));
-                        
-                        // Change mute button
-                        changeMuteButtonIcon();   
-                        //.setDisable(false);
-						
-                        //
-                        ready = true;
+
+						// Change mute button
+						changeMuteButtonIcon();
+						//.setDisable(false);
+
+						//
+						ready = true;
 						changeWifiAccess(true);
 
 						System.out.println("Success!");
 						System.out.println("===================================\n\n");
-                        
-                        virtualAssistantFinished = true;
-                        
-                        if(sstFinished)
-                            round_mic_button.setDisable(false);
-                        
+
+						virtualAssistantFinished = true;
+
+						if(sstFinished)
+								round_mic_button.setDisable(false);
+
 						return null;
 				}
 		};
@@ -124,22 +124,22 @@ public void initialize(URL location, ResourceBundle resources) {
 				public Void call() {
 						stt = new SpeechRecognizerMain(Controller.this);
 
-						
-                        //stt.startSpeechRecognition();
+
+						//stt.startSpeechRecognition();
 						stt.ignoreSpeechRecognitionResults();
-                        System.out.println("Speech to text... complete");
-                        
-                        sstFinished = true;
-                        
-                        if(virtualAssistantFinished)
-                            round_mic_button.setDisable(false);
-                        
+						System.out.println("Speech to text... complete");
+
+						sstFinished = true;
+
+						if(virtualAssistantFinished)
+								round_mic_button.setDisable(false);
+
 						return null;
 				}
 		};
 		new Thread(task2).start();
-        
-  
+
+
 		if(autoUpdate) {
 				final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 				executorService.scheduleAtFixedRate(new Runnable(){
@@ -218,32 +218,32 @@ public void makeQuery(String text) {
 				Task task = new Task<Message>() {
 						@Override
 						public Message call() {
-                                
-                                Message response;
+
+								Message response;
 
 								try {
 
-                                    Pair<String, LinkedList<NewsObj>> responsePair = 
-                                        virtualAssistant.getResponse(query.getMessage());
-                                        
-                                    String responseStr = responsePair.getFirst();
-                                    
-                                    LinkedList<NewsObj> responseNews = responsePair.getSecond();
-                                    
-                                    if(responseStr != null && !responseStr.equals("") && virtualAssistant.systemStatus.getSoundEnabled())
-                                        tts.speak(responseStr, 1.0f, false, false);
+										Pair<String, LinkedList<NewsObj> > responsePair =
+												virtualAssistant.getResponse(query.getMessage());
 
-                                    response = new Response(responseStr, responseNews);
+										String responseStr = responsePair.getFirst();
+
+										LinkedList<NewsObj> responseNews = responsePair.getSecond();
+
+										if(responseStr != null && !responseStr.equals("") && virtualAssistant.systemStatus.getSoundEnabled())
+												tts.speak(responseStr, 1.0f, false, false);
+
+										response = new Response(responseStr, responseNews);
 
 								} catch (Exception e) {
 
-                                    //e.printStackTrace();
-                                    
-                                    String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";                 
-                                    String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
-                                    response = new URLMessage(message, url);
+										//e.printStackTrace();
+
+										String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";
+										String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
+										response = new URLMessage(message, url);
 								}
-								
+
 								return response;
 						}
 				};
@@ -285,8 +285,8 @@ public static void saveStatus(){
 
 // Start listening to voice input
 public void startListening() {
-        
-        System.out.println("start listening");
+
+		System.out.println("start listening");
 		stt.stopIgnoreSpeechRecognitionResults();
 
 }
@@ -294,7 +294,7 @@ public void startListening() {
 // End listening to voice input
 public void stopListening() {
 
-		
+
 		stt.ignoreSpeechRecognitionResults();
 		System.out.println("stop listening");
 		//String text = "";
@@ -307,20 +307,8 @@ public void stopListening() {
 
 @FXML
 private void handleMuteButtonClick() {
-		changeMuteButtonIcon();      
-        virtualAssistant.systemStatus.toggleSound();
-}
-
-private void changeMuteButtonIcon(){
-        if(!virtualAssistant.systemStatus.getSoundEnabled()) {
-				// un mute the voice
-				Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
-				mute_control_image_view.setImage(image);
-		} else {
-				// mute the voice
-				Image image = new Image(getClass().getResourceAsStream("images/muted.png"));
-				mute_control_image_view.setImage(image);		
-		}
+		changeMuteButtonIcon();
+		virtualAssistant.systemStatus.toggleSound();
 }
 
 // handle when the mic button is clicked
@@ -365,7 +353,6 @@ private void displayFavourites(String[] suggested) {
 		Message display = new Response("Here are some suggested queries",null);
 		chatbot_message_list.add(display);
 		addMessage(display);
-		System.out.println("Length = " + suggested.length);
 
 		for(String x : suggested) {
 				System.out.println(x);
@@ -406,6 +393,18 @@ public void changeWifiAccess(boolean access) {
 
 				Image image = new Image(getClass().getResourceAsStream("images/wifi_no_access.png"));
 				wifi_image_view.setImage(image);
+		}
+}
+
+private void changeMuteButtonIcon(){
+		if(!virtualAssistant.systemStatus.getSoundEnabled()) {
+				// un mute the voice
+				Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
+				mute_control_image_view.setImage(image);
+		} else {
+				// mute the voice
+				Image image = new Image(getClass().getResourceAsStream("images/muted.png"));
+				mute_control_image_view.setImage(image);
 		}
 }
 
