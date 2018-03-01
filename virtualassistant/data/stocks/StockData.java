@@ -27,9 +27,7 @@ public class StockData implements IStockData {
     companiesInSector = new HashMap<String, Set<Company>>();
     nameToCompany = new HashMap<String, Company>();
 
-    //if (verbose) {
-    System.out.println("Downloading sector data...");
-    //}
+    System.out.println("Downloading sector data...");  
 
     HashMap<String, Integer> sectors = Scrapper.getSectors();
     int index = 1;
@@ -47,7 +45,6 @@ public class StockData implements IStockData {
         nameToCompany.put(com.getName(), com);
       }
     }
-
   }
 
   public StockData(Set<Company> companies) throws IOException {
