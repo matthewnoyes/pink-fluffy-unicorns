@@ -379,11 +379,7 @@ public class VirtualAssistant {
         StringBuilder sb = new StringBuilder(" ");
 
         switch(data) {
-
-            /*case "price":
-                chatbot.output(stockData.getSectorCurrentPrice(sector));
-                break;
-            */
+                
             case "OpenPrice":
                 sb.append("opening price: ");
                 sb.append("\u00A3");
@@ -459,7 +455,7 @@ public class VirtualAssistant {
                 sb.append(stockData.sectorAverageVolume(sector));
                 return new Pair(sb.toString(), null);
 
-               case "OnDateClosePrice":  // not on dialogflow
+               case "OnDateClosePrice":
                 sb.append("close price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -471,7 +467,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorClosePriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
                 
-              case "OnDateLowPrice":  // not on dialogflow
+              case "OnDateLowPrice": 
                 sb.append("low price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -483,7 +479,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorLowOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
                                 
-               case "OnDateHighPrice":  // not on dialogflow
+               case "OnDateHighPrice": 
                 sb.append("high price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -495,7 +491,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorHighOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
                 
-          case "OnDateVolume":  // not on dialogflow
+          case "OnDateVolume":  
                 sb.append("volume on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
