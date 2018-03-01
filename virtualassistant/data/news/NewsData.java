@@ -94,7 +94,7 @@ public class NewsData implements INewsData{
 	        //This method is only compatible with companies now.
 			String companyIncorectFormat = company;
 			if(company.equals("BT.A")){ // BT'S name is different on yahoo
-				companyIncorectFormat = "bt";
+				companyIncorectFormat = "BT-A";
 		      	}
 			
 			if(company.charAt(company.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
@@ -161,7 +161,7 @@ public class NewsData implements INewsData{
 					String company = li.select("td:eq(1)").text();
 
 					if(company.equals("BT.A")){ // BT'S name is different on yahoo
-					company = "bt";
+					company = "BT-A";
 				}
 
 							if(company.charAt(company.length() -1) == '.'){ // This is needed as the company name must end with .l e.g. barc = barc.l
