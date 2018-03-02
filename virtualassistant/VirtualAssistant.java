@@ -379,11 +379,7 @@ public class VirtualAssistant {
         StringBuilder sb = new StringBuilder(" ");
 
         switch(data) {
-
-            /*case "price":
-                chatbot.output(stockData.getSectorCurrentPrice(sector));
-                break;
-            */
+                
             case "OpenPrice":
                 sb.append("opening price: ");
                 sb.append("\u00A3");
@@ -459,11 +455,7 @@ public class VirtualAssistant {
                 sb.append(stockData.sectorAverageVolume(sector));
                 return new Pair(sb.toString(), null);
 
-            //case "OnDateClosePrice":  // not on  dialogflow
-                // return stockData.sectorYearLow(sector);
-                //break;
-
-            case "OnDateClosePrice":  // not on dialogflow
+               case "OnDateClosePrice":
                 sb.append("close price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -474,7 +466,41 @@ public class VirtualAssistant {
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorClosePriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
-
+                
+              case "OnDateLowPrice": 
+                sb.append("low price on ");
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
+                sb.append(": ");
+                sb.append("\u00A3");
+                sb.append(String.format("%.2f", stockData.getSectorLowOnDate(sector,calDate)));
+                return new Pair(sb.toString(), null);
+                                
+               case "OnDateHighPrice": 
+                sb.append("high price on ");
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
+                sb.append(": ");
+                sb.append("\u00A3");
+                sb.append(String.format("%.2f", stockData.getSectorHighOnDate(sector,calDate)));
+                return new Pair(sb.toString(), null);
+                
+          case "OnDateVolume":  
+                sb.append("volume on ");
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
+                sb.append(": ");
+                sb.append(stockData.getSectorVolumeOnDate(sector, calDate));
+                return new Pair(sb.toString(), null);
         }
 
         return null;

@@ -55,7 +55,6 @@ public HBox getDisplay() {
 
 				for(NewsObj x : news) {
 						Separator separator = new Separator();
-						separator.setMaxWidth(200);
 
 						Label heading = new Label(x.getTitle());
 						heading.setWrapText(true);
