@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Set;
 import java.util.Collection;
 
+import java.io.IOException;
+
 //Manages all the stocks data
 public interface IStockData {
 

@@ -27,7 +27,7 @@ public class StockData implements IStockData {
     companiesInSector = new HashMap<String, Set<Company>>();
     nameToCompany = new HashMap<String, Company>();
 
-    System.out.println("Downloading sector data...");  
+    System.out.println("Downloading sector data...");
 
     HashMap<String, Integer> sectors = Scrapper.getSectors();
     int index = 1;
@@ -45,6 +45,19 @@ public class StockData implements IStockData {
         nameToCompany.put(com.getName(), com);
       }
     }
+  }
+
+  public static StockData reloadData(StockData old) throws IOException, Exception {
+
+    if (!Scrapper.updateCurrentData(old.tickerToCompany)) {
+      throw new Exception("Companies have changed");
+    }
+
+    for (Company com : old.tickerToCompany.values()) {
+      com.updatePastData();
+    }
+
+    return old;
   }
 
   public StockData(Set<Company> companies) throws IOException {

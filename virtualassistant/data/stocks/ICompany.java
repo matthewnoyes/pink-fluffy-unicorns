@@ -1,6 +1,7 @@
 package virtualassistant.data.stocks;
 
 import java.util.Calendar;
+import java.io.IOException;
 
 //A store for each company
 public interface ICompany {
@@ -23,6 +24,9 @@ public interface ICompany {
   public double getClose();
 
   //Data from last year
+
+  public void updatePastData() throws IOException;
+
   public double yearHigh();
   public double yearLow();
   public double yearAverageClose();

@@ -2,6 +2,7 @@ package virtualassistant.data.stocks;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.io.IOException;
 
 public class Company implements ICompany {
 
@@ -107,6 +108,13 @@ public class Company implements ICompany {
   }
 
   //----------------- Past data ----------------
+
+  public void updatePastData() throws IOException {
+    
+    Scrapper.updateHistoricalData(this.pastData, this.ticker);
+
+    updateCalculatedData();
+  }
 
   private void updateCalculatedData() {
 
