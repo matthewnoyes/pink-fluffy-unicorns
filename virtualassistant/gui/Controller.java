@@ -1,38 +1,28 @@
 package virtualassistant.gui;
 
-// TODO
-
-import virtualassistant.VirtualAssistant;
-import virtualassistant.misc.Pair;
-import virtualassistant.data.news.NewsObj;
-
-import javafx.fxml.Initializable;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.image.*;
-import javafx.scene.text.*;
-import javafx.event.*;
-import javafx.geometry.*;
-import javafx.scene.control.Separator;
-import javafx.animation.*;
-import javafx.util.Duration;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
 import java.text.SimpleDateFormat;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.Calendar;
-
-import java.io.IOException;
-
-// Text to speech
+import java.util.concurrent.TimeUnit;
+import javafx.animation.*;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.event.*;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.*;
+import javafx.scene.control.*;
+import javafx.scene.control.Separator;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
+import javafx.util.Duration;
 import marytts.modules.synthesis.Voice;
 import marytts.signalproc.effects.JetPilotEffect;
 import marytts.signalproc.effects.LpcWhisperiserEffect;
@@ -40,10 +30,11 @@ import marytts.signalproc.effects.RobotiserEffect;
 import marytts.signalproc.effects.StadiumEffect;
 import marytts.signalproc.effects.VocalTractLinearScalerEffect;
 import marytts.signalproc.effects.VolumeEffect;
-
 import model.TextToSpeech;
-
+import virtualassistant.VirtualAssistant;
 import virtualassistant.chatbot.SpeechRecognizerMain;
+import virtualassistant.data.news.NewsObj;
+import virtualassistant.misc.Pair;
 
 public class Controller implements Initializable {
 
@@ -95,14 +86,10 @@ public void initialize(URL location, ResourceBundle resources) {
 
 						System.out.println("Downloading data...");
 						virtualAssistant = new VirtualAssistant();
-						// displayFavourites(virtualAssistant.learningAgent.suggestQueries(3));
 
+						ready = true;
 						// Change mute button
 						changeMuteButtonIcon();
-						//.setDisable(false);
-
-						//
-						ready = true;
 						changeWifiAccess(true);
 
 						System.out.println("Success!");
@@ -112,6 +99,9 @@ public void initialize(URL location, ResourceBundle resources) {
 
 						if(sstFinished)
 								round_mic_button.setDisable(false);
+
+						displayFavourites(virtualAssistant.learningAgent.suggestQueries(3));
+						closeAll();
 
 						return null;
 				}
@@ -163,7 +153,7 @@ public void init_variables() {
 		listening = false;
 		onHelp = false;
 		ready = false;
-		chatbot_message_list = new ArrayList<>();
+		chatbot_message_list = new LinkedList<>();
 		helptext_list = new ArrayList<>();
 
 		generateHelpText();
@@ -206,8 +196,8 @@ private void generateHelpText() {
 		helptext_list.add("2018 average volume of banks?");
 		helptext_list.add("Closing price on banks?");
 		helptext_list.add("Closing price of tobacco yesterday?");
-		helptext_list.add("Which companies are falling in automobiles?");
-		helptext_list.add("Which chemicals are falling right now?");
+		helptext_list.add("Any companies falling in automobiles?");
+		helptext_list.add("Which chemicals are falling?");
 		helptext_list.add("Which aerospace companies are rising?");
 		helptext_list.add("Which tobacco companies are falling right now?");
 
@@ -335,8 +325,8 @@ public void stopListening() {
 
 @FXML
 private void handleMuteButtonClick() {
-		changeMuteButtonIcon();
 		virtualAssistant.systemStatus.toggleSound();
+		changeMuteButtonIcon();
 }
 
 // handle when the mic button is clicked
@@ -377,24 +367,20 @@ private void handleHelpButtonClick(ActionEvent e) {
 /* ============ Change User Inteface ============= */
 /* =============================================== */
 
-private void displayFavourites(String[] suggested) {
-		Message display = new Response("Here are some suggested queries",null);
-		chatbot_message_list.add(display);
-		addMessage(display);
-
-		for(String x : suggested) {
-				System.out.println(x);
-				Message query = new Response(x,null);
-				chatbot_message_list.add(query);
-				addMessage(query);
+public void displayFavourites(String[] suggested) {
+		if(suggested.length > 0) {
+				Message faves = new FavouritesMessage("You should ask this", suggested);
+				chatbot_message_list.add(faves);
+				addMessage(faves);
 		}
 }
 
-private void scrollToBottom() {
+public void scrollToBottom() {
 		Animation animation = new Timeline(
 				new KeyFrame(Duration.seconds(1),
 				             new KeyValue(scrollpane.vvalueProperty(), 1)));
 		animation.play();
+
 }
 
 public void changeUpdateTime() {
@@ -424,8 +410,8 @@ public void changeWifiAccess(boolean access) {
 		}
 }
 
-private void changeMuteButtonIcon(){
-		if(!virtualAssistant.systemStatus.getSoundEnabled()) {
+public void changeMuteButtonIcon(){
+		if(virtualAssistant.systemStatus.getSoundEnabled()) {
 				// un mute the voice
 				Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
 				mute_control_image_view.setImage(image);
@@ -436,13 +422,16 @@ private void changeMuteButtonIcon(){
 		}
 }
 
-private void addMessage(Message message) {
+public void addMessage(Message message) {
+		if(onHelp) {
+				closeAll();
+		}
 		chatbot_container.getChildren().add(message.getDisplay());
 		scrollToBottom();
 }
 
 // Display the help screen to the user
-private void openHelp() {
+public void openHelp() {
 		onHelp = true;
 		chatbot_container.getChildren().clear();
 
@@ -460,7 +449,7 @@ private void openHelp() {
 				int rand_index = (int)(Math.random() * helptext_list.size());
 
 				while (stated.contains(rand_index)) {
-					rand_index = (int)(Math.random() * helptext_list.size());
+						rand_index = (int)(Math.random() * helptext_list.size());
 				}
 
 				stated.add(rand_index);
@@ -482,12 +471,12 @@ private void openHelp() {
 }
 
 // close help screen
-private void closeAll() {
+public void closeAll() {
 		onHelp = false;
 		chatbot_container.getChildren().clear();
 
-		for(int i = 0; i < chatbot_message_list.size(); i++) {
-				addMessage(chatbot_message_list.get(i));
+		for(Message x : chatbot_message_list) {
+				addMessage(x);
 		}
 }
 

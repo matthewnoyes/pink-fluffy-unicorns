@@ -110,7 +110,7 @@ public class LearningAgent implements ILearningAgent {
       }
 
     }
-    
+
     return queries;
   }
 
