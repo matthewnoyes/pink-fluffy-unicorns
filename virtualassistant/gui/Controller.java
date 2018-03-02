@@ -64,6 +64,7 @@ private boolean ready; // used to see if ready to recieve messages
 private boolean autoUpdate = true;
 private boolean virtualAssistantFinished = false;
 private boolean sstFinished = false;
+private final int dataUpdatePeriod = 60; // seconds
 
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
@@ -136,7 +137,7 @@ public void initialize(URL location, ResourceBundle resources) {
 								public void run() {
 								        virtualAssistant.scan();
 								}
-						}, 60, 60, TimeUnit.SECONDS);
+						}, dataUpdatePeriod, dataUpdatePeriod, TimeUnit.SECONDS);
 
 		}
 

@@ -21,8 +21,6 @@ public class NewsData implements INewsData{
 	private DateFormat yahooNewFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date format for yahoo news
 	private DateFormat sectorNewsFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // Date format for the sectors
 
-
-
 	public LinkedList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
 		LinkedList<NewsObj> articlesObjs = new LinkedList<NewsObj>(); // arraylist of news articles objects
 		for(int i=1;i<=6;i++){ // loop to go through each page and get the isin number of the company wanted.
