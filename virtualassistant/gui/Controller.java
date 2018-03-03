@@ -101,9 +101,6 @@ public void initialize(URL location, ResourceBundle resources) {
 						if(sstFinished)
 								round_mic_button.setDisable(false);
 
-						displayFavourites(virtualAssistant.learningAgent.suggestQueries(3));
-						closeAll();
-
 						return null;
 				}
 		};
@@ -368,14 +365,6 @@ private void handleHelpButtonClick(ActionEvent e) {
 /* ============ Change User Inteface ============= */
 /* =============================================== */
 
-public void displayFavourites(String[] suggested) {
-		if(suggested.length > 0) {
-				Message faves = new FavouritesMessage("You should ask this", suggested);
-				chatbot_message_list.add(faves);
-				addMessage(faves);
-		}
-}
-
 public void scrollToBottom() {
 		Animation animation = new Timeline(
 				new KeyFrame(Duration.seconds(1),
@@ -436,31 +425,51 @@ public void openHelp() {
 		onHelp = true;
 		chatbot_container.getChildren().clear();
 
-		Label helpTitle = new Label("Some questions you can ask:");
+		Label helpTitle;
+
+		if(!ready) {
+			helpTitle = new Label("Some questions you can ask:");
+		} else {
+			helpTitle = new Label("Suggested queries for you:");
+		}
+
 		helpTitle.setPrefWidth(Main.WIDTH);
 		helpTitle.setAlignment(Pos.CENTER);
 		helpTitle.setId("help_title");
 
 		chatbot_container.getChildren().add(helpTitle);
 
-		Set<Integer> stated = new HashSet<>();
+		if(!ready) {
+			Set<Integer> stated = new HashSet<>();
 
-		for(int i = 0; i < 4 && i < helptext_list.size(); i++) {
+			for(int i = 0; i < 4 && i < helptext_list.size(); i++) {
 
-				int rand_index = (int)(Math.random() * helptext_list.size());
+					int rand_index = (int)(Math.random() * helptext_list.size());
 
-				while (stated.contains(rand_index)) {
-						rand_index = (int)(Math.random() * helptext_list.size());
-				}
+					while (stated.contains(rand_index)) {
+							rand_index = (int)(Math.random() * helptext_list.size());
+					}
 
-				stated.add(rand_index);
+					stated.add(rand_index);
 
-				Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
+					Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
+					text_label.setPrefWidth(Main.WIDTH);
+					text_label.setAlignment(Pos.CENTER);
+					text_label.setId("help_text");
+
+					chatbot_container.getChildren().add(text_label);
+			}
+		} else {
+			String[] suggested = virtualAssistant.learningAgent.suggestQueries(4);
+
+			for(String x : suggested) {
+				Label text_label = new Label('"'+x+'"');
 				text_label.setPrefWidth(Main.WIDTH);
 				text_label.setAlignment(Pos.CENTER);
 				text_label.setId("help_text");
 
 				chatbot_container.getChildren().add(text_label);
+			}
 		}
 
 		Label ellipsis = new Label("...");
