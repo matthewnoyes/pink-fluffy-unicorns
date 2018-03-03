@@ -21,12 +21,13 @@ public class LearningAgent implements ILearningAgent {
 
   private Favourites<String, Integer> favouriteStocks;
   private HashMap<String, Calendar> stockNotifications;
+  private Calendar lastNewsUpdateTime;
 
   private IStockData stocks;
   private INewsData news;
 
-  private final double minStockImpact = 1.0;
-  private final double minNewsImpact = 20.0;
+  private final double minStockImpact = 2.5;
+  private final double minNewsImpact = 5.0;
 
   public LearningAgent(IStockData stocks, INewsData news) {
     favouriteStocks = new Favourites<String, Integer>();
@@ -159,58 +160,59 @@ public class LearningAgent implements ILearningAgent {
 
   public String searchForNewsEvent() throws IOException, ParseException {
 
+    if (lastNewsUpdateTime == null) {
+      //If first check, get data from past day
+      lastNewsUpdateTime = Calendar.getInstance();
+      lastNewsUpdateTime.add(Calendar.DAY_OF_YEAR, -1);
+    }
+
     String alerts = "";
     for (ICompany com : stocks.getAllCompanies()) {
-      for (NewsObj article : news.getRnsNews(com.getTicker())) {
-        try {
-          if (Math.abs(Integer.parseInt(article.getImpact())) > minNewsImpact) {
-            //Send a alert
-            alerts += "There is significant news: " + article.getTitle() + "\n";
-          }
-        } catch (Exception e) {
-          //Do nothing
-        }
-      }
 
-      for (NewsObj article : news.getAllianceNews(com.getTicker())) {
-        try {
-          if (Math.abs(Integer.parseInt(article.getImpact())) > minNewsImpact) {
-            //Send a alert
-            alerts += "There is significant news: " + article.getTitle() + "\n";
-          }
-        } catch (Exception e) {
-          //Do nothing
-        }
-      }
+      //Test if the company is in the users favourites
+      if (favouriteStocks.containsKey(com.getTicker())) {
 
-      for (NewsObj article : news.getYahooNews(com.getTicker())) {
-        try {
-          if (Math.abs(Integer.parseInt(article.getImpact())) > minNewsImpact) {
-            //Send a alert
-            alerts += "There is significant news: " + article.getTitle() + "\n";
-          }
-        } catch (Exception e) {
-          //Do nothing
-        }
-      }
+        //Get news for company
+        for (NewsObj article : news.getRnsNews(com.getTicker())) {
+          //Check that the news has not just been flagged
+          if (article.getDateTime().after(lastNewsUpdateTime)) {
+            try {
+              String impact = article.getImpact();
+              if (impact.length() > 1) {
+                if (Math.abs(Double.parseDouble(impact.substring(0, impact.length() - 1))) > minNewsImpact) {
+                  //Send a alert
+                  String[] title = article.getTitle().split(" ", 3);
 
-      //Check more sources
-    }
-
-    for (String sector : stocks.getSectors()) {
-      for (NewsObj article : news.sectorNews(sector)) {
-        try {
-          if (Math.abs(Integer.parseInt(article.getImpact())) > minNewsImpact) {
-            //Send a alert
-            alerts += "There is significant news: " + article.getTitle() + "\n";
+                  alerts += "There is significant news on " + title[0] + ": " + title[2] + "\n";
+                  alerts += article.getUrl() + "\n";
+                }
+              }
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
-        } catch (Exception e) {
-          //Do nothing
         }
       }
     }
 
+    // for (String sector : stocks.getSectors()) {
+    //   for (NewsObj article : news.sectorNews(sector)) {
+    //     try {
+    //       String impact = article.getImpact();
+    //       if (impact.length() > 1) {
+    //         if (Math.abs(Double.parseDouble(impact.substring(0, impact.length() - 1))) > minNewsImpact) {
+    //         //Send a alert
+    //         alerts += "There is significant news: " + article.getTitle() + "\n";
+    //       }
+    //     }
+    //     } catch (Exception e) {
+    //       //Do nothing
+    //     }
+    //   }
+    //
+    // }
 
+    lastNewsUpdateTime = Calendar.getInstance();
 
     return alerts;
 

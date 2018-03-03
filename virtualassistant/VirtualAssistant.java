@@ -71,14 +71,15 @@ public class VirtualAssistant {
         System.out.println("Loading favourites...");
         learningAgent = new LearningAgent(stockData, newsData, loader.readFavourites());
 
-        try {
-          System.out.println(learningAgent.searchForStockEvent());
-          for (String query : learningAgent.suggestQueries(5)) {
-            System.out.println(query);
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+        // try {
+        //   System.out.println(learningAgent.searchForStockEvent());
+        //   System.out.println(learningAgent.searchForNewsEvent());
+        //   for (String query : learningAgent.suggestQueries(5)) {
+        //     System.out.println(query);
+        //   }
+        // } catch (Exception e) {
+        //   e.printStackTrace();
+        // }
             //learningAgent.searchForNewsEvent();
         System.out.println("Finished");
 
@@ -107,7 +108,11 @@ public class VirtualAssistant {
         }
 
         System.out.println(learningAgent.searchForStockEvent());
-            //learningAgent.searchForNewsEvent();
+        try {
+          System.out.println(learningAgent.searchForNewsEvent());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
         System.out.println("Finished reloading data");
 
 
