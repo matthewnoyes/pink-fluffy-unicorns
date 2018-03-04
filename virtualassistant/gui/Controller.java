@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -104,6 +106,9 @@ public void initialize(URL location, ResourceBundle resources) {
 			return null;
 		}
 	};
+	task1.setOnSucceeded(e -> {
+		changeUpdateTime(getTimeNow());
+	});
 	new Thread(task1).start();
 
 	// Run initialization of speech-to-text in background
@@ -128,13 +133,25 @@ public void initialize(URL location, ResourceBundle resources) {
 
 
 	if(autoUpdate) {
-		final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-		executorService.scheduleAtFixedRate(new Runnable(){
-				public void run() {
-				        virtualAssistant.scan();
-				}
-			}, dataUpdatePeriod, dataUpdatePeriod, TimeUnit.SECONDS);
-
+		ScheduledService<String> svc = new ScheduledService<String>() {
+			protected Task<String> createTask() {
+				return new Task<String>() {
+					protected String call() {
+						virtualAssistant.scan();
+						return getTimeNow();
+          }
+        };
+			}
+		};
+		svc.setPeriod(Duration.seconds(dataUpdatePeriod));
+		svc.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+      public void handle(WorkerStateEvent t) {
+				String time = (String)t.getSource().getValue();
+        changeUpdateTime(time);
+      }
+		});
+		svc.start();
 	}
 
 	System.out.println("Launching interface...");
@@ -371,11 +388,14 @@ public void scrollToBottom() {
 	animation.play();
 
 }
-
-public void changeUpdateTime() {
+public String getTimeNow() {
 	Calendar cal = Calendar.getInstance();
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 	String time = sdf.format(cal.getTime()).toString();
+	return time;
+}
+
+public void changeUpdateTime(String time) {
 	update_time.setText("Last updated: " + time);
 }
 

@@ -38,7 +38,7 @@ public class VirtualAssistant {
     private Loader loader;
     private INewsData newsData;
     private Chatbot chatbot;
-    
+
     private Calendar today;
     private Calendar lastYearToday;
 
@@ -77,17 +77,17 @@ public class VirtualAssistant {
 
         System.out.println("Getting today's date...");
         updateToday();
-        
+
         System.out.println("Finished");
 
     }
-    
+
     private void updateToday(){
         today = Calendar.getInstance();
         today.set(Calendar.HOUR, 23);
         today.set(Calendar.MINUTE, 59);
         today.set(Calendar.SECOND, 59);
-        
+
         lastYearToday = Calendar.getInstance();
         lastYearToday.add(Calendar.YEAR, -1);
     }
@@ -103,10 +103,30 @@ public class VirtualAssistant {
         //if(loader.updateData(stockData)) {
         System.out.println("Reloading data...");
 
+        // Set today(maybe they work overnight)
+        boolean updatedDay = false;
+
+        Calendar now = Calendar.getInstance();
+        if(now.after(today)) {
+            updateToday();
+            updatedDay = true;
+        }
+
+        // Reload stockData
         boolean loaded = false;
         while(!loaded) {
             try {
-                stockData = StockData.reloadData(stockData);
+                if(updatedDay) {
+                    StockData newStockData = new StockData(true);
+                    synchronized(this) {
+                        stockData = newStockData;
+                    }
+                } else { 
+                    synchronized(this) {
+                        stockData = StockData.reloadData(stockData);
+                    }
+                }
+                
                 loaded = true;
             } catch (Exception e) {
                 System.out.println("Failed to load stock data... Retrying...");
@@ -120,15 +140,8 @@ public class VirtualAssistant {
         } catch (Exception e) {
           e.printStackTrace();
         }
-        
-        // Set today(maybe they work overnight)
-        Calendar now = Calendar.getInstance();
-        if(now.after(today))
-            updateToday();
-        
+
         System.out.println("Finished reloading data");
-
-
     }
 
     // Decide action type based on action type decided by chatbot?
@@ -156,19 +169,24 @@ public class VirtualAssistant {
         Calendar calDate = Calendar.getInstance();
 
         // Company - sector names
-        String names = (String) response.get("company");  
+        String names = (String) response.get("company");
         String[] nameList = names.split("\\sand\\s|,\\s");
         Set<String> nameSet = new HashSet();
+            
         for(String s : nameList)
             nameSet.add(s);
         
+        // Special case
+        if(names.contains(("Gas, Water & Multiutilities"))) 
+            nameSet.add("Gas, Water & Multiutilities");
+            
         // Pieces of data
         String datas = (String) response.get("data");
         String[] dataList = datas.split("\\sand\\s|,\\s");
         Set<String> dataSet = new HashSet();
         for(String s : dataList)
             dataSet.add(s);
-        
+
         // Try to get date
         try {
             if(response.get("date") != null){
@@ -237,15 +255,17 @@ public class VirtualAssistant {
 
         return result;
     }
-      
+
     private Pair<String, LinkedList<NewsObj>> getCompanyData(Company company, String data, Calendar calDate) throws IOException, java.text.ParseException {
 
         StringBuilder sb = new StringBuilder(" ");
-        
-       
-        if(calDate != null)
-            calDate = fixCalendar(calDate, company);
-             
+
+
+        if(calDate == null)
+            calDate = (Calendar)today.clone();
+
+        calDate = fixCalendar(calDate, company);
+
         switch(data) {
 
             case "CurrentPrice":
@@ -254,6 +274,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.getCurrentPrice()));
                 return new Pair(sb.toString(), null);
 
+            case "ClosePrice":
             case "OnDateClosePrice": //ALL DATES FUNCTIONS ARE NOT ON DIALOGFLOW
                 sb.append("closing price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -266,6 +287,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.getClosePriceOnDate(calDate)));
                 return new Pair(sb.toString(), null);
 
+            case "OpenPrice":
             case "OnDateOpenPrice":
                 System.out.println("OnDateOpenPrice");
                 sb.append("opening price on ");
@@ -312,18 +334,6 @@ public class VirtualAssistant {
                 sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append(company.getVolumeOnDate(calDate));
-                return new Pair(sb.toString(), null);
-
-            case "OpenPrice":
-                sb.append("opening price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", company.getOpen()));
-                return new Pair(sb.toString(), null);
-
-            case "ClosePrice":
-                sb.append("closing price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", company.getClose()));
                 return new Pair(sb.toString(), null);
 
             case "News":
@@ -382,6 +392,8 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.yearAverageVolume()));
                 return new Pair(sb.toString(), null);
 
+            default:
+                throw new IOException("Unknown option");
            /* case "news":
                 Arraylist news = ...
                 return company.yield();
@@ -389,7 +401,7 @@ public class VirtualAssistant {
             */
         }
 
-        return null;
+        //return null;
     }
 
     /* Sector data
@@ -397,9 +409,11 @@ public class VirtualAssistant {
     private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, Set<String> data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
 
-        if(calDate != null)
-            calDate = fixCalendar(calDate, sector);
-        
+        if(calDate == null)
+            calDate = (Calendar) today.clone();
+
+        calDate = fixCalendar(calDate, sector);
+
         boolean firstData = true;
 
         for(String d : data){
@@ -423,18 +437,6 @@ public class VirtualAssistant {
         StringBuilder sb = new StringBuilder(" ");
 
         switch(data) {
-
-            case "OpenPrice":
-                sb.append("opening price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", stockData.getSectorOpen(sector)));
-                return new Pair(sb.toString(), null);
-
-            case "ClosePrice":
-                sb.append("closing price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", stockData.getSectorClose(sector)));
-                return new Pair(sb.toString(), null);
 
             case "HighPrice":
                 sb.append("highest price: ");
@@ -499,7 +501,8 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.sectorAverageVolume(sector)));
                 return new Pair(sb.toString(), null);
 
-               case "OnDateClosePrice":
+            case "ClosePrice" :
+            case "OnDateClosePrice":
                 sb.append("close price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -511,7 +514,20 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorClosePriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
-              case "OnDateLowPrice":
+            case "OpenPrice" :
+            case "OnDateOpenPrice":
+                sb.append("open price on ");
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
+                sb.append(": ");
+                sb.append("\u00A3");
+                sb.append(String.format("%.2f", stockData.getSectorOpenPriceOnDate(sector,calDate)));
+                return new Pair(sb.toString(), null);
+
+            case "OnDateLowPrice":
                 sb.append("low price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -523,7 +539,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorLowOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
-               case "OnDateHighPrice":
+           case "OnDateHighPrice":
                 sb.append("high price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -545,9 +561,12 @@ public class VirtualAssistant {
                 sb.append(": ");
                 sb.append(stockData.getSectorVolumeOnDate(sector, calDate));
                 return new Pair(sb.toString(), null);
+
+            default:
+                throw new IOException("Unknown option");
         }
 
-        return null;
+        //return null;
     }
     // ========================= DATA REQUEST END ======================================
 
@@ -607,60 +626,60 @@ public class VirtualAssistant {
         return result;
     }
     // ========================= SECTOR COMPARISON END =================================
-    
+
     // ============= Setting the date to be within the past year =======================
     private Pair<Integer, Calendar> fixCal(Calendar calDate) {
-        int inPast = -1; 
-        
+        int inPast = -1;
+
         if(calDate.before(lastYearToday)) {
             calDate = (Calendar) lastYearToday.clone();
             inPast = 1;
-            
+
         } else if(calDate.after(today)) {
             calDate = (Calendar) today.clone();
             inPast = -1;
         }
-        
+
         return new Pair(inPast, calDate);
     }
-    
+
     private Calendar fixCalendar(Calendar calDate, Company company) {
-     
+
         Pair<Integer, Calendar> pair = fixCal(calDate);
-        
+
         int inPast = pair.getFirst();
         calDate = pair.getSecond();
-        
-        while(company.getClosePriceOnDate(calDate) == (-1.0)){
-            calDate.add(Calendar.DAY_OF_MONTH, inPast); 
+
+        while(company.getOpenPriceOnDate(calDate) == (-1.0)){
+            calDate.add(Calendar.DAY_OF_MONTH, inPast);
             //System.out.println(toString(calDate));
-        }    
-        
+        }
+
         return calDate;
     }
-    
+
     private Calendar fixCalendar(Calendar calDate, String sector) {
-        
+
         Pair<Integer, Calendar> pair = fixCal(calDate);
-        
+
         int inPast = pair.getFirst();
-        calDate = pair.getSecond(); 
-            
-        while(stockData.getSectorClosePriceOnDate(sector, calDate) == (-1.0)){
-            calDate.add(Calendar.DAY_OF_MONTH, inPast);     
-        }    
-        
+        calDate = pair.getSecond();
+
+        while(stockData.getSectorOpenPriceOnDate(sector, calDate) < 0.0){
+            calDate.add(Calendar.DAY_OF_MONTH, inPast);
+        }
+
         return calDate;
     }
-    
+
     private String toString(Calendar calDate) {
-        
-        return calDate.get(Calendar.DAY_OF_MONTH) + "-" + 
+
+        return calDate.get(Calendar.DAY_OF_MONTH) + "-" +
                 calDate.get(Calendar.MONTH) + "-" +
                 calDate.get(Calendar.YEAR);
     }
     // ==================================================================
-    
+
     class SortByDate implements Comparator<NewsObj> {
         // Used for sorting in descending order of date
         public int compare(NewsObj a, NewsObj b)
@@ -674,5 +693,5 @@ public class VirtualAssistant {
         SECTOR_COMPARISON = 1,
         ALERT = 2;
     }
-    
+
 }
