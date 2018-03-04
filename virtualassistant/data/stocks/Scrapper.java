@@ -108,7 +108,7 @@ public class Scrapper {
         com.updatePrice(Double.parseDouble(boxes.get(3).html().replace(",", "")));
         com.updateChange(Double.parseDouble(boxes.get(4).html().split("<")[0]));
         try {
-          //Sometimes fails - don't know why
+          //Sometimes fails - jsoup not parsing correctly?
           com.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
         } catch (Exception e) {
           com.updatePercentageChange(0.0);

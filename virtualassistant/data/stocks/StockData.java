@@ -298,8 +298,8 @@ public class StockData implements IStockData {
 
     double total = 0.0;
     double count = 0.0;
-    for (Calendar date = Calendar.getInstance(); date.before(lastYear); date.add(Calendar.DAY_OF_YEAR, -1)) {
-      total += getSectorVolumeOnDate(sector, date);
+    for (Company com : getCompaniesInSector(sector)) {
+      total += com.yearAverageVolume();
       count++;
     }
 
