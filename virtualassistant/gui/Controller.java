@@ -85,8 +85,10 @@ public void initialize(URL location, ResourceBundle resources) {
 		public Void call() {
 			System.out.println("Starting text to speech...");
 			tts = new TextToSpeech();
-			tts.setVoice("dfki-poppy-hsmm");
-
+			//tts.setVoice("dfki-poppy-hsmm");
+			tts.setVoice("cmu-rms-hsmm");
+			
+            
 			System.out.println("Downloading data...");
 			virtualAssistant = new VirtualAssistant();
 
