@@ -170,11 +170,16 @@ public class VirtualAssistant {
 
         // Company - sector names
         String names = (String) response.get("company");
-        String[] nameList = names.split("\\sand\\s|,\\s^(Gas, Water & Multiutilities)");
+        String[] nameList = names.split("\\sand\\s|,\\s");
         Set<String> nameSet = new HashSet();
+            
         for(String s : nameList)
             nameSet.add(s);
-
+        
+        // Special case
+        if(names.contains(("Gas, Water & Multiutilities"))); 
+            nameSet.add("Gas, Water & Multiutilities");
+            
         // Pieces of data
         String datas = (String) response.get("data");
         String[] dataList = datas.split("\\sand\\s|,\\s");
