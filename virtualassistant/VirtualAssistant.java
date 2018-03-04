@@ -376,6 +376,10 @@ public class VirtualAssistant {
 
     private Pair<String, LinkedList<NewsObj>> getSectorData(String sector, String data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
 
+        if (stockData.getCompaniesInSector(sector).size() == 0) {
+          return new Pair("no companies in sector", null);
+        }
+
         StringBuilder sb = new StringBuilder(" ");
 
         switch(data) {
