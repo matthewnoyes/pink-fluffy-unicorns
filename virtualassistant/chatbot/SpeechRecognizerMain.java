@@ -103,11 +103,11 @@ public class SpeechRecognizerMain {
 		configuration.setGrammarPath("virtualassistant/chatbot/grammars");
 		configuration.setGrammarName("grammar");
 		configuration.setUseGrammar(true);
-        System.out.println("Set Grammar");
+        //System.out.println("Set Grammar");
 
 		try {
 			recognizer = new LiveSpeechRecognizer(configuration);
-            System.out.println("Set Recognizer");
+            //System.out.println("Set Recognizer");
 		} catch (IOException ex) {
 			//logger.log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -139,15 +139,15 @@ public class SpeechRecognizerMain {
 			System.out.println("Speech Recognition Thread already running...\n");
 		else
 			//Submit to ExecutorService
-			System.out.println("Line 139");
+			//System.out.println("Line 139");
 			eventsExecutorService.submit(() -> {
-			System.out.println("Line 141");
+			//System.out.println("Line 141");
 
 				//locks
 				speechRecognizerThreadRunning = true;
-			System.out.println("Line 145");
+			//System.out.println("Line 145");
 				ignoreSpeechRecognitionResults = true;
-			System.out.println("Line 147");
+			//System.out.println("Line 147");
 
 				//Start Recognition
 				try {

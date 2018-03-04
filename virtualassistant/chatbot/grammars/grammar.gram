@@ -1,4 +1,4 @@
-#JSGF V1.0;
+#JSGF V10;
 
 /**
  * JSGF Grammar 
@@ -21,7 +21,7 @@ spell | add | even | land | here | must | big | high | such | follow | act | why
 light | kind | off | need | house | picture | try | us | again | animal | point | mother | world | near | build | 
 self | earth | father | head | stand | own | page | should | country | found | answer | school | grow | study | 
 still | learn | plant | cover | food | sun | four | between | state | keep | eye | never | last | let | thought | 
-city | tree | cross | farm | hard | start | might | story | saw | far | sea | draw | left | late | run | don't | 
+city | tree | cross | farm | hard | start | might | story | saw | far | sea | draw | left | late | run | 
 while | press | close | night | real | life | few | north | open | seem | together | next | white | children | 
 begin | got | walk | example | ease | paper | group | always | music | those | both | mark | often | 
 letter | until | mile | river | car | feet | care | second | book | carry | took | science | eat | room | 
@@ -65,21 +65,90 @@ garden | equal | sent | choose | fell | fit | flow | fair | bank | collect | sav
 gentle | woman | captain | practice | separate | difficult | doctor | please | protect | noon | whose | 
 locate | ring | character | insect | caught | period | indicate | radio | spoke | atom | human | history | 
 effect | electric | expect | crop | modern | element | hit | student | corner | party | supply | bone | 
-rail | imagine | provide | agree | thus | capital | won't | chair | danger | fruit | rich | thick | soldier | 
+rail | imagine | provide | agree | thus | capital | wont | chair | danger | fruit | rich | thick | soldier | 
 process | operate | guess | necessary | sharp | wing | create | neighbor | wash | bat | rather | crowd | 
 corn | compare | poem | string | bell | depend | meat | rub | tube | famous | dollar | stream | fear | 
 sight | thin | triangle | planet | hurry | chief | colony | clock | mine | tie | enter | major | fresh | 
 search | send | yellow | gun | allow | print | dead | spot | desert | suit | current | lift | rose | 
 continue | block | chart | hat | sell | success | company | subtract | event | particular | deal | swim | 
 term | opposite | wife | shoe | shoulder | spread | arrange | camp | invent | cotton | born | determine |
- quart | nine | truck | noise | level | chance | gather | shop | stretch | throw | shine | property | 
- column | molecule | select | wrong | gray | repeat | require | broad | prepare | salt | nose | plural | 
- anger | claim | continent | oxygen | sugar | death | pretty | skill | women | season | solution | magnet | 
- silver | thank | branch | match | suffix | especially | fig | afraid | huge | sister | steel | discuss | 
- forward | similar | guide | experience | score | apple | bought | led | pitch | coat | mass | card | band | 
- rope | slip | win | dream | evening | condition | feed | tool | total | basic | smell | valley | nor | 
- double | seat | arrive | master | track | parent | shore | division | sheet | substance | favor | 
- connect | post | spend | chord | fat | glad | original | share | station | dad | bread | charge | proper | 
- bar | offer | segment | slave | duck | instant | market | degree | populate | chick | dear | enemy | reply | 
- drink | occur | support | speech | nature | range | steam | motion | path | liquid | log | meant | 
- quotient | teeth | shell | neck)+;
+quart | nine | truck | noise | level | chance | gather | shop | stretch | throw | shine | property | 
+column | molecule | select | wrong | gray | repeat | require | broad | prepare | salt | nose | plural | 
+anger | claim | continent | oxygen | sugar | death | pretty | skill | women | season | solution | magnet | 
+silver | thank | branch | match | suffix | especially | fig | afraid | huge | sister | steel | discuss | 
+forward | similar | guide | experience | score | apple | bought | led | pitch | coat | mass | card | band | 
+rope | slip | win | dream | evening | condition | feed | tool | total | basic | smell | valley | nor | 
+double | seat | arrive | master | track | parent | shore | division | sheet | substance | favor | 
+connect | post | spend | chord | fat | glad | original | share | station | dad | bread | charge | proper | 
+bar | offer | segment | slave | duck | instant | market | degree | populate | chick | dear | enemy | reply | 
+drink | occur | support | speech | nature | range | steam | motion | path | liquid | log | meant | 
+quotient | teeth | shell | neck | 3 i | 3 i group | three i | three i group | three i | 
+admiral group | admiral group | admiral | anglo american | angloamerican | anglo-american | antofagasta | anto fagasta | 
+ashtead group | ashtead | ashtead group | ashtead | ashtead | abf | abf | associated british foo | british foo | 
+associated british food | british food | associated british food | a b food | a b food | a b food group | a b food group | 
+abfood | ab food | ab food | 
+ba | ba | ba | bae systems | bae | bae systems | bae sys | barc | barc | barclays | barclays | barclays bank | bdev | 
+bdev | barratt developements | barratt | barratt developments | barrat devel | bkg | bkg | berkeley group holdings | 
+berkeley group | berkeley | berkeley group holdings | berkeley | berkely | berkely group | berkely 
+bhp | bhp billiton limited | bhp billiton | broken hill proprietary | bhp billiton bas | bats | british american tobacco | 
+british american tobacco | bramertob | blnd | blnd | british land | british land company | british land company | 
+british land | brland | bt | group | group | british telecom | british telecommunications | 
+british telecommunications  bunzl | bunzl | brby | brby | burberry | burberry group | 
+burberry group | burberry | carnival corporation and | carnival | carnival corporation | 
+carnival corporation and |coca cola | coca-cola | coca-cola hbc ag | 
+coca-cola hbc | coca-cola hellenic bottling company | coca-cola hellenic | coca cola hellenic | coca cola hellenic bottling company | 
+coca cola hbc | cocacola hbc ag | cocacola | cocacola hbc | compass | compass group | compass group | crh | crh | 
+crh | cement roadstone holdings | cement roadstone | cement roadstone holdings | crda | crda | croda international | 
+croda | croda international | development capital corporation | development capital corporation limited | 
+development capital | diageo | diageo | direct line group | direct line | direct line insurance | 
+direct line insurance group | easyjet | easyjet airline company limited | easy jet | easyjet airline | 
+easyjet airline company | evraz | experian | experian | ferguson | 
+ferguson | fres | fres | group four s | group four | guest keen | 
+guest| keen | 
+glen | global energy commodity resources | hammerson | hammerson | 
+hargreaves lansdown | hargreaves lansdown hargreaves lans | bp | bp | bp | british petroleum | british petrol | 
+bp | bp oil | hsbc holdings | hsbc holdings | hongkong and shanghai bank | hong kong and shanghai bank | 
+hsbc hldgsuk | imperial bran | imperial bran | imperial tobacco group | imperial tobacco | imperial tobacco group | 
+imperial | imperial bran tobacco | imp bran | imp bran | 
+intercontinental hotels group | intercontinental hotels | intercontinental hotels group | 
+international airlines group | international consolidated airlines group| sa | international consolidated airlines group | 
+international consolidated airlines | 
+independent television | johnson matthey | just eat | kingfisher | 
+kingfisher | land | land | land securities | land securities group | land securities group | 
+legal and general | legal and general | legal and general group | legal and general group | legal and general group | 
+legal and general group | l and g | l and g | 
+london stock exchange group | 
+london stock exchange group | london stock exchange | marks and spencer | marks and spencer | 
+marks and spencer | man | m and s | marks and spencer | m and s | marks and sp |
+micro focus | 
+micro focus international | micro focus international | morrison | 
+wm morrisons supermarkets | morrison supermarkets | morrison supermarket | wm morrison | 
+morrison supermarkets | wm morrison supermarkets | morrison supermarkets | ng | ng | ng | 
+national grid | national grid | nmc health | new medical centre | new medical centre health | 
+old mutual | old mutual | old mutual banks | old mutual bank | paddy power | 
+paddy power | paddy bet | pearson | pearson | pearson publishing | 
+prudential | prudential | prudential insurance | prudential life insurance | next | 
+next |reckitt | reckitt group | 
+reckitt ben | rio | 
+rio tinto group | rio tinto | rolls-royce holdings | rolls royce holdings | rolls royce | 
+rolls royce holdings | the royal bank of scotland group | 
+royal bank of scotland | the royal bank of scotland group |royal bank of scotland group | 
+royal bank of scotland group | royal bank scot | r | r | royal dutch shell | shell | shell oil | 
+royal dutch shell oil | royal dutch shell | shell a | shell oil a | royal dutch shell oil a | royal dutch shell a | 
+royal dutch shell a | royal dutch shell b | shell b | shell oil b | royal dutch shell oil b | 
+royal dutch shell b | insurance group | insurance group | royal and sun alliance | 
+insurance | royal and sun alliance insurance | royal and sun alliance insurance group | ins | sage group | 
+sage group | sage | sage | 
+schroders | schroders | scottish mortgage investment trust | scottish mortgage | scottish mortgage investment | 
+scottish mort | slough estates | severn trent | severn trent | 
+shire | shire | sky | smith and nephew | smith and nephew | smith and nephew | 
+smith and nephew | smith | smith | smith | smith | smith |  smith | 
+smith | david solomon smith | smith | smiths group | smiths group | smiths | smurfit kappa | 
+smurfit kappa group | smurfit kappa group | smurfit | scottish and southern energy | 
+scottish and southern energy | stan | stan | standard chartered | standard chartered | standchart | stand chart | 
+stand chart | standard life aberdeen | standard life aberdeen | standard life aberdeen investment | 
+life aber | st james place wealth management | st james place | 
+taylor woodrow | tesco | tesco supermarket | tesco | tesco supermarkets | 
+unilever unilever | unilever | united utilities | united utilities group | 
+united utilities group | utilities | utilities | vodafone group | vodafone | vodafone group | 
+vodafone | whitbread | whitbread | wire and plastic products | wire and plastic products)+;
