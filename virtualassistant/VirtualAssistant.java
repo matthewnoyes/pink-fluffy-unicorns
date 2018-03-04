@@ -116,10 +116,17 @@ public class VirtualAssistant {
         boolean loaded = false;
         while(!loaded) {
             try {
-                if(updatedDay)
-                    stockData = new StockData(true);
-                else 
-                    stockData = StockData.reloadData(stockData);
+                if(updatedDay) {
+                    StockData newStockData = new StockData(true);
+                    synchronized(this) {
+                        stockData = newStockData;
+                    }
+                } else { 
+                    synchronized(this) {
+                        stockData = StockData.reloadData(stockData);
+                    }
+                }
+                
                 loaded = true;
             } catch (Exception e) {
                 System.out.println("Failed to load stock data... Retrying...");
@@ -133,11 +140,8 @@ public class VirtualAssistant {
         } catch (Exception e) {
           e.printStackTrace();
         }
-        
-        
+               
         System.out.println("Finished reloading data");
-
-
     }
 
     // Decide action type based on action type decided by chatbot?
