@@ -202,10 +202,15 @@ public class VirtualAssistant {
     */
     private Pair<String, LinkedList<NewsObj>> formatCompanyData(Company company, String[] data, Calendar calDate) throws IOException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
-
+        
+        boolean firstData = true;
+        
         for(String d : data){
-            result = Pair.merge(result, new Pair(", ", null));
+            if(!firstData)
+                result = Pair.merge(result, new Pair(", ", null));
+            
             result = Pair.merge(result, getCompanyData(company, d, calDate));
+            firstData = false;
         }
 
         return result;
@@ -295,8 +300,8 @@ public class VirtualAssistant {
                 return new Pair(sb.toString(), null);
 
             case "News":
-                sb.append("news:");
-                return new Pair(sb.toString(), newsData.getAllianceNews(company.getTicker()));
+                sb.append("news");
+                return new Pair(sb.toString(), newsData.getAllNews(company.getTicker()));
 
             case "HighPrice":
                 sb.append("highest price: ");
@@ -365,10 +370,16 @@ public class VirtualAssistant {
     */
     private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, String[] data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
-
+        
+        boolean firstData = true;
+        
         for(String d : data){
-            result = Pair.merge(result, new Pair(", ", null));
+            
+            if(!firstData)
+                result = Pair.merge(result, new Pair(", ", null));
+            
             result = Pair.merge(result, getSectorData(sector, d, calDate));
+            firstData = false;
         }
 
         return result;

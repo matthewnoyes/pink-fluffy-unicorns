@@ -20,7 +20,21 @@ public class NewsData implements INewsData{
 	private DateFormat rnsNewsDateFormat = new SimpleDateFormat("HH:mm dd-MMM-yyyy"); // date format for rns londonstockexchange news
 	private DateFormat yahooNewFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z"); // Date format for yahoo news
 	private DateFormat sectorNewsFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // Date format for the sectors
-
+    
+    public LinkedList<NewsObj> getAllNews(String company) throws IOException, ParseException {
+        
+        LinkedList<NewsObj> news = getRnsNews(company);
+        news.addAll(getAllianceNews(company));
+        
+        try {
+            news.addAll(getYahooNews(company));
+        } catch(Exception e) {
+            System.out.println(e.toString());
+        }
+        
+        return news;
+    }
+    
 	public LinkedList<NewsObj> getRnsNews(String company) throws IOException, ParseException {
 		LinkedList<NewsObj> articlesObjs = new LinkedList<NewsObj>(); // arraylist of news articles objects
 		for(int i=1;i<=6;i++){ // loop to go through each page and get the isin number of the company wanted.
