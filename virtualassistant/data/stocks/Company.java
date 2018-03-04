@@ -171,7 +171,11 @@ public class Company implements ICompany {
   public double getClosePriceOnDate(Calendar day) {
 
     day = resetTime(day);
-
+    
+    while(!pastData.containsKey(day)){
+        day.add(Calendar.DAY_OF_MONTH, -1);
+    }
+    
     if (pastData.containsKey(day))
       return pastData.get(day).close;
 

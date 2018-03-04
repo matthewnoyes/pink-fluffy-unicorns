@@ -102,11 +102,24 @@ public class VirtualAssistant {
         // Try to update data, if working, fire learning agent
         //if(loader.updateData(stockData)) {
         System.out.println("Reloading data...");
-
+        
+        // Set today(maybe they work overnight)
+        boolean updatedDay = false;
+        
+        Calendar now = Calendar.getInstance();
+        if(now.after(today)) {
+            updateToday();
+            updatedDay = true;
+        }
+        
+        // Reload stockData
         boolean loaded = false;
         while(!loaded) {
             try {
-                stockData = StockData.reloadData(stockData);
+                if(updatedDay)
+                    stockData = new StockData(true);
+                else 
+                    stockData = StockData.reloadData(stockData);
                 loaded = true;
             } catch (Exception e) {
                 System.out.println("Failed to load stock data... Retrying...");
@@ -121,10 +134,6 @@ public class VirtualAssistant {
           e.printStackTrace();
         }
         
-        // Set today(maybe they work overnight)
-        Calendar now = Calendar.getInstance();
-        if(now.after(today))
-            updateToday();
         
         System.out.println("Finished reloading data");
 
@@ -243,8 +252,10 @@ public class VirtualAssistant {
         StringBuilder sb = new StringBuilder(" ");
         
        
-        if(calDate != null)
-            calDate = fixCalendar(calDate, company);
+        if(calDate == null)
+            calDate = (Calendar)today.clone();
+        
+        calDate = fixCalendar(calDate, company);
              
         switch(data) {
 
@@ -254,6 +265,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.getCurrentPrice()));
                 return new Pair(sb.toString(), null);
 
+            case "ClosePrice":
             case "OnDateClosePrice": //ALL DATES FUNCTIONS ARE NOT ON DIALOGFLOW
                 sb.append("closing price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -265,7 +277,8 @@ public class VirtualAssistant {
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", company.getClosePriceOnDate(calDate)));
                 return new Pair(sb.toString(), null);
-
+            
+            case "OpenPrice":
             case "OnDateOpenPrice":
                 System.out.println("OnDateOpenPrice");
                 sb.append("opening price on ");
@@ -312,18 +325,6 @@ public class VirtualAssistant {
                 sb.append(calDate.get(Calendar.YEAR));
                 sb.append(": ");
                 sb.append(company.getVolumeOnDate(calDate));
-                return new Pair(sb.toString(), null);
-
-            case "OpenPrice":
-                sb.append("opening price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", company.getOpen()));
-                return new Pair(sb.toString(), null);
-
-            case "ClosePrice":
-                sb.append("closing price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", company.getClose()));
                 return new Pair(sb.toString(), null);
 
             case "News":
@@ -397,8 +398,10 @@ public class VirtualAssistant {
     private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, Set<String> data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
 
-        if(calDate != null)
-            calDate = fixCalendar(calDate, sector);
+        if(calDate == null)
+            calDate = (Calendar) today.clone();
+        
+        calDate = fixCalendar(calDate, sector);
         
         boolean firstData = true;
 
@@ -423,18 +426,6 @@ public class VirtualAssistant {
         StringBuilder sb = new StringBuilder(" ");
 
         switch(data) {
-
-            case "OpenPrice":
-                sb.append("opening price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", stockData.getSectorOpen(sector)));
-                return new Pair(sb.toString(), null);
-
-            case "ClosePrice":
-                sb.append("closing price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", stockData.getSectorClose(sector)));
-                return new Pair(sb.toString(), null);
 
             case "HighPrice":
                 sb.append("highest price: ");
@@ -498,8 +489,9 @@ public class VirtualAssistant {
                 sb.append("year average volume: ");
                 sb.append(String.format("%.2f", stockData.sectorAverageVolume(sector)));
                 return new Pair(sb.toString(), null);
-
-               case "OnDateClosePrice":
+            
+            case "ClosePrice" :
+            case "OnDateClosePrice":
                 sb.append("close price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -510,8 +502,21 @@ public class VirtualAssistant {
                 sb.append("\u00A3");
                 sb.append(String.format("%.2f", stockData.getSectorClosePriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
+                
+            case "OpenPrice" :
+            case "OnDateOpenPrice":
+                sb.append("open price on ");
+                sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
+                sb.append("/");
+                sb.append(String.format("%02d", (calDate.get(Calendar.MONTH) + 1)));
+                sb.append("/");
+                sb.append(calDate.get(Calendar.YEAR));
+                sb.append(": ");
+                sb.append("\u00A3");
+                sb.append(String.format("%.2f", stockData.getSectorOpenPriceOnDate(sector,calDate)));
+                return new Pair(sb.toString(), null);
 
-              case "OnDateLowPrice":
+            case "OnDateLowPrice":
                 sb.append("low price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -523,7 +528,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorLowOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
-               case "OnDateHighPrice":
+           case "OnDateHighPrice":
                 sb.append("high price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -631,7 +636,7 @@ public class VirtualAssistant {
         int inPast = pair.getFirst();
         calDate = pair.getSecond();
         
-        while(company.getClosePriceOnDate(calDate) == (-1.0)){
+        while(company.getOpenPriceOnDate(calDate) == (-1.0)){
             calDate.add(Calendar.DAY_OF_MONTH, inPast); 
             //System.out.println(toString(calDate));
         }    
@@ -646,7 +651,7 @@ public class VirtualAssistant {
         int inPast = pair.getFirst();
         calDate = pair.getSecond(); 
             
-        while(stockData.getSectorClosePriceOnDate(sector, calDate) == (-1.0)){
+        while(stockData.getSectorOpenPriceOnDate(sector, calDate) < 0.0){
             calDate.add(Calendar.DAY_OF_MONTH, inPast);     
         }    
         
