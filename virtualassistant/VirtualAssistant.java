@@ -379,7 +379,7 @@ public class VirtualAssistant {
 
             case "YearAverageVolume":
                 sb.append("year average volume: ");
-                sb.append(company.yearAverageVolume());
+                sb.append(String.format("%.2f", company.yearAverageVolume()));
                 return new Pair(sb.toString(), null);
 
            /* case "news":
@@ -496,7 +496,7 @@ public class VirtualAssistant {
 
             case "YearAverageVolume":
                 sb.append("year average volume: ");
-                sb.append(stockData.sectorAverageVolume(sector));
+                sb.append(String.format("%.2f", stockData.sectorAverageVolume(sector)));
                 return new Pair(sb.toString(), null);
 
                case "OnDateClosePrice":
