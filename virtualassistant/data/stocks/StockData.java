@@ -318,6 +318,18 @@ public class StockData implements IStockData {
     return total;
   }
 
+  public double getSectorOpenPriceOnDate(String sector, Calendar date) {
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getOpenPriceOnDate(date);
+    }
+
+    return total;
+  }
+
   public double getSectorHighOnDate(String sector, Calendar date) {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
