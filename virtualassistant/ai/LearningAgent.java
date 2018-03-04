@@ -151,8 +151,10 @@ public class LearningAgent implements ILearningAgent {
         if (favouriteStocks.containsKey(com.getTicker())) {
           if (com.getPercentageChange() > minStockImpact) {
             alerts += com.getName() + " is gaining price quickly\n";
+            stockNotifications.put(com.getTicker(), Calendar.getInstance());
           } else if (com.getPercentageChange() < -minStockImpact) {
             alerts += com.getName() + " is losing price quickly\n";
+            stockNotifications.put(com.getTicker(), Calendar.getInstance());
           }
         }
 

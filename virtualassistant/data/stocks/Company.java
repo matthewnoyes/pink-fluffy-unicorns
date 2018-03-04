@@ -110,7 +110,7 @@ public class Company implements ICompany {
   //----------------- Past data ----------------
 
   public void updatePastData() throws IOException {
-    
+
     Scrapper.updateHistoricalData(this.pastData, this.ticker);
 
     updateCalculatedData();
@@ -125,14 +125,17 @@ public class Company implements ICompany {
 
     for (Map.Entry<Calendar, HistoricalData.Record> date : pastData.entrySet()) {
 
-      totalPrice += date.getValue().close;
-      totalVolume += date.getValue().volume;
+      if (date.getValue().close != -1.0)
+        totalPrice += date.getValue().close;
 
-      if (high < date.getValue().high) {
+      if (date.getValue().volume != -1.0)
+        totalVolume += date.getValue().volume;
+
+      if (date.getValue().high != -1.0 && high < date.getValue().high) {
         high = date.getValue().high;
       }
 
-      if (low > date.getValue().low) {
+      if (date.getValue().low != 1.0 && low > date.getValue().low) {
         low = date.getValue().low;
       }
 
