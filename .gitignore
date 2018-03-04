@@ -5,3 +5,4 @@ virtualassistant/data/datastore/favourites.json
 virtualassistant/data/datastore/systemStatus.json
 *.json
 log/*
+virtualassistant/data/datastore/systemStatus.json
