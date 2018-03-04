@@ -276,13 +276,10 @@ public class StockData implements IStockData {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
 
-    Calendar lastYear = Calendar.getInstance();
-    lastYear.add(Calendar.YEAR, -1);
-
     double total = 0.0;
     double count = 0.0;
-    for (Calendar date = Calendar.getInstance(); date.before(lastYear); date.add(Calendar.DAY_OF_YEAR, -1)) {
-      total += getSectorClosePriceOnDate(sector, date);
+    for (Company com : getCompaniesInSector(sector)) {
+      total += com.yearAverageClose();
       count++;
     }
 
@@ -292,9 +289,6 @@ public class StockData implements IStockData {
   public double sectorAverageVolume(String sector) {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
-
-    Calendar lastYear = Calendar.getInstance();
-    lastYear.add(Calendar.YEAR, -1);
 
     double total = 0.0;
     double count = 0.0;
