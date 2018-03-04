@@ -301,6 +301,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.getOpenPriceOnDate(calDate)));
                 return new Pair(sb.toString(), null);
 
+            case "HighPrice":
             case "OnDateHighPrice":
                 sb.append("highest price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -313,6 +314,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.getHighPriceOnDate(calDate)));
                 return new Pair(sb.toString(), null);
 
+            case "LowPrice":
             case "OnDateLowPrice":
                 sb.append("lowest price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -325,6 +327,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.getLowPriceOnDate(calDate)));
                 return new Pair(sb.toString(), null);
 
+            case "Volume":
             case "OnDateVolume":
                 sb.append("volume on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -339,23 +342,6 @@ public class VirtualAssistant {
             case "News":
                 sb.append("news");
                 return new Pair(sb.toString(), newsData.getAllNews(company.getTicker()));
-
-            case "HighPrice":
-                sb.append("highest price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", company.getHigh()));
-                return new Pair(sb.toString(), null);
-
-            case "LowPrice":
-                sb.append("lowest price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", company.getLow()));
-                return new Pair(sb.toString(), null);
-
-            case "Volume":
-                sb.append("volume: ");
-                sb.append(company.getVolume());
-                return new Pair(sb.toString(), null);
 
             case "PercentageChange":
                 sb.append("percentage change: ");
@@ -438,19 +424,6 @@ public class VirtualAssistant {
 
         switch(data) {
 
-            case "HighPrice":
-                sb.append("highest price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", stockData.getSectorHigh(sector)));
-                return new Pair(sb.toString(), null);
-
-            case "LowPrice":
-                sb.append("lowest price: ");
-                sb.append("\u00A3");
-                sb.append(String.format("%.2f", stockData.getSectorLow(sector)));
-                return new Pair(sb.toString(), null);
-
-
             case "CurrentPrice":
                 sb.append("current price: ");
                 sb.append("\u00A3");
@@ -467,11 +440,6 @@ public class VirtualAssistant {
                 sb.append("percentage change: ");
                 sb.append("\u00A3");
                 sb.append(stockData.getSectorPercentageChange(sector));
-                return new Pair(sb.toString(), null);
-
-            case "Volume":
-                sb.append("volume: ");
-                sb.append(stockData.getSectorVolume(sector));
                 return new Pair(sb.toString(), null);
 
             case "News":
@@ -527,6 +495,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorOpenPriceOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
+            case "LowPrice":
             case "OnDateLowPrice":
                 sb.append("low price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -539,6 +508,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorLowOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
+           case "HighPrice":
            case "OnDateHighPrice":
                 sb.append("high price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
@@ -551,6 +521,7 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", stockData.getSectorHighOnDate(sector,calDate)));
                 return new Pair(sb.toString(), null);
 
+          case "Volume":
           case "OnDateVolume":
                 sb.append("volume on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
