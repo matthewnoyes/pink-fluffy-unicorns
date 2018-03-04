@@ -27,7 +27,7 @@ public class LearningAgent implements ILearningAgent {
   private INewsData news;
 
   private final double minStockImpact = 2.5;
-  private final double minNewsImpact = 5.0;
+  private final double minNewsImpact = 2.5;
 
   public LearningAgent(IStockData stocks, INewsData news) {
     favouriteStocks = new Favourites<String, Integer>();
@@ -125,32 +125,41 @@ public class LearningAgent implements ILearningAgent {
 
     //Check sectors
     for (String sector : stocks.getSectors()) {
-      if (Math.abs(stocks.getSectorPercentageChange(sector)) > minStockImpact) {
-        //Make sure the user has not been notified recently
-        if (!stockNotifications.containsKey(sector)) {
-          alerts += sector + " is changing price quickly\n";
+
+      //Make sure the user has not been notified recently
+      if (!stockNotifications.containsKey(sector)) {
+
+        if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
+          alerts += sector + " is gaining price quickly\n";
           stockNotifications.put(sector, Calendar.getInstance());
-        } else {
-          if (stockNotifications.get(sector).before(removeTime)) {
-            stockNotifications.remove(sector);
-          }
+        } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
+          alerts += sector + " is losing price quickly\n";
+          stockNotifications.put(sector, Calendar.getInstance());
+        }
+      } else {
+        if (stockNotifications.get(sector).before(removeTime)) {
+          stockNotifications.remove(sector);
         }
       }
     }
 
     for (ICompany com : stocks.getAllCompanies()) {
-      if (Math.abs(com.getPercentageChange()) > minStockImpact && favouriteStocks.containsKey(com.getTicker())) {
-        //Check the user has not recently recieved notification of company or its sector
-        if (!stockNotifications.containsKey(com.getTicker()) && !stockNotifications.containsKey(com.getSector())) {
-          alerts += com.getName() + " is changing price quickly\n";
-          stockNotifications.put(com.getTicker(), Calendar.getInstance());
-        } else {
-          if (stockNotifications.containsKey(com.getTicker()) && stockNotifications.get(com.getTicker()).before(removeTime)) {
-            stockNotifications.remove(com.getTicker());
+
+      if (!stockNotifications.containsKey(com.getTicker()) && !stockNotifications.containsKey(com.getSector())) {
+
+        //Check the favourite stocks contain this stock
+        if (favouriteStocks.containsKey(com.getTicker())) {
+          if (com.getPercentageChange() > minStockImpact) {
+            alerts += com.getName() + " is gaining price quickly\n";
+          } else if (com.getPercentageChange() < -minStockImpact) {
+            alerts += com.getName() + " is losing price quickly\n";
           }
         }
 
-
+      } else {
+        if (stockNotifications.containsKey(com.getTicker()) && stockNotifications.get(com.getTicker()).before(removeTime)) {
+          stockNotifications.remove(com.getTicker());
+        }
       }
     }
 
@@ -163,7 +172,7 @@ public class LearningAgent implements ILearningAgent {
     if (lastNewsUpdateTime == null) {
       //If first check, get data from past day
       lastNewsUpdateTime = Calendar.getInstance();
-      lastNewsUpdateTime.add(Calendar.DAY_OF_YEAR, -1);
+      lastNewsUpdateTime.add(Calendar.DAY_OF_YEAR, -5);
     }
 
     String alerts = "";
