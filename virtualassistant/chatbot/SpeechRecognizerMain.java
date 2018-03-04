@@ -133,22 +133,17 @@ public class SpeechRecognizerMain {
 	 */
 	public synchronized void startSpeechRecognition() {
         
-        System.out.println("Entered startSpeechRecognition...\n");
-		//Check lock
+        //Check lock
 		if (speechRecognizerThreadRunning)
 			System.out.println("Speech Recognition Thread already running...\n");
 		else
 			//Submit to ExecutorService
-			//System.out.println("Line 139");
 			eventsExecutorService.submit(() -> {
-			//System.out.println("Line 141");
-
+			
 				//locks
 				speechRecognizerThreadRunning = true;
-			//System.out.println("Line 145");
 				ignoreSpeechRecognitionResults = true;
-			//System.out.println("Line 147");
-
+			
 				//Start Recognition
 				try {
 					recognizer.startRecognition(true);
@@ -186,8 +181,8 @@ public class SpeechRecognizerMain {
 								System.out.println("Decision made!");
 
 							}
-						} else
-							System.out.println("Ingoring Speech Recognition Results...");
+						} 
+							//else System.out.println("Ingoring Speech Recognition Results...");
 
 					}
 				} catch (Exception ex) {
@@ -265,7 +260,7 @@ public class SpeechRecognizerMain {
 	 */
 	public void makeDecision(String speech , List<WordResult> speechWords) {
         
-        System.out.println("Made decision: " + speech);
+        //System.out.println("Made decision: " + speech);
 		try {
 			Platform.runLater(new Runnable() {
 				@Override public void run() {
