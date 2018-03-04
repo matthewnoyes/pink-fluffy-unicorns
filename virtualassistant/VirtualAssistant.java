@@ -177,7 +177,7 @@ public class VirtualAssistant {
             nameSet.add(s);
         
         // Special case
-        if(names.contains(("Gas, Water & Multiutilities"))); 
+        if(names.contains(("Gas, Water & Multiutilities"))) 
             nameSet.add("Gas, Water & Multiutilities");
             
         // Pieces of data
