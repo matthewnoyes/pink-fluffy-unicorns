@@ -121,12 +121,12 @@ public class VirtualAssistant {
                     synchronized(this) {
                         stockData = newStockData;
                     }
-                } else { 
+                } else {
                     synchronized(this) {
                         stockData = StockData.reloadData(stockData);
                     }
                 }
-                
+
                 loaded = true;
             } catch (Exception e) {
                 System.out.println("Failed to load stock data... Retrying...");
@@ -172,14 +172,14 @@ public class VirtualAssistant {
         String names = (String) response.get("company");
         String[] nameList = names.split("\\sand\\s|,\\s");
         Set<String> nameSet = new HashSet();
-            
+
         for(String s : nameList)
             nameSet.add(s);
-        
+
         // Special case
-        if(names.contains(("Gas, Water & Multiutilities"))) 
+        if(names.contains(("Gas, Water & Multiutilities")))
             nameSet.add("Gas, Water & Multiutilities");
-            
+
         // Pieces of data
         String datas = (String) response.get("data");
         String[] dataList = datas.split("\\sand\\s|,\\s");
@@ -590,7 +590,7 @@ public class VirtualAssistant {
                 if(companies.isEmpty()){
                     result = Pair.merge(result, new Pair("No rising companies in " + sector + ".", null));
                 } else {
-                    result = Pair.merge(result, new Pair("Rising companies: ", null));
+                    result = Pair.merge(result, new Pair("Rising companies: \n", null));
                 }
                 break;
 
@@ -600,7 +600,7 @@ public class VirtualAssistant {
                 if(companies.isEmpty()){
                     result = Pair.merge(result, new Pair("No falling companies in " + sector + ".", null));
                 } else {
-                    result = Pair.merge(result, new Pair("Falling companies: ", null));
+                    result = Pair.merge(result, new Pair("Falling companies: \n", null));
                 }
                 break;
         }
@@ -618,7 +618,7 @@ public class VirtualAssistant {
             System.out.println("Company: " + c.getName());
             if(ok) result = Pair.merge(result, new Pair(", ", null));
             ok = true;
-            result = Pair.merge(result, new Pair(c.getName(), null));
+            result = Pair.merge(result, new Pair(c.getName() + " " + c.getPercentageChange() + "%", null));
         }
 
         result = Pair.merge(result, new Pair(".", null));
