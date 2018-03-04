@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.Set;
+import java.util.HashSet;
 
 public class VirtualAssistant {
 
@@ -154,11 +155,20 @@ public class VirtualAssistant {
 
         Calendar calDate = Calendar.getInstance();
 
-        String names = (String) response.get("company");
+        // Company - sector names
+        String names = (String) response.get("company");  
+        String[] nameList = names.split("\\sand\\s|,\\s");
+        Set<String> nameSet = new HashSet();
+        for(String s : nameList)
+            nameSet.add(s);
+        
+        // Pieces of data
         String datas = (String) response.get("data");
-        String[] namesList = names.split("\\sand\\s|,\\s");
         String[] dataList = datas.split("\\sand\\s|,\\s");
-
+        Set<String> dataSet = new HashSet();
+        for(String s : dataList)
+            dataSet.add(s);
+        
         // Try to get date
         try {
             if(response.get("date") != null){
@@ -169,18 +179,18 @@ public class VirtualAssistant {
             e.toString();
         }
 
-        for(String name : namesList){
+        for(String name : nameSet){
 
 
             //Treat edge case "RDS" separately
             if(name.equals("RDS")){
 
                 result = Pair.merge(result, new Pair("RDSA", null));
-                result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSA"), dataList, calDate));
+                result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSA"), dataSet, calDate));
                 result = Pair.merge(result, new Pair(".\n", null));
 
                 result = Pair.merge(result, new Pair("RDSB", null));
-                result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSB"), dataList, calDate));
+                result = Pair.merge(result, formatCompanyData((Company) stockData.getCompanyForTicker("RDSB"), dataSet, calDate));
                 result = Pair.merge(result, new Pair(".\n", null));
 
                 learningAgent.analyzeInput("RDS");
@@ -192,13 +202,13 @@ public class VirtualAssistant {
                 if(company != null) {
 
                     result = Pair.merge(result, new Pair(company.getTicker(), null));
-                    result = Pair.merge(result, formatCompanyData((Company) company, dataList, calDate));
+                    result = Pair.merge(result, formatCompanyData((Company) company, dataSet, calDate));
                      result = Pair.merge(result, new Pair(".\n", null));
                     learningAgent.analyzeInput(name);
                 } else if (stockData.isSector(name)){
 
                     result = Pair.merge(result, new Pair(name, null));
-                    result = Pair.merge(result, formatSectorData(name, dataList, calDate));
+                    result = Pair.merge(result, formatSectorData(name, dataSet, calDate));
                      result = Pair.merge(result, new Pair(".\n", null));
                     learningAgent.analyzeInput(name);
                 }
@@ -212,7 +222,7 @@ public class VirtualAssistant {
 
     /* Company data
     */
-    private Pair<String, LinkedList<NewsObj>> formatCompanyData(Company company, String[] data, Calendar calDate) throws IOException, java.text.ParseException {
+    private Pair<String, LinkedList<NewsObj>> formatCompanyData(Company company, Set<String> data, Calendar calDate) throws IOException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
 
         boolean firstData = true;
@@ -384,7 +394,7 @@ public class VirtualAssistant {
 
     /* Sector data
     */
-    private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, String[] data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
+    private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, Set<String> data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
 
         if(calDate != null)
