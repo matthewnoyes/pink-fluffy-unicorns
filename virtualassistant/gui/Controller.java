@@ -184,7 +184,7 @@ private void generateHelpText() {
 	helptext_list.add("BP open price yesterday?");
 	helptext_list.add("What was the highest price of barc yesterday?");
 	helptext_list.add("Lowest price of Sainsbury's?");
-	helptext_list.add("BATS volume 1 feb?");
+	//helptext_list.add("BATS volume 1 feb?");
 	helptext_list.add("BT's open price today?");
 	helptext_list.add("Any news on BKG?");
 	helptext_list.add("What is the high price of barc?");
@@ -206,8 +206,8 @@ private void generateHelpText() {
 	helptext_list.add("News on chemicals?");
 	helptext_list.add("Yearly highs of tobacco?");
 	helptext_list.add("Yearly lows of tobacco?");
-	helptext_list.add("2017 average close real estate?");
-	helptext_list.add("2018 average volume of banks?");
+	//helptext_list.add("2017 average close real estate?");
+	//helptext_list.add("2018 average volume of banks?");
 	helptext_list.add("Closing price on banks?");
 	helptext_list.add("Closing price of tobacco yesterday?");
 	helptext_list.add("Any companies falling in automobiles?");
