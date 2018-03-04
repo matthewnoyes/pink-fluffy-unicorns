@@ -37,6 +37,9 @@ public class VirtualAssistant {
     private Loader loader;
     private INewsData newsData;
     private Chatbot chatbot;
+    
+    private Calendar today;
+    private Calendar lastYearToday;
 
 
     // Set this for debugging
@@ -71,18 +74,21 @@ public class VirtualAssistant {
         System.out.println("Loading favourites...");
         learningAgent = new LearningAgent(stockData, newsData, loader.readFavourites());
 
-        // try {
-        //   System.out.println(learningAgent.searchForStockEvent());
-        //   System.out.println(learningAgent.searchForNewsEvent());
-        //   for (String query : learningAgent.suggestQueries(5)) {
-        //     System.out.println(query);
-        //   }
-        // } catch (Exception e) {
-        //   e.printStackTrace();
-        // }
-            //learningAgent.searchForNewsEvent();
+        System.out.println("Getting today's date...");
+        updateToday();
+        
         System.out.println("Finished");
 
+    }
+    
+    private void updateToday(){
+        today = Calendar.getInstance();
+        today.set(Calendar.HOUR, 23);
+        today.set(Calendar.MINUTE, 59);
+        today.set(Calendar.SECOND, 59);
+        
+        lastYearToday = Calendar.getInstance();
+        lastYearToday.add(Calendar.YEAR, -1);
     }
 
     public void saveStatus(){
@@ -113,6 +119,12 @@ public class VirtualAssistant {
         } catch (Exception e) {
           e.printStackTrace();
         }
+        
+        // Set today(maybe they work overnight)
+        Calendar now = Calendar.getInstance();
+        if(now.after(today))
+            updateToday();
+        
         System.out.println("Finished reloading data");
 
 
@@ -215,11 +227,15 @@ public class VirtualAssistant {
 
         return result;
     }
-
-    private Pair<String, LinkedList<NewsObj>> getCompanyData(Company company, String data ,Calendar calDate) throws IOException, java.text.ParseException {
+      
+    private Pair<String, LinkedList<NewsObj>> getCompanyData(Company company, String data, Calendar calDate) throws IOException, java.text.ParseException {
 
         StringBuilder sb = new StringBuilder(" ");
-
+        
+       
+        if(calDate != null)
+            calDate = fixCalendar(calDate, company);
+             
         switch(data) {
 
             case "CurrentPrice":
@@ -241,6 +257,7 @@ public class VirtualAssistant {
                 return new Pair(sb.toString(), null);
 
             case "OnDateOpenPrice":
+                System.out.println("OnDateOpenPrice");
                 sb.append("opening price on ");
                 sb.append(String.format("%02d", calDate.get(Calendar.DAY_OF_MONTH)));
                 sb.append("/");
@@ -363,7 +380,6 @@ public class VirtualAssistant {
         }
 
         return null;
-
     }
 
     /* Sector data
@@ -371,6 +387,9 @@ public class VirtualAssistant {
     private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, String[] data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
 
+        if(calDate != null)
+            calDate = fixCalendar(calDate, sector);
+        
         boolean firstData = true;
 
         for(String d : data){
@@ -578,8 +597,60 @@ public class VirtualAssistant {
         return result;
     }
     // ========================= SECTOR COMPARISON END =================================
-
-
+    
+    // ============= Setting the date to be within the past year =======================
+    private Pair<Integer, Calendar> fixCal(Calendar calDate) {
+        int inPast = -1; 
+        
+        if(calDate.before(lastYearToday)) {
+            calDate = (Calendar) lastYearToday.clone();
+            inPast = 1;
+            
+        } else if(calDate.after(today)) {
+            calDate = (Calendar) today.clone();
+            inPast = -1;
+        }
+        
+        return new Pair(inPast, calDate);
+    }
+    
+    private Calendar fixCalendar(Calendar calDate, Company company) {
+     
+        Pair<Integer, Calendar> pair = fixCal(calDate);
+        
+        int inPast = pair.getFirst();
+        calDate = pair.getSecond();
+        
+        while(company.getClosePriceOnDate(calDate) == (-1.0)){
+            calDate.add(Calendar.DAY_OF_MONTH, inPast); 
+            //System.out.println(toString(calDate));
+        }    
+        
+        return calDate;
+    }
+    
+    private Calendar fixCalendar(Calendar calDate, String sector) {
+        
+        Pair<Integer, Calendar> pair = fixCal(calDate);
+        
+        int inPast = pair.getFirst();
+        calDate = pair.getSecond(); 
+            
+        while(stockData.getSectorClosePriceOnDate(sector, calDate) == (-1.0)){
+            calDate.add(Calendar.DAY_OF_MONTH, inPast);     
+        }    
+        
+        return calDate;
+    }
+    
+    private String toString(Calendar calDate) {
+        
+        return calDate.get(Calendar.DAY_OF_MONTH) + "-" + 
+                calDate.get(Calendar.MONTH) + "-" +
+                calDate.get(Calendar.YEAR);
+    }
+    // ==================================================================
+    
     class SortByDate implements Comparator<NewsObj> {
         // Used for sorting in descending order of date
         public int compare(NewsObj a, NewsObj b)
@@ -593,5 +664,5 @@ public class VirtualAssistant {
         SECTOR_COMPARISON = 1,
         ALERT = 2;
     }
-
+    
 }
