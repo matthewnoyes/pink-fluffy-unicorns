@@ -202,13 +202,13 @@ public class VirtualAssistant {
     */
     private Pair<String, LinkedList<NewsObj>> formatCompanyData(Company company, String[] data, Calendar calDate) throws IOException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
-        
+
         boolean firstData = true;
-        
+
         for(String d : data){
             if(!firstData)
                 result = Pair.merge(result, new Pair(", ", null));
-            
+
             result = Pair.merge(result, getCompanyData(company, d, calDate));
             firstData = false;
         }
@@ -370,14 +370,14 @@ public class VirtualAssistant {
     */
     private Pair<String, LinkedList<NewsObj>> formatSectorData(String sector, String[] data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
         Pair result = new Pair("", new LinkedList<NewsObj>());
-        
+
         boolean firstData = true;
-        
+
         for(String d : data){
-            
+
             if(!firstData)
                 result = Pair.merge(result, new Pair(", ", null));
-            
+
             result = Pair.merge(result, getSectorData(sector, d, calDate));
             firstData = false;
         }
@@ -388,7 +388,7 @@ public class VirtualAssistant {
     private Pair<String, LinkedList<NewsObj>> getSectorData(String sector, String data, Calendar calDate) throws IOException, ParseException, java.text.ParseException {
 
         if (stockData.getCompaniesInSector(sector).size() == 0) {
-          return new Pair("no companies in sector", null);
+          return new Pair(", no companies in sector", null);
         }
 
         StringBuilder sb = new StringBuilder(" ");
