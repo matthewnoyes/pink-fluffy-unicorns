@@ -27,9 +27,7 @@ public class StockData implements IStockData {
     companiesInSector = new HashMap<String, Set<Company>>();
     nameToCompany = new HashMap<String, Company>();
 
-    //if (verbose) {
     System.out.println("Downloading sector data...");
-    //}
 
     HashMap<String, Integer> sectors = Scrapper.getSectors();
     int index = 1;
@@ -47,7 +45,19 @@ public class StockData implements IStockData {
         nameToCompany.put(com.getName(), com);
       }
     }
+  }
 
+  public static StockData reloadData(StockData old) throws IOException, Exception {
+
+    if (!Scrapper.updateCurrentData(old.tickerToCompany)) {
+      throw new Exception("Companies have changed");
+    }
+
+    for (Company com : old.tickerToCompany.values()) {
+      com.updatePastData();
+    }
+
+    return old;
   }
 
   public StockData(Set<Company> companies) throws IOException {
@@ -101,6 +111,29 @@ public class StockData implements IStockData {
 
   public Set<Company> getCompaniesInSector(String sector) {
     return companiesInSector.get(sector);
+  }
+
+  public Set<Company> getRisingInSector(String sector) {
+    HashSet<Company> rising = new HashSet<Company>();
+
+    for (Company com : getCompaniesInSector(sector)) {
+      if (com.getChange() > 0) {
+        rising.add(com);
+      }
+    }
+
+    return rising;
+  }
+  public Set<Company> getFallingInSector(String sector) {
+    HashSet<Company> falling = new HashSet<Company>();
+
+    for (Company com : getCompaniesInSector(sector)) {
+      if (com.getChange() < 0) {
+        falling.add(com);
+      }
+    }
+
+    return falling;
   }
 
   public Collection<Company> getAllCompanies() {
@@ -191,6 +224,18 @@ public class StockData implements IStockData {
     return total;
   }
 
+  public double getSectorClose(String sector) {
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getClose();
+    }
+
+    return total;
+  }
+
   public double sectorYearHigh(String sector) {
     if (!companiesInSector.containsKey(sector))
       return -1.0;
@@ -253,8 +298,8 @@ public class StockData implements IStockData {
 
     double total = 0.0;
     double count = 0.0;
-    for (Calendar date = Calendar.getInstance(); date.before(lastYear); date.add(Calendar.DAY_OF_YEAR, -1)) {
-      total += getSectorVolumeOnDate(sector, date);
+    for (Company com : getCompaniesInSector(sector)) {
+      total += com.yearAverageVolume();
       count++;
     }
 
@@ -268,6 +313,18 @@ public class StockData implements IStockData {
     double total = 0.0;
     for (Company company : companiesInSector.get(sector)) {
       total += company.getClosePriceOnDate(date);
+    }
+
+    return total;
+  }
+
+  public double getSectorOpenPriceOnDate(String sector, Calendar date) {
+    if (!companiesInSector.containsKey(sector))
+      return -1.0;
+
+    double total = 0.0;
+    for (Company company : companiesInSector.get(sector)) {
+      total += company.getOpenPriceOnDate(date);
     }
 
     return total;

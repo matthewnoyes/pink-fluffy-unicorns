@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Set;
 import java.util.Collection;
 
+import java.io.IOException;
+
 //Manages all the stocks data
 public interface IStockData {
 
@@ -18,6 +20,8 @@ public interface IStockData {
   public boolean isSector(String sector);
 
   public Set<Company> getCompaniesInSector(String sector);
+  public Set<Company> getRisingInSector(String sector);
+  public Set<Company> getFallingInSector(String sector);
   public Collection<Company> getAllCompanies();
 
   //Sector info
@@ -29,6 +33,7 @@ public interface IStockData {
   public double getSectorHigh(String sector);
   public double getSectorLow(String sector);
   public int getSectorVolume(String sector);
+  public double getSectorClose(String sector);
 
   public double sectorYearHigh(String sector);
   public double sectorYearLow(String sector);
@@ -36,5 +41,9 @@ public interface IStockData {
   public double sectorAverageVolume(String sector);
 
   public double getSectorClosePriceOnDate(String sector, Calendar date);
+  public double getSectorOpenPriceOnDate(String sector, Calendar date);
+  public int getSectorVolumeOnDate(String sector, Calendar date);
+  public double getSectorLowOnDate(String sector, Calendar date);
+  public double getSectorHighOnDate(String sector, Calendar date);
 
 }

@@ -63,6 +63,7 @@ public class Scrapper {
       company.updatePrice(Double.parseDouble(boxes.get(3).html().replace(",", "")));
       company.updateChange(Double.parseDouble(boxes.get(4).html().split("<")[0]));
       try {
+        //Sometimes fails - don't know why
         company.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
       } catch (Exception e) {
         company.updatePercentageChange(0.0);
@@ -103,9 +104,16 @@ public class Scrapper {
         // Company company = new Company(boxes.get(0).html(), boxes.get(1).child(0).html(), "");
         // //System.out.println(boxes.get(3).html().replace(",", ""));
         //
+
         com.updatePrice(Double.parseDouble(boxes.get(3).html().replace(",", "")));
         com.updateChange(Double.parseDouble(boxes.get(4).html().split("<")[0]));
-        com.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
+        try {
+          //Sometimes fails - jsoup not parsing correctly?
+          com.updatePercentageChange(Double.parseDouble(boxes.get(5).html()));
+        } catch (Exception e) {
+          com.updatePercentageChange(0.0);
+          System.out.println(e);
+        }
         //
         // companies[position] = company;
         // position++;
@@ -137,9 +145,11 @@ public class Scrapper {
     ticker += ".L";
 
     //Setup the date range
+
+    //From 4 days from before newest entry - to get weekends
     Calendar cal = (Calendar)pastData.getLatestEntryDate().clone();
 
-    cal.add(Calendar.DAY_OF_YEAR, -1);
+    cal.add(Calendar.DAY_OF_YEAR, -4);
     long pastDay = (long)cal.getTime().getTime()/1000;
     cal = Calendar.getInstance();
     cal.add(Calendar.MINUTE, -1);

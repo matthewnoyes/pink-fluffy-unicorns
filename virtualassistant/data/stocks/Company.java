@@ -2,6 +2,7 @@ package virtualassistant.data.stocks;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.io.IOException;
 
 public class Company implements ICompany {
 
@@ -100,7 +101,20 @@ public class Company implements ICompany {
     return getVolumeOnDate(Calendar.getInstance());
   }
 
+  public double getClose() {
+    Calendar date = Calendar.getInstance();
+    date.add(Calendar.DAY_OF_YEAR, -1);
+    return getClosePriceOnDate(date);
+  }
+
   //----------------- Past data ----------------
+
+  public void updatePastData() throws IOException {
+
+    Scrapper.updateHistoricalData(this.pastData, this.ticker);
+
+    updateCalculatedData();
+  }
 
   private void updateCalculatedData() {
 
@@ -111,14 +125,17 @@ public class Company implements ICompany {
 
     for (Map.Entry<Calendar, HistoricalData.Record> date : pastData.entrySet()) {
 
-      totalPrice += date.getValue().close;
-      totalVolume += date.getValue().volume;
+      if (date.getValue().close != -1.0)
+        totalPrice += date.getValue().close;
 
-      if (high < date.getValue().high) {
+      if (date.getValue().volume != -1.0)
+        totalVolume += date.getValue().volume;
+
+      if (date.getValue().high != -1.0 && high < date.getValue().high) {
         high = date.getValue().high;
       }
 
-      if (low > date.getValue().low) {
+      if (date.getValue().low != 1.0 && low > date.getValue().low) {
         low = date.getValue().low;
       }
 

@@ -7,6 +7,12 @@ public class HistoricalData extends HashMap<Calendar, HistoricalData.Record> {
 
   private Calendar latestEntry;
 
+  public HistoricalData() {
+
+    latestEntry = Calendar.getInstance();
+    latestEntry.add(Calendar.YEAR, -5);
+  }
+
   @Override
   public Record put(Calendar key, Record value) {
     Record previous = super.put(key, value);

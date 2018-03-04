@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 public class Loader {
     
     private boolean verbose = false;
-    JSONParser parser;
+    private JSONParser parser;
 
     public Loader(){
 
@@ -34,16 +34,6 @@ public class Loader {
       System.out.println(str);
 
         return (JSONObject)parser.parse(str);
-    }
-
-    public JSONObject parseJSONFile(String str) throws ParseException {
-      //System.out.println(str);
-      try {
-        return (JSONObject)parser.parse(new FileReader(str));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      return null;
     }
     
     public void writeSystemStatus(SystemStatus status){
