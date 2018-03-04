@@ -134,7 +134,7 @@ public class VirtualAssistant {
           e.printStackTrace();
         }
 
-        
+
         System.out.println("Finished reloading data");
 
 
@@ -383,6 +383,8 @@ public class VirtualAssistant {
                 sb.append(String.format("%.2f", company.yearAverageVolume()));
                 return new Pair(sb.toString(), null);
 
+            default:
+                throw new IOException("Unknown option");
            /* case "news":
                 Arraylist news = ...
                 return company.yield();
@@ -390,7 +392,7 @@ public class VirtualAssistant {
             */
         }
 
-        return null;
+        //return null;
     }
 
     /* Sector data
@@ -550,9 +552,12 @@ public class VirtualAssistant {
                 sb.append(": ");
                 sb.append(stockData.getSectorVolumeOnDate(sector, calDate));
                 return new Pair(sb.toString(), null);
+
+            default:
+                throw new IOException("Unknown option");
         }
 
-        return null;
+        //return null;
     }
     // ========================= DATA REQUEST END ======================================
 
