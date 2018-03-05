@@ -66,7 +66,7 @@ private boolean ready; // used to see if ready to recieve messages
 private boolean autoUpdate = true;
 private boolean virtualAssistantFinished = false;
 private boolean sstFinished = false;
-private final int dataUpdatePeriod = 60; // seconds
+private final static int dataUpdatePeriod = 60; // seconds
 
 private List<Message> chatbot_message_list;
 private List<String> helptext_list;
@@ -275,7 +275,10 @@ public void makeQuery(String text) {
 					//e.printStackTrace();
 
 					String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";
-					String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
+                    if(virtualAssistant.systemStatus.getSoundEnabled())
+						tts.speak("Sorry, we couldn't find that.", 1.0f, false, false);
+                        
+                    String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
 					response = new URLMessage(message, url);
 				}
 
