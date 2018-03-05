@@ -87,8 +87,8 @@ public void initialize(URL location, ResourceBundle resources) {
 			tts = new TextToSpeech();
 			//tts.setVoice("dfki-poppy-hsmm");
 			tts.setVoice("cmu-rms-hsmm");
-			
-            
+
+
 			System.out.println("Downloading data...");
 			virtualAssistant = new VirtualAssistant();
 
@@ -108,10 +108,6 @@ public void initialize(URL location, ResourceBundle resources) {
 			return null;
 		}
 	};
-	task1.setOnSucceeded(e -> {
-		changeUpdateTime(getTimeNow());
-	});
-	new Thread(task1).start();
 
 	// Run initialization of speech-to-text in background
 	Task task2 = new Task<Void>() {
@@ -131,7 +127,14 @@ public void initialize(URL location, ResourceBundle resources) {
 			return null;
 		}
 	};
-	new Thread(task2).start();
+
+	task1.setOnSucceeded(e -> {
+		changeUpdateTime(getTimeNow());
+		new Thread(task2).start();
+	});
+	new Thread(task1).start();
+
+
 
 
 	if(autoUpdate) {
@@ -277,7 +280,7 @@ public void makeQuery(String text) {
 					String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";
                     if(virtualAssistant.systemStatus.getSoundEnabled())
 						tts.speak("Sorry, we couldn't find that.", 1.0f, false, false);
-                        
+
                     String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
 					response = new URLMessage(message, url);
 				}
@@ -488,6 +491,7 @@ public void openHelp() {
 			Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
 			text_label.setPrefWidth(Main.WIDTH);
 			text_label.setAlignment(Pos.CENTER);
+			text_label.setWrapText(true);
 			text_label.setId("help_text");
 
 			chatbot_container.getChildren().add(text_label);
@@ -498,6 +502,7 @@ public void openHelp() {
 			Label text_label = new Label('"'+x+'"');
 			text_label.setPrefWidth(Main.WIDTH);
 			text_label.setAlignment(Pos.CENTER);
+			text_label.setWrapText(true);
 			text_label.setId("help_text");
 
 			chatbot_container.getChildren().add(text_label);
