@@ -474,7 +474,6 @@ public void openHelp() {
 	chatbot_container.getChildren().add(helpTitle);
 
 
-
 	if(!ready || suggested.length == 0) {
 		Set<Integer> stated = new HashSet<>();
 
@@ -491,6 +490,7 @@ public void openHelp() {
 			Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
 			text_label.setPrefWidth(Main.WIDTH);
 			text_label.setAlignment(Pos.CENTER);
+			text_label.setTextAlignment(TextAlignment.CENTER);
 			text_label.setWrapText(true);
 			text_label.setId("help_text");
 
@@ -502,6 +502,7 @@ public void openHelp() {
 			Label text_label = new Label('"'+x+'"');
 			text_label.setPrefWidth(Main.WIDTH);
 			text_label.setAlignment(Pos.CENTER);
+			text_label.setTextAlignment(TextAlignment.CENTER);
 			text_label.setWrapText(true);
 			text_label.setId("help_text");
 
