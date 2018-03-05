@@ -107,14 +107,15 @@ public class SpeechRecognizerMain {
 
 		try {
 			recognizer = new LiveSpeechRecognizer(configuration);
-            //System.out.println("Set Recognizer");
+            System.out.println("Grammar loaded!");
 		} catch (IOException ex) {
 			//logger.log(Level.SEVERE, null, ex);
             ex.printStackTrace();
 		} catch (Exception e){
             e.printStackTrace();
         }
-
+        //System.out.println("Started Resources Thread");
+		
 		// Start recognition process pruning previously cached data.
 		// recognizer.startRecognition(true);
 
@@ -136,7 +137,7 @@ public class SpeechRecognizerMain {
         //Check lock
 		if (speechRecognizerThreadRunning)
 			System.out.println("Speech Recognition Thread already running...\n");
-		else
+		else 
 			//Submit to ExecutorService
 			eventsExecutorService.submit(() -> {
 			
@@ -181,13 +182,13 @@ public class SpeechRecognizerMain {
 								System.out.println("Decision made!");
 
 							}
-						} 
-							//else System.out.println("Ingoring Speech Recognition Results...");
-
+						} else { 
+                              System.out.println("Ingoring Speech Recognition Results...");
+                        }
 					}
 				} catch (Exception ex) {
 					//logger.log(Level.WARNING, null, ex);
-                     ex.toString();
+                     ex.printStackTrace();
 					speechRecognizerThreadRunning = false;
 				} 
 
@@ -264,7 +265,8 @@ public class SpeechRecognizerMain {
 		try {
 			Platform.runLater(new Runnable() {
 				@Override public void run() {
-					controller.makeQuery(speech);
+					System.out.println("Making decision?");
+                    controller.makeQuery(speech);
 				}
 			});
 		}
