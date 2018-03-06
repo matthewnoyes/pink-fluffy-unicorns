@@ -209,13 +209,13 @@ public class NewsData implements INewsData{
             String company = li.select("td:eq(1)").text();
             String sector = li.select("td:eq(2)").text();
             if(getAllNews(company) == null){
-                logger.write("Got an empty linked list for company : " + company);
-                    return false;
+                logger.write("Empty news list for company: " + company + "\n");
+                    //return false;
             }
 
             if(sectorNews(sector) == null){
-                logger.write("Got an empty linked list for sector : " + sector);
-                    return false;
+                logger.write("Empty news list for sector: " + sector + "\n");
+                    //return false;
             }
         }
          return true;

@@ -667,7 +667,7 @@ public class VirtualAssistant {
     }
     
     public boolean unitTest(BufferedWriter logger) throws IOException {
-    return false;
-}
+        return false;
+    }
 
 }
