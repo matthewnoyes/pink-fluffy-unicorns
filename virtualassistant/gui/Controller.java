@@ -40,23 +40,25 @@ import virtualassistant.misc.Pair;
 
 public class Controller implements Initializable {
 
+private static final Logger LOGGER = Logger.getLogger( ClassName.class.getName() );
+
 @FXML
-public ScrollPane scrollpane;
+private ScrollPane scrollpane;
 @FXML
-public VBox chatbot_container;
+private VBox chatbot_container;
 @FXML
-public Label update_time;
+private Label update_time;
 @FXML
-public TextField query_text_field;
+private TextField query_text_field;
 @FXML
-public Button send_query_button;
+private Button send_query_button;
 @FXML
-public ImageView wifi_image_view;
+private ImageView wifi_image_view;
 @FXML
-public ImageView mute_control_image_view;
+private ImageView mute_control_image_view;
 @FXML
-public Button round_mic_button;
-public Timeline mic_button_timeline;
+private Button round_mic_button;
+private Timeline mic_button_timeline;
 
 private boolean listening;
 private boolean onHelp;
@@ -94,7 +96,7 @@ public void initialize(URL location, ResourceBundle resources) {
 
 			ready = true;
 			// Change mute button
-			changeMuteButtonIcon();
+			changeMuteButtonIcon(virtualAssistant.systemStatus.getSoundEnabled());
 			changeWifiAccess(true);
 
 			System.out.println("Success!");
@@ -135,8 +137,6 @@ public void initialize(URL location, ResourceBundle resources) {
 	new Thread(task1).start();
 
 
-
-
 	if(autoUpdate) {
 		ScheduledService<String> svc = new ScheduledService<String>() {
 			protected Task<String> createTask() {
@@ -174,7 +174,7 @@ public void initialize(URL location, ResourceBundle resources) {
 /* =============================================== */
 
 // Initialise variables
-public void init_variables() {
+private void init_variables() {
 	listening = false;
 	onHelp = false;
 	ready = false;
@@ -238,13 +238,12 @@ private void generateAnimations() {
 /* =============== ChatBot queries =============== */
 /* =============================================== */
 
-public void makeSystemQuery(String message, String[] alerts){
-	Message system = new AlertMessage(message, alerts);
-	chatbot_message_list.add(system);
-	addMessage(system);
-}
-
-// Make a query to the chatbot
+/**
+ * This method allows for a query to be made to the chatbot.
+ * It will add both the query and the response the chatbot display.
+ *
+ * @param text {String} The query to be made to the chatbot
+ */
 public void makeQuery(String text) {
 	// if we are on the help page, close it
 	if(onHelp) {
@@ -258,7 +257,7 @@ public void makeQuery(String text) {
 
 	// if the connection is established
 	if(ready) {
-		// Get response in extra task
+		// Get response in extra task to allow for better user experience
 		Task task = new Task<Message>() {
 			@Override
 			public Message call() {
@@ -267,7 +266,7 @@ public void makeQuery(String text) {
 
 				try {
 
-					Pair<String, LinkedList<NewsObj>> responsePair =
+					Pair<String, LinkedList<NewsObj> > responsePair =
 						virtualAssistant.getResponse(query.getMessage());
 
 					String responseStr = responsePair.getFirst();
@@ -324,13 +323,32 @@ public void makeQuery(String text) {
 	}
 }
 
+/**
+ * Make a system query to the UI.
+ * Just displays the given data similar to a response
+ *
+ * @param message The message to be displayed with the alerts
+ * @param alerts  Array of alerts that will be displayed with the message
+ */
+public void makeSystemQuery(String message, String[] alerts){
+	Message system = new AlertMessage(message, alerts);
+	chatbot_message_list.add(system);
+	addMessage(system);
+}
+
+/**
+ * [saveStatus description]
+ */
 public static void saveStatus(){
 	if(virtualAssistant == null) return;
 
 	virtualAssistant.saveStatus();
 }
 
-// Start listening to voice input
+/**
+ * Called when the microphone button is first clicked.
+ * Used to make the application start listening to voice input.
+ */
 public void startListening() {
 
 	System.out.println("start listening");
@@ -338,13 +356,24 @@ public void startListening() {
 
 }
 
-// End listening to voice input
+/**
+ * Called when the microphone button is clicked while it is already listening.
+ * Used to make the application stop listening to voice input.
+ */
 public void stopListening() {
 
 	stt.ignoreSpeechRecognitionResults();
 	System.out.println("stop listening");
-	//String text = "";
-	//makeQuery(text);
+
+}
+
+/**
+ * Changes what the UI displays for the last updated time
+ *
+ * @param time The time to be displayed
+ */
+public void changeUpdateTime(String time) {
+	update_time.setText("Last updated: " + time);
 }
 
 /* =============================================== */
@@ -395,25 +424,21 @@ private void handleHelpButtonClick(ActionEvent e) {
 /* ============ Change User Inteface ============= */
 /* =============================================== */
 
-public void scrollToBottom() {
+private void scrollToBottom() {
 	Animation animation = new Timeline(
 		new KeyFrame(Duration.seconds(1),
 		             new KeyValue(scrollpane.vvalueProperty(), 1)));
 	animation.play();
 
 }
-public String getTimeNow() {
+private String getTimeNow() {
 	Calendar cal = Calendar.getInstance();
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 	String time = sdf.format(cal.getTime()).toString();
 	return time;
 }
 
-public void changeUpdateTime(String time) {
-	update_time.setText("Last updated: " + time);
-}
-
-public void changeWifiAccess(boolean access) {
+private void changeWifiAccess(boolean access) {
 	if(access) {
 		ready = true;
 		query_text_field.setPromptText("Input a query here");
@@ -433,8 +458,8 @@ public void changeWifiAccess(boolean access) {
 	}
 }
 
-public void changeMuteButtonIcon(){
-	if(virtualAssistant.systemStatus.getSoundEnabled()) {
+private void changeMuteButtonIcon(boolean sound){
+	if(sound) {
 		// un mute the voice
 		Image image = new Image(getClass().getResourceAsStream("images/not_muted.png"));
 		mute_control_image_view.setImage(image);
@@ -445,7 +470,7 @@ public void changeMuteButtonIcon(){
 	}
 }
 
-public void addMessage(Message message) {
+private void addMessage(Message message) {
 	if(onHelp) {
 		closeAll();
 	}
@@ -454,7 +479,7 @@ public void addMessage(Message message) {
 }
 
 // Display the help screen to the user
-public void openHelp() {
+private void openHelp() {
 	onHelp = true;
 	chatbot_container.getChildren().clear();
 
@@ -525,7 +550,7 @@ public void openHelp() {
 }
 
 // close help screen
-public void closeAll() {
+private void closeAll() {
 	onHelp = false;
 	chatbot_container.getChildren().clear();
 
