@@ -128,10 +128,10 @@ public void initialize(URL location, ResourceBundle resources) {
 		}
 	};
 
-	task1.setOnSucceeded(e -> {
-		changeUpdateTime(getTimeNow());
-		new Thread(task2).start();
-	});
+	task1.setOnSucceeded(e->{
+			changeUpdateTime(getTimeNow());
+			new Thread(task2).start();
+		});
 	new Thread(task1).start();
 
 
@@ -141,21 +141,21 @@ public void initialize(URL location, ResourceBundle resources) {
 		ScheduledService<String> svc = new ScheduledService<String>() {
 			protected Task<String> createTask() {
 				return new Task<String>() {
-					protected String call() {
-						virtualAssistant.scan();
-						return getTimeNow();
-          }
-        };
+					       protected String call() {
+						       virtualAssistant.scan();
+						       return getTimeNow();
+					       }
+				};
 			}
 		};
 		svc.setPeriod(Duration.seconds(dataUpdatePeriod));
 		svc.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			@Override
-      public void handle(WorkerStateEvent t) {
-				String time = (String)t.getSource().getValue();
-        changeUpdateTime(time);
-      }
-		});
+				@Override
+				public void handle(WorkerStateEvent t) {
+				        String time = (String)t.getSource().getValue();
+				        changeUpdateTime(time);
+				}
+			});
 		svc.start();
 	}
 
@@ -278,10 +278,10 @@ public void makeQuery(String text) {
 					//e.printStackTrace();
 
 					String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";
-                    if(virtualAssistant.systemStatus.getSoundEnabled())
+					if(virtualAssistant.systemStatus.getSoundEnabled())
 						tts.speak("Sorry, we couldn't find that.", 1.0f, false, false);
 
-                    String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
+					String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
 					response = new URLMessage(message, url);
 				}
 
