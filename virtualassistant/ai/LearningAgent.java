@@ -255,8 +255,25 @@ public class LearningAgent implements ILearningAgent {
     // }
 
   }*/
-    public boolean unitTest(BufferedWriter logger) throws IOException {
-    return false;
-}
+  public boolean unitTest(BufferedWriter logger) throws IOException, ParseException {
+
+    getFavouriteStocks();
+    logger.write("Can get favourite stocks\n");
+
+    if (suggestQueries(10) != []) {;
+      logger.write("Suggested Queries fails\n");
+      return false;
+    }
+    logger.write("Suggested Queries succeeds\n");
+
+    searchForStockEvent();
+    logger.write("Stock notifications succeeds\n");
+
+    searchForNewsEvent();
+    logger.write("News notifications succeeds\n");
+
+    return true;
+
+  }
 
 }

@@ -361,8 +361,41 @@ public class StockData implements IStockData {
 
     return total;
   }
-    
-    public boolean unitTest(BufferedWriter logger) throws IOException {
-    return false;
-}
+
+  public boolean unitTest(BufferedWriter logger) throws IOException {
+
+    int sum = 0;
+    for (Set com : companiesInSector.values()) {
+      sum += com.size();
+    }
+
+    if (sum != tickerToCompany.size() || sum != nameToCompany.size()) {
+      logger.write("Company stores inconsistent\n");
+      return false;
+    }
+    logger.write("Company stores consistent\n");
+
+    if (!isSector("Construction & Materials")) {
+      logger.write("Missing random sector\n");
+      return false;
+    }
+    logger.write("Random sector present\n");
+
+    if (sectorYearLow("Pharmaceuticals & Biotechnology") == -1.0) {
+      logger.write("Sector year low fails\n");
+      return false;
+    }
+    logger.write("Sector year low succeeds\n");
+
+    if (sectorYearHigh("Software & Computer Services") == -1.0) {
+      logger.write("Sector year high fails\n");
+      return false;
+    }
+    logger.write("Sector year high succeeds\n");
+
+
+
+
+    return true;
+  }
 }

@@ -15,11 +15,11 @@ import java.io.FileWriter;
 public class UnitTest {
 
     private static BufferedWriter logger;
-      
+
     public static void main(String[] args) throws IOException {
-            
+
         logger = new BufferedWriter(new FileWriter("tests/logs_unitTesting.txt"));
-         
+
         VirtualAssistant virtualAssistant = null;
         Scrapper scrapper = null;
         StockData stockData = null;
@@ -27,7 +27,7 @@ public class UnitTest {
         Loader loader = null;
         Chatbot chatbot = null;
         LearningAgent learningAgent = null;
-    
+
         // Start testing
         logger.write("Testing Virtual Assistant...");
         try {
@@ -37,7 +37,7 @@ public class UnitTest {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
         logger.write("Testing Scrapper...");
         try {
             scrapper = new Scrapper();
@@ -46,16 +46,25 @@ public class UnitTest {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
         logger.write("Testing StockData...");
-        try {          
+        try {
             stockData = new StockData(true);
             writeConclusion(stockData.unitTest(logger));
         } catch (Exception e) {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
+        logger.write("Reloading StockData...");
+        try {
+            stockData = StockData.reloadData(stockData);
+            writeConclusion(stockData.unitTest(logger));
+        } catch (Exception e) {
+            writeConclusion(false);
+            e.printStackTrace();
+        }
+
         logger.write("Testing NewsData...");
         try {
             newsData = new NewsData();
@@ -64,7 +73,7 @@ public class UnitTest {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
         logger.write("Testing Loader...");
         try {
             loader = new Loader();
@@ -73,7 +82,7 @@ public class UnitTest {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
         logger.write("Testing Chatbot...");
         try {
             chatbot = new Chatbot();
@@ -82,7 +91,7 @@ public class UnitTest {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
         logger.write("Testing LearningAgent...");
         try {
             learningAgent = new LearningAgent(stockData, newsData);
@@ -91,20 +100,20 @@ public class UnitTest {
             writeConclusion(false);
             e.printStackTrace();
         }
-         
+
         logger.write("\nTESTING COMPLETE!");
-         
+
         logger.close();
-         
+
     }
-    
+
     private static void writeConclusion(boolean ok) throws IOException{
-        
+
         if(ok)
             logger.write("SUCCESS\n");
-        else 
+        else
             logger.write("FAILED\n");
-         
+
     }
-    
+
 }

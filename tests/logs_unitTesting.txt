@@ -1,9 +1,22 @@
 Testing Virtual Assistant...FAILED
 Testing Scrapper...FAILED
-Testing StockData...FAILED
+Testing StockData...Company stores consistent
+Random sector present
+Sector year low succeeds
+Sector year high succeeds
+SUCCESS
+Reloading StockData...Company stores consistent
+Random sector present
+Sector year low succeeds
+Sector year high succeeds
+SUCCESS
 Testing NewsData...FAILED
 Testing Loader...FAILED
 Testing Chatbot...FAILED
-Testing LearningAgent...FAILED
+Testing LearningAgent...Can get favourite stocks
+Suggested Queries succeeds
+Stock notifications succeeds
+News notifications succeeds
+SUCCESS
 
 TESTING COMPLETE!
