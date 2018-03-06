@@ -1,0 +1,2 @@
+Main-Class: tests.UnitTest
+Class-Path: libraries/guava-22.0.jar libraries/JSON-parser.jar libraries/jsoup-1.11.2.jar libraries/marytts-builder-5.2-jar-with-dependencies.jar libraries/marytts-lang-en-5.2.jar libraries/TTS.jar libraries/virtualassistant.jar libraries/voice-cmu-rms-hsmm-5.2.jar libraries/sphinx4-core-5prealpha-20160628.232526-10.jar libraries/phinx4-data-5prealpha-20160628.232535-10.jar

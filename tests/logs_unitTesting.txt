@@ -1,0 +1,9 @@
+Testing Virtual Assistant...FAILED
+Testing Scrapper...FAILED
+Testing StockData...FAILED
+Testing NewsData...FAILED
+Testing Loader...FAILED
+Testing Chatbot...FAILED
+Testing LearningAgent...FAILED
+
+TESTING COMPLETE!
