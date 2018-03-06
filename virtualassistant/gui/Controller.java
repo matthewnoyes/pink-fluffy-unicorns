@@ -528,8 +528,4 @@ public void closeAll() {
 	}
 }
 
-public boolean unitTest(BufferedWriter logger) throws IOException {
-    return false;
-}
-
 }

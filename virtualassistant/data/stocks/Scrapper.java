@@ -6,15 +6,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jsoup.Connection;
 
-import java.util.HashMap;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.text.ParseException;
+
 import java.util.Set;
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Date;
+import java.util.Calendar;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 public class Scrapper {
 

@@ -14,6 +14,7 @@ import virtualassistant.data.stocks.IStockData;
 import virtualassistant.data.stocks.ICompany;
 import virtualassistant.data.news.*;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.ParseException;
 

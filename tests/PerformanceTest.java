@@ -5,7 +5,7 @@ public class PerformanceTest {
   
   public static void main(String[] args) {
     
-    long start, end;
+    /*long start, end;
     
     // Test instantiations
     System.out.println("Instantiation testing (nanoseconds)...");
@@ -33,7 +33,7 @@ public class PerformanceTest {
     
     System.out.println((end - start) + "ns");
     
-    // Test methods
+    // Test methods*/
     
   }
 }
