@@ -1,22 +1,35 @@
-Testing Virtual Assistant...FAILED
-Testing Scrapper...FAILED
-Testing StockData...Company stores consistent
-Random sector present
-Sector year low succeeds
-Sector year high succeeds
-SUCCESS
-Reloading StockData...Company stores consistent
-Random sector present
-Sector year low succeeds
-Sector year high succeeds
-SUCCESS
-Testing NewsData...FAILED
-Testing Loader...FAILED
+Testing Virtual Assistant...
+Testing Virtual Assistant...SUCCESS
+
+Testing Scrapper...
+Testing Scrapper...SUCCESS
+
+Testing StockData...
+Sector year low...SUCCESS
+Sector year high...SUCCESS
+Testing StockData...SUCCESS
+
+Testing Reloading StockData...
+Company stores consistent...SUCCESS
+Random sector present...SUCCESS
+Sector year low...SUCCESS
+Sector year high...SUCCESS
+Testing Reloading StockData...SUCCESS
+
+Testing LearningAgent...
+Getting favourite stocks... SUCCESS
+Suggested Queries... FAILED
+Testing LearningAgent...FAILED
+
+Testing NewsData...
+Testing NewsData...SUCCESS
+
+Testing Loader...
+Testing Loader...SUCCESS
+
+Testing Chatbot...
 Testing Chatbot...FAILED
-Testing LearningAgent...Can get favourite stocks
-Suggested Queries succeeds
-Stock notifications succeeds
-News notifications succeeds
-SUCCESS
+
+
 
 TESTING COMPLETE!

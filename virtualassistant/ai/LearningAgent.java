@@ -229,6 +229,11 @@ public class LearningAgent implements ILearningAgent {
   }
 
   /*public static void main(String[] args) {
+
+
+  }*/
+  public boolean unitTest(BufferedWriter logger) throws IOException, ParseException {
+
     // Favourites<String, Integer> test = new Favourites<String, Integer>();
     // String[] values = new String[]{"a", "b", "c", "d", "a", "e", "f", "g", "g", "f"};
     // for (int i = 0; i < values.length; i++) {
@@ -252,23 +257,23 @@ public class LearningAgent implements ILearningAgent {
     //   System.out.println(output[i]);
     // }
 
-  }*/
-  public boolean unitTest(BufferedWriter logger) throws IOException, ParseException {
+    analyzeInput("BT");
+    logger.write("Adding test stock... SUCCESS\n");
 
     getFavouriteStocks();
-    logger.write("Can get favourite stocks\n");
+    logger.write("Getting favourite stocks... SUCCESS\n");
 
-    if (suggestQueries(10).length == 0) {;
-      logger.write("Suggested Queries fails\n");
+    if(suggestQueries(10).length == 0) {
+      logger.write("Suggested Queries... FAILED\n");
       return false;
     }
-    logger.write("Suggested Queries succeeds\n");
+    logger.write("Suggested Queries... SUCCESS\n");
 
     searchForStockEvent();
-    logger.write("Stock notifications succeeds\n");
+    logger.write("Stock notifications... SUCCESS\n");
 
     searchForNewsEvent();
-    logger.write("News notifications succeeds\n");
+    logger.write("News notifications... SUCCESS\n");
 
     return true;
 
