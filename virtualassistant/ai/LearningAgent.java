@@ -254,6 +254,8 @@ public class LearningAgent implements ILearningAgent {
     // }
 
   }*/
-
+    public boolean unitTest(){
+        return false;
+    }
 
 }

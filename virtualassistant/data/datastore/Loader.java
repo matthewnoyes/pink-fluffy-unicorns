@@ -160,4 +160,7 @@ public class Loader {
         }
     }
     
+    public boolean unitTest(){
+        return false;
+    }
 }

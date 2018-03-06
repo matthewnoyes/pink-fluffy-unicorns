@@ -41,7 +41,7 @@ public class Chatbot implements IChatBot {
         return jsonResponse;
     }
 
-    public void output(Double text) {
-
+    public boolean unitTest() {
+        return false;
     }
 }

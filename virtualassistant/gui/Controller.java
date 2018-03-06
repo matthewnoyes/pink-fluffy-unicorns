@@ -528,4 +528,8 @@ public void closeAll() {
 	}
 }
 
+public boolean unitTest(){
+    return false;
+}
+
 }

@@ -359,5 +359,8 @@ public class StockData implements IStockData {
 
     return total;
   }
-
+    
+    public boolean unitTest(){
+        return false;
+    }
 }

@@ -23,5 +23,5 @@ public class Favourites<K, V> extends LinkedHashMap<K, V> {
     }
     this.put(key, value);
   }
-
+    
 }

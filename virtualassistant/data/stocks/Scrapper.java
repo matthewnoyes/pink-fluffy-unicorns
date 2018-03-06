@@ -357,4 +357,8 @@ public class Scrapper {
 
     System.out.println(data.getCompanyForTicker("BT.A").getOpen());
   }
+  
+  public boolean unitTest(){
+        return false;
+    }
 }

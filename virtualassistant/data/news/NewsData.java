@@ -202,4 +202,8 @@ public class NewsData implements INewsData{
 		NewsObj c = new NewsObj(Datetime,title,impact,url,source);
 		return c;
 	}
+    
+    public boolean unitTest(){
+        return false;
+    }
 }

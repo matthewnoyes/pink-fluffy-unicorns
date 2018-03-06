@@ -664,5 +664,9 @@ public class VirtualAssistant {
         SECTOR_COMPARISON = 1,
         ALERT = 2;
     }
+    
+    public boolean unitTest(){
+        return false;
+    }
 
 }
