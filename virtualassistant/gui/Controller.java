@@ -160,6 +160,12 @@ public void initialize(URL location, ResourceBundle resources) {
 	}
 
 	System.out.println("Launching interface...");
+	String[] alerts = new String[3];
+	alerts[0] = "BARC is rising rapidly";
+	alerts[1] = "TESCO is gaining price quickly";
+	alerts[2] = "COCACOLA HBC AG is gaining price quickly";
+
+	makeSystemQuery("I've noticed these changes", alerts);
 	openHelp();
 }
 
@@ -232,8 +238,8 @@ private void generateAnimations() {
 /* =============== ChatBot queries =============== */
 /* =============================================== */
 
-public void makeSystemQuery(String message){
-	Message system = new Response(message, null);
+public void makeSystemQuery(String message, String[] alerts){
+	Message system = new AlertMessage(message, alerts);
 	chatbot_message_list.add(system);
 	addMessage(system);
 }
@@ -261,7 +267,7 @@ public void makeQuery(String text) {
 
 				try {
 
-					Pair<String, LinkedList<NewsObj> > responsePair =
+					Pair<String, LinkedList<NewsObj>> responsePair =
 						virtualAssistant.getResponse(query.getMessage());
 
 					String responseStr = responsePair.getFirst();

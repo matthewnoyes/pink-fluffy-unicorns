@@ -11,17 +11,17 @@ import java.awt.Desktop;
 import java.net.URI;
 import java.util.*;
 
-public class URLMessage extends Message {
+public class AlertMessage extends Message {
 
-  private String url;
+  private String[] alerts;
 
-  public URLMessage(String response, String url) {
-  		super(response);
-      this.url = url;
+  public AlertMessage(String message, String[] alerts) {
+    super(message);
+    this.alerts = alerts;
   }
 
-  public String getUrl() {
-    return url;
+  public String[] getAlerts() {
+      return alerts;
   }
 
   public HBox getDisplay() {
@@ -43,22 +43,16 @@ public class URLMessage extends Message {
 		Label label = new Label(this.getMessage());
 		label.setWrapText(true);
 		label.setTextAlignment(TextAlignment.LEFT);
+    content_contain.getChildren().add(label);
 
-    Hyperlink url_hyperlink = new Hyperlink(this.getUrl());
-    url_hyperlink.setWrapText(true);
-		url_hyperlink.setTextAlignment(TextAlignment.LEFT);
-    url_hyperlink.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent e) {
-        try {
-          Desktop.getDesktop().browse(new URI(url_hyperlink.getText()));
-        } catch(Exception ex) {
-          System.out.println("Error opening webpage");
-        }
-      }
-    });
+    for(String alert : getAlerts()) {
+      Label alert_message = new Label(alert);
+      alert_message.setId("alert_message");
+      alert_message.setWrapText(true);
+  		alert_message.setTextAlignment(TextAlignment.LEFT);
+      content_contain.getChildren().add(alert_message);
+    }
 
-		content_contain.getChildren().addAll(label, url_hyperlink);
 		container.getChildren().addAll(content_contain, region);
 		return container;
   }
