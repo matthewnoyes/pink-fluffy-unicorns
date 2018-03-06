@@ -203,7 +203,21 @@ public class NewsData implements INewsData{
 		return c;
 	}
     
-    public boolean unitTest(BufferedWriter logger) throws IOException {
-    return false;
+    public boolean unitTest(BufferedWriter logger) throws IOException, ParseException {
+               final Document Ftse100 = Jsoup.connect("https://en.wikipedia.org/wiki/FTSE_100_Index").get(); // used to get all companies in a sector
+        for(Element li: Ftse100.select(".wikitable.sortable tbody tr")){ 
+            String company = li.select("td:eq(1)").text();
+            String sector = li.select("td:eq(2)").text();
+            if(getAllNews(company) == null){
+                logger.write("Got an empty linked list for company : " + company);
+                    return false;
+            }
+
+            if(sectorNews(sector) == null){
+                logger.write("Got an empty linked list for sector : " + sector);
+                    return false;
+            }
+        }
+         return true;
 }
 }
