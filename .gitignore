@@ -6,3 +6,4 @@ virtualassistant/data/datastore/systemStatus.json
 *.json
 log/*
 virtualassistant/data/datastore/systemStatus.json
+tests/*.txt
