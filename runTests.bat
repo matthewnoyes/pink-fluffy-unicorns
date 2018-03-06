@@ -1,7 +1,7 @@
 @echo off
 
 echo 'Running jar...'
-java tests.UnitTest
+java -jar virtualassistanttests.jar
 
 echo 'Complete..'
 pause

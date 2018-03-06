@@ -1,24 +1,19 @@
 @echo off
 
-REM dir "$(dirname "$0")"
+REM cd "$(dirname "$0")"
 
-set classpath=.;libraries\*
-set folders=.\tests\*.java .\virtualassistant\ai\*.java .\virtualassistant\chatbot\*.java .\virtualassistant\data\news\*.java .\virtualassistant\data\system\*.java .\virtualassistant\data\stocks\*.java .\virtualassistant\data\datastore\*.java .\virtualassistant\gui\*.java .\virtualassistant\misc\*.java
+set classpath=.;libraries/*
+set folders=./virtualassistant/ai/*.java ./virtualassistant/chatbot/*.java ./virtualassistant/data/news/*.java ./virtualassistant/data/system/*.java ./virtualassistant/data/stocks/*.java ./virtualassistant/data/datastore/*.java ./virtualassistant/gui/*.java ./virtualassistant/misc/*.java ./tests/UnitTest.java
+#Compile all java files
+javac -cp %classpath% %folders% ./virtualassistant/IVirtualAssistant.java ./virtualassistant/VirtualAssistant.java || { echo Compiling Failed  exit 1 }
 
-REM Compile all java files
+set gui=./virtualassistant/gui/*.class ./virtualassistant/gui/sample.fxml ./virtualassistant/gui/images/* ./virtualassistant/gui/styles/*
+set classes=./virtualassistant/ai/*.class ./virtualassistant/chatbot/*.class ./virtualassistant/chatbot/grammars/* ./virtualassistant/data/datastore/*.class ./virtualassistant/data/news/*.class ./virtualassistant/data/stocks/*.class ./virtualassistant/data/system/*.class ./virtualassistant/misc/*.class
+jar cfm virtualassistanttests.jar TestManifest.txt %gui% %classes% ./virtualassistant/*.class ./tests/*.class || { echo Creating jar file failed  exit 1 }
 
-javac -cp %classpath% %folders% virtualassistant\IVirtualAssistant.java virtualassistant\VirtualAssistant.java 
 
+REM echo Succesfully created jar file
+REM echo Run "java -jar virtualassistanttests.jar" to run program
 
-
-@echo off
-
-REM dir "$(dirname "$0")"
-
-set classpath=.;libraries\*
-set folders=.\virtualassistant\ai\*.java .\virtualassistant\chatbot\*.java .\virtualassistant\data\news\*.java .\virtualassistant\data\system\*.java .\virtualassistant\data\stocks\*.java .\virtualassistant\data\datastore\*.java .\virtualassistant\gui\*.java .\virtualassistant\misc\*.java
-
-REM Compile all java files
-pause
 
 pause
