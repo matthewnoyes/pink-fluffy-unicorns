@@ -398,7 +398,7 @@ public void scrollToBottom() {
 }
 public String getTimeNow() {
 	Calendar cal = Calendar.getInstance();
-	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 	String time = sdf.format(cal.getTime()).toString();
 	return time;
 }
