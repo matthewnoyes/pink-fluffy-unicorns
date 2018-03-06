@@ -92,7 +92,7 @@ public void initialize(URL location, ResourceBundle resources) {
 
 
 			System.out.println("Downloading data...");
-			virtualAssistant = new VirtualAssistant();
+			virtualAssistant = new VirtualAssistant(Controller.this);
 
 			ready = true;
 			// Change mute button

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import virtualassistant.data.stocks.IStockData;
 import virtualassistant.data.stocks.ICompany;
 import virtualassistant.data.news.*;
+import virtualassistant.gui.Controller;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -26,19 +27,21 @@ public class LearningAgent implements ILearningAgent {
 
   private IStockData stocks;
   private INewsData news;
+  private Controller controller;
 
   private final double minStockImpact = 2.5;
   private final double minNewsImpact = 2.5;
 
-  public LearningAgent(IStockData stocks, INewsData news) {
+  public LearningAgent(IStockData stocks, INewsData news, Controller controller) {
     favouriteStocks = new Favourites<String, Integer>();
     stockNotifications = new HashMap<String, Calendar>();
 
+    this.controller = controller;
     this.stocks = stocks;
     this.news = news;
   }
 
-  public LearningAgent(IStockData stocks, INewsData news, Favourites<String, Integer> favouriteStocks) {
+  public LearningAgent(IStockData stocks, INewsData news, Favourites<String, Integer> favouriteStocks, Controller controller) {
 
     if(favouriteStocks == null) {
         favouriteStocks = new Favourites<String, Integer>();
@@ -47,6 +50,7 @@ public class LearningAgent implements ILearningAgent {
 
     this.favouriteStocks = favouriteStocks;
 
+    this.controller = controller;
     this.stocks = stocks;
     this.news = news;
 
@@ -118,7 +122,7 @@ public class LearningAgent implements ILearningAgent {
 
   public String searchForStockEvent() {
 
-    String alerts = "";
+    ArrayList<String> alerts = new ArrayList<String>();
 
     Calendar removeTime = Calendar.getInstance();
     //Send notification every 3 hours
@@ -131,10 +135,10 @@ public class LearningAgent implements ILearningAgent {
       if (!stockNotifications.containsKey(sector)) {
 
         if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
-          alerts += sector + " is gaining price quickly\n";
+          alerts.add(sector + " is gaining price quickly");
           stockNotifications.put(sector, Calendar.getInstance());
         } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
-          alerts += sector + " is losing price quickly\n";
+          alerts.add(sector + " is losing price quickly");
           stockNotifications.put(sector, Calendar.getInstance());
         }
       } else {
@@ -151,10 +155,10 @@ public class LearningAgent implements ILearningAgent {
         //Check the favourite stocks contain this stock
         if (favouriteStocks.containsKey(com.getTicker())) {
           if (com.getPercentageChange() > minStockImpact) {
-            alerts += com.getName() + " is gaining price quickly\n";
+            alerts.add(com.getName() + " is gaining price quickly");
             stockNotifications.put(com.getTicker(), Calendar.getInstance());
           } else if (com.getPercentageChange() < -minStockImpact) {
-            alerts += com.getName() + " is losing price quickly\n";
+            alerts.add(com.getName() + " is losing price quickly");
             stockNotifications.put(com.getTicker(), Calendar.getInstance());
           }
         }
@@ -166,11 +170,18 @@ public class LearningAgent implements ILearningAgent {
       }
     }
 
-    return alerts;
+    String[] alertArray = new String[alerts.size()];
+    alerts.toArray(alertArray);
+
+    controller.makeSystemQuery("There are new stock alerts:", alertArray);
+
+    return "";
 
   }
 
   public String searchForNewsEvent() throws IOException, ParseException {
+
+    ArrayList<String> alerts = new ArrayList<String>();
 
     if (lastNewsUpdateTime == null) {
       //If first check, get data from past day
@@ -178,7 +189,6 @@ public class LearningAgent implements ILearningAgent {
       lastNewsUpdateTime.add(Calendar.DAY_OF_YEAR, -5);
     }
 
-    String alerts = "";
     for (ICompany com : stocks.getAllCompanies()) {
 
       //Test if the company is in the users favourites
@@ -195,8 +205,8 @@ public class LearningAgent implements ILearningAgent {
                   //Send a alert
                   String[] title = article.getTitle().split(" ", 3);
 
-                  alerts += "There is significant news on " + title[0] + ": " + title[2] + "\n";
-                  alerts += article.getUrl() + "\n";
+                  alerts.add("There is significant news on " + title[0] + ": " + title[2]);
+                  alerts.add(article.getUrl());
                 }
               }
             } catch (Exception e) {
@@ -207,26 +217,14 @@ public class LearningAgent implements ILearningAgent {
       }
     }
 
-    // for (String sector : stocks.getSectors()) {
-    //   for (NewsObj article : news.sectorNews(sector)) {
-    //     try {
-    //       String impact = article.getImpact();
-    //       if (impact.length() > 1) {
-    //         if (Math.abs(Double.parseDouble(impact.substring(0, impact.length() - 1))) > minNewsImpact) {
-    //         //Send a alert
-    //         alerts += "There is significant news: " + article.getTitle() + "\n";
-    //       }
-    //     }
-    //     } catch (Exception e) {
-    //       //Do nothing
-    //     }
-    //   }
-    //
-    // }
-
     lastNewsUpdateTime = Calendar.getInstance();
 
-    return alerts;
+    String[] alertArray = new String[alerts.size()];
+    alerts.toArray(alertArray);
+
+    controller.makeSystemQuery("There are new news alerts:", alertArray);
+
+    return "";
 
   }
 
@@ -260,7 +258,7 @@ public class LearningAgent implements ILearningAgent {
     getFavouriteStocks();
     logger.write("Can get favourite stocks\n");
 
-    if (suggestQueries(10) != []) {;
+    if (suggestQueries(10).length == 0) {;
       logger.write("Suggested Queries fails\n");
       return false;
     }

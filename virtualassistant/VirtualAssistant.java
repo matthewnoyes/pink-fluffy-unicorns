@@ -19,6 +19,7 @@ import virtualassistant.ai.LearningAgent;
 import virtualassistant.data.system.SystemStatus;
 import virtualassistant.misc.Pair;
 import virtualassistant.data.news.*;
+import virtualassistant.gui.Controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,7 +48,7 @@ public class VirtualAssistant {
     // Set this for debugging
     private boolean verbose = false;
 
-    public VirtualAssistant(){
+    public VirtualAssistant(Controller controller){
         //Instantiate everything
 
         loader = new Loader();
@@ -74,7 +75,7 @@ public class VirtualAssistant {
         }
 
         System.out.println("Loading favourites...");
-        learningAgent = new LearningAgent(stockData, newsData, loader.readFavourites());
+        learningAgent = new LearningAgent(stockData, newsData, loader.readFavourites(), controller);
 
         System.out.println("Getting today's date...");
         updateToday();
@@ -135,8 +136,9 @@ public class VirtualAssistant {
             }
         }
 
-        System.out.println(learningAgent.searchForStockEvent());
+
         try {
+          System.out.println(learningAgent.searchForStockEvent());
           System.out.println(learningAgent.searchForNewsEvent());
         } catch (Exception e) {
           e.printStackTrace();
@@ -665,7 +667,7 @@ public class VirtualAssistant {
         SECTOR_COMPARISON = 1,
         ALERT = 2;
     }
-    
+
     public boolean unitTest(BufferedWriter logger) throws IOException {
     return false;
 }
