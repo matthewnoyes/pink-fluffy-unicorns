@@ -254,8 +254,8 @@ public class LearningAgent implements ILearningAgent {
     // }
 
   }*/
-    public boolean unitTest(){
-        return false;
-    }
+    public boolean unitTest(BufferedWriter logger) throws IOException {
+    return false;
+}
 
 }

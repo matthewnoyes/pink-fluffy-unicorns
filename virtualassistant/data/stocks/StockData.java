@@ -360,7 +360,7 @@ public class StockData implements IStockData {
     return total;
   }
     
-    public boolean unitTest(){
-        return false;
-    }
+    public boolean unitTest(BufferedWriter logger) throws IOException {
+    return false;
+}
 }
