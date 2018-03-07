@@ -222,7 +222,9 @@ private void generateHelpText() {
 	helptext_list.add("Which chemicals are falling?");
 	helptext_list.add("Which aerospace companies are rising?");
 	helptext_list.add("Which tobacco companies are falling right now?");
-
+	helptext_list.add("What are my favourite stocks?");
+	helptext_list.add("How are my favourites doing?");
+	helptext_list.add("Show my favourite stocks");
 }
 
 private void generateAnimations() {
