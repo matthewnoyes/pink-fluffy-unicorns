@@ -189,13 +189,15 @@ public class LearningAgent implements ILearningAgent {
 
       //Make sure the user has not been notified recently
       if (!stockNotifications.containsKey(sector)) {
+        if (favouriteStocks.containsKey(sector)) {
 
-        if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
-          alerts.add(sector + ": +" + String.format("%.2f", stocks.getSectorPercentageChange(sector)) + "%");
-          stockNotifications.put(sector, Calendar.getInstance());
-        } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
-          alerts.add(sector + ": " + String.format("%.2f",stocks.getSectorPercentageChange(sector)) + "%");
-          stockNotifications.put(sector, Calendar.getInstance());
+          if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
+            alerts.add(sector + ": +" + String.format("%.2f", stocks.getSectorPercentageChange(sector)) + "%");
+            stockNotifications.put(sector, Calendar.getInstance());
+          } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
+            alerts.add(sector + ": " + String.format("%.2f",stocks.getSectorPercentageChange(sector)) + "%");
+            stockNotifications.put(sector, Calendar.getInstance());
+          }
         }
       } else {
         if (stockNotifications.get(sector).before(removeTime)) {
