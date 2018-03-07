@@ -421,8 +421,9 @@ private void handleHelpButtonClick(ActionEvent e) {
 /* =============================================== */
 
 private void scrollToBottom() {
+	scrollpane.setVvalue(1);
 	Animation animation = new Timeline(
-		new KeyFrame(Duration.seconds(1),
+		new KeyFrame(Duration.seconds(0.5),
 		             new KeyValue(scrollpane.vvalueProperty(), 1)));
 	animation.play();
 
