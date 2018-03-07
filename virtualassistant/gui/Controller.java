@@ -75,6 +75,8 @@ private static VirtualAssistant virtualAssistant;
 private static SpeechRecognizerMain stt;
 private static TextToSpeech tts;
 
+public final boolean sttEnabled = false;
+
 @Override
 public void initialize(URL location, ResourceBundle resources) {
 	init_variables();
@@ -113,16 +115,18 @@ public void initialize(URL location, ResourceBundle resources) {
 	Task task2 = new Task<Void>() {
 		@Override
 		public Void call() {
-			stt = new SpeechRecognizerMain(Controller.this);
+			if (Controller.this.sttEnabled) {
+				stt = new SpeechRecognizerMain(Controller.this);
 
-			//stt.startSpeechRecognition();
-			stt.ignoreSpeechRecognitionResults();
-			System.out.println("Speech to text... complete");
+				//stt.startSpeechRecognition();
+				stt.ignoreSpeechRecognitionResults();
+				System.out.println("Speech to text... complete");
 
-			sstFinished = true;
+				sstFinished = true;
 
-			if(virtualAssistantFinished)
-				round_mic_button.setDisable(false);
+				if(virtualAssistantFinished)
+					round_mic_button.setDisable(false);
+			}
 
 			return null;
 		}
