@@ -19,6 +19,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.ParseException;
 
+import java.lang.*;
+import javafx.application.Platform;
+
 public class LearningAgent implements ILearningAgent {
 
   private Favourites<String, Integer> favouriteStocks;
@@ -226,8 +229,20 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    if (alertArray.length > 0)
-      controller.makeSystemQuery("There are new stock alerts:", alertArray);
+    if (alertArray.length > 0) {
+      try {
+        Platform.runLater(new Runnable() {
+          @Override public void run() {
+            System.out.println("Making decision?");
+                      controller.makeSystemQuery("There are new stock alerts:", alertArray);
+          }
+        });
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
 
     return "";
 
@@ -276,8 +291,20 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    if (alertArray.length > 0)
-      controller.makeSystemQuery("There are new news alerts:", alertArray);
+    if (alertArray.length > 0) {
+      try {
+        Platform.runLater(new Runnable() {
+          @Override public void run() {
+            System.out.println("Making decision?");
+                      controller.makeSystemQuery("There are new news alerts:", alertArray);
+          }
+        });
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
 
     return "";
 
