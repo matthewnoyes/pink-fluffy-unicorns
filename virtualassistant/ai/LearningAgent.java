@@ -32,6 +32,8 @@ public class LearningAgent implements ILearningAgent {
   private final double minStockImpact = 2.5;
   private final double minNewsImpact = 2.5;
 
+  private int updatePos = 0;
+
   public LearningAgent(IStockData stocks, INewsData news, Controller controller) {
     favouriteStocks = new Favourites<String, Integer>();
     stockNotifications = new HashMap<String, Calendar>();
@@ -118,6 +120,57 @@ public class LearningAgent implements ILearningAgent {
     }
 
     return queries;
+  }
+
+  public String[] getUpdates(int count) {
+
+    Set<String> tickers = favouriteStocks.keySet();
+
+    String[] queries;
+    //Check that there is enough tickers to fill array
+    if (tickers.size() < count) {
+      queries = new String[tickers.size()];
+    } else {
+      queries = new String[count];
+    }
+
+    int skip = updatePos;
+
+    int i = 0;
+    ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favouriteStocks.size());
+
+    while (iterator.hasPrevious()) {
+
+      if (skip > 0) {
+        skip--;
+        continue;
+      }
+
+      String ticker = iterator.previous();
+      //Search for something interesting
+
+      ICompany com = stocks.getCompanyForTicker(ticker);
+
+      String query = ticker + ": " + com.getCurrentPrice() + ", " + com.getPercentageChange() + "%";
+
+      queries[i] = query;
+      i++;
+
+      //If we have enough queries, finish
+      if (i >= queries.length) {
+        break;
+      }
+
+    }
+
+    updatePos += queries.length;
+
+    if (updatePos >= favouriteStocks.size()) {
+      updatePos -= favouriteStocks.size();
+    }
+
+    return queries;
+
   }
 
   public String searchForStockEvent() {
