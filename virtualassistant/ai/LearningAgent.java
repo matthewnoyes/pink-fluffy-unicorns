@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.ParseException;
 
+import java.lang.*;
 import javafx.application.Platform;
 
 public class LearningAgent implements ILearningAgent {
@@ -33,6 +34,8 @@ public class LearningAgent implements ILearningAgent {
 
   private final double minStockImpact = 2.5;
   private final double minNewsImpact = 2.5;
+
+  private int updatePos = 0;
 
   public LearningAgent(IStockData stocks, INewsData news, Controller controller) {
     favouriteStocks = new Favourites<String, Integer>();
@@ -122,6 +125,57 @@ public class LearningAgent implements ILearningAgent {
     return queries;
   }
 
+  public String[] getUpdates(int count) {
+
+    Set<String> tickers = favouriteStocks.keySet();
+
+    String[] queries;
+    //Check that there is enough tickers to fill array
+    if (tickers.size() < count) {
+      queries = new String[tickers.size()];
+    } else {
+      queries = new String[count];
+    }
+
+    int skip = updatePos;
+
+    int i = 0;
+    ListIterator<String> iterator = new ArrayList<String>(tickers).listIterator(favouriteStocks.size());
+
+    while (iterator.hasPrevious()) {
+
+      if (skip > 0) {
+        skip--;
+        continue;
+      }
+
+      String ticker = iterator.previous();
+      //Search for something interesting
+
+      ICompany com = stocks.getCompanyForTicker(ticker);
+
+      String query = ticker + ": " + com.getCurrentPrice() + ", " + com.getPercentageChange() + "%";
+
+      queries[i] = query;
+      i++;
+
+      //If we have enough queries, finish
+      if (i >= queries.length) {
+        break;
+      }
+
+    }
+
+    updatePos += queries.length;
+
+    if (updatePos >= favouriteStocks.size()) {
+      updatePos -= favouriteStocks.size();
+    }
+
+    return queries;
+
+  }
+
   public String searchForStockEvent() {
 
     ArrayList<String> alerts = new ArrayList<String>();
@@ -137,10 +191,10 @@ public class LearningAgent implements ILearningAgent {
       if (!stockNotifications.containsKey(sector)) {
 
         if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
-          alerts.add(sector + " is gaining price quickly");
+          alerts.add(sector + ": +" + String.format("%.2f", stocks.getSectorPercentageChange(sector)) + "%");
           stockNotifications.put(sector, Calendar.getInstance());
         } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
-          alerts.add(sector + " is losing price quickly");
+          alerts.add(sector + ": " + String.format("%.2f",stocks.getSectorPercentageChange(sector)) + "%");
           stockNotifications.put(sector, Calendar.getInstance());
         }
       } else {
@@ -157,10 +211,10 @@ public class LearningAgent implements ILearningAgent {
         //Check the favourite stocks contain this stock
         if (favouriteStocks.containsKey(com.getTicker())) {
           if (com.getPercentageChange() > minStockImpact) {
-            alerts.add(com.getName() + " is gaining price quickly");
+            alerts.add(com.getName() + ": +" + com.getPercentageChange() + "%");
             stockNotifications.put(com.getTicker(), Calendar.getInstance());
           } else if (com.getPercentageChange() < -minStockImpact) {
-            alerts.add(com.getName() + " is losing price quickly");
+            alerts.add(com.getName() + ": " + com.getPercentageChange() + "%");
             stockNotifications.put(com.getTicker(), Calendar.getInstance());
           }
         }
@@ -175,14 +229,19 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-
-              controller.makeSystemQuery("There are new stock alerts:", alertArray);
-
+    if (alertArray.length > 0) {
+      try {
+        Platform.runLater(new Runnable() {
+          @Override public void run() {
+            System.out.println("Making decision?");
+                      controller.makeSystemQuery("There are new stock alerts:", alertArray);
+          }
+        });
       }
-      });
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
 
 
     return "";
@@ -232,15 +291,19 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-
-              controller.makeSystemQuery("There are new news alerts:", alertArray);
-
+    if (alertArray.length > 0) {
+      try {
+        Platform.runLater(new Runnable() {
+          @Override public void run() {
+            System.out.println("Making decision?");
+                      controller.makeSystemQuery("There are new news alerts:", alertArray);
+          }
+        });
       }
-      });
-
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
 
 
     return "";

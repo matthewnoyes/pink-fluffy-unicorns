@@ -100,7 +100,7 @@ public class SpeechRecognizerMain {
 		//====================================================================================
 
 		// Grammar
-		configuration.setGrammarPath("virtualassistant/chatbot/grammars");
+		configuration.setGrammarPath("./data/grammars");
 		configuration.setGrammarName("grammar");
 		configuration.setUseGrammar(true);
         //System.out.println("Set Grammar");
@@ -115,7 +115,7 @@ public class SpeechRecognizerMain {
             e.printStackTrace();
         }
         //System.out.println("Started Resources Thread");
-		
+
 		// Start recognition process pruning previously cached data.
 		// recognizer.startRecognition(true);
 
@@ -133,18 +133,18 @@ public class SpeechRecognizerMain {
 	 * Starts the Speech Recognition Thread
 	 */
 	public synchronized void startSpeechRecognition() {
-        
+
         //Check lock
 		if (speechRecognizerThreadRunning)
 			System.out.println("Speech Recognition Thread already running...\n");
-		else 
+		else
 			//Submit to ExecutorService
 			eventsExecutorService.submit(() -> {
-			
+
 				//locks
 				speechRecognizerThreadRunning = true;
 				ignoreSpeechRecognitionResults = true;
-			
+
 				//Start Recognition
 				try {
 					recognizer.startRecognition(true);
@@ -182,7 +182,7 @@ public class SpeechRecognizerMain {
 								System.out.println("Decision made!");
 
 							}
-						} else { 
+						} else {
                               System.out.println("Ingoring Speech Recognition Results...");
                         }
 					}
@@ -190,7 +190,7 @@ public class SpeechRecognizerMain {
 					//logger.log(Level.WARNING, null, ex);
                      ex.printStackTrace();
 					speechRecognizerThreadRunning = false;
-				} 
+				}
 
 				//logger.log(Level.INFO, "SpeechThread has exited...");
 
@@ -260,7 +260,7 @@ public class SpeechRecognizerMain {
 	 * @param speechWords
 	 */
 	public void makeDecision(String speech , List<WordResult> speechWords) {
-        
+
         //System.out.println("Made decision: " + speech);
 		try {
 			Platform.runLater(new Runnable() {
@@ -272,7 +272,7 @@ public class SpeechRecognizerMain {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
 	}
 
 	public boolean getIgnoreSpeechRecognitionResults() {

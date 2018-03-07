@@ -7,7 +7,7 @@ javac -cp $classpath $folders ./virtualassistant/IVirtualAssistant.java ./virtua
 
 #jar cfe virtualassistant.jar virtualassistant.gui.Main ./virtualassistant/* || { echo 'Creating jar file failed' ; exit 1; }
 gui='./virtualassistant/gui/*.class ./virtualassistant/gui/sample.fxml ./virtualassistant/gui/images/* ./virtualassistant/gui/styles/*';
-classes='./virtualassistant/ai/*.class ./virtualassistant/chatbot/*.class ./virtualassistant/chatbot/grammars/* ./virtualassistant/data/datastore/*.class ./virtualassistant/data/news/*.class ./virtualassistant/data/stocks/*.class ./virtualassistant/data/system/*.class ./virtualassistant/misc/*.class';
+classes='./virtualassistant/ai/*.class ./virtualassistant/chatbot/*.class ./virtualassistant/data/datastore/*.class ./virtualassistant/data/news/*.class ./virtualassistant/data/stocks/*.class ./virtualassistant/data/system/*.class ./virtualassistant/misc/*.class';
 jar cfm virtualassistanttests.jar TestManifest.txt $gui $classes ./virtualassistant/*.class ./tests/*.class || { echo 'Creating jar file failed' ; exit 1; }
 
 
