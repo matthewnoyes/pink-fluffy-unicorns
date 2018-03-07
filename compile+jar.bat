@@ -10,7 +10,7 @@ REM Compile all java files
 javac -cp %classpath% %folders% virtualassistant\IVirtualAssistant.java virtualassistant\VirtualAssistant.java || { echo 'Compiling Failed' ; exit 1; }
 
 set gui=.\virtualassistant\gui\*.class .\virtualassistant\gui\sample.fxml .\virtualassistant\gui\images\* virtualassistant\gui\styles\* 
-set classes=virtualassistant\ai\*.class virtualassistant\chatbot\*.class virtualassistant\chatbot\grammars\* virtualassistant\data\datastore\*.class virtualassistant\data\news\*.class virtualassistant\data\stocks\*.class virtualassistant\data\system\*.class virtualassistant\misc\*.class
+set classes=virtualassistant\ai\*.class virtualassistant\chatbot\*.class virtualassistant\data\datastore\*.class virtualassistant\data\news\*.class virtualassistant\data\stocks\*.class virtualassistant\data\system\*.class virtualassistant\misc\*.class
 
 echo 'Making jar file...'
 
