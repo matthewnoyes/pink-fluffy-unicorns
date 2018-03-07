@@ -21,7 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class Loader {
-    
+
     private boolean verbose = false;
     private JSONParser parser;
 
@@ -36,38 +36,38 @@ public class Loader {
 
         return (JSONObject)parser.parse(str);
     }
-    
+
     public void writeSystemStatus(SystemStatus status){
-        
+
         JSONObject obj = new JSONObject();
-        
+
         obj.put("soundEnabled", status.getSoundEnabled());
         obj.put("speechEnabled", status.getSpeechEnabled());
         obj.put("volume", status.getVolume());
-        
+
         //Write
-        try (FileWriter file = new FileWriter("virtualassistant/data/datastore/systemStatus.json")) {
+        try (FileWriter file = new FileWriter("./data/systemStatus.json")) {
 
             file.write(obj.toJSONString());
             file.flush();
 
         } catch (IOException e) {
             e.printStackTrace();
-        } 
-        
+        }
+
     }
-    
+
     public SystemStatus readSystemStatus(){
-        
+
         try {
-            JSONObject obj = (JSONObject) parser.parse(new FileReader("virtualassistant/data/datastore/systemStatus.json"));
-            
+            JSONObject obj = (JSONObject) parser.parse(new FileReader("./data/systemStatus.json"));
+
             boolean soundEnabled = (boolean) obj.get("soundEnabled");
             boolean speechEnabled = (boolean) obj.get("speechEnabled");
             double volume = (double) obj.get("volume");
-            
+
             return new SystemStatus(soundEnabled, speechEnabled, volume);
-        
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -75,12 +75,12 @@ public class Loader {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
-    
+
     public void writeFavourites(LinkedHashMap<String, Integer> favourites){
-    
+
         JSONArray list = new JSONArray();
 
         for(String str : favourites.keySet()){
@@ -92,51 +92,51 @@ public class Loader {
 
             list.add(cObj);
         }
-        
+
         // Write to file
-        try (FileWriter file = new FileWriter("virtualassistant/data/datastore/favourites.json")) {
+        try (FileWriter file = new FileWriter("./data/favourites.json")) {
 
             file.write(list.toJSONString());
             file.flush();
 
         } catch (IOException e) {
             e.printStackTrace();
-        }  
+        }
     }
-    
-    
+
+
     public Favourites<String, Integer> readFavourites(){
         // IMPORTANT : Load high first
         Favourites<String, Integer> favourites = new Favourites();
         ArrayList<Pair<String, Integer>> arrayList = new ArrayList(Favourites.maxFavourites);
-        
+
         try{
-            Object obj = parser.parse(new FileReader("virtualassistant/data/datastore/favourites.json"));
-            
+            Object obj = parser.parse(new FileReader("./data/favourites.json"));
+
             JSONArray list = (JSONArray) obj;
-            
+
             if(verbose) System.out.println("Read array obj...");
-            
+
             for(Object o : list) {
-                
+
                 JSONObject jo = (JSONObject) o;
-                
+
                 Pair<String, Integer> p = new Pair((String) jo.get("name"), Math.toIntExact((Long) jo.get("integer")));
-                
+
                 if(verbose) System.out.println("Loading favourite: " + jo.get("name"));
-                
+
                 arrayList.add(p);
             }
-            
+
             // Sort arrayList
-            arrayList.sort(new SortBySecond()); 
-            
+            arrayList.sort(new SortBySecond());
+
             if(verbose) System.out.println("Sorted array...");
-            
+
             for(Pair<String,Integer> p : arrayList) {
                 favourites.put(p.getFirst(), p.getSecond());
             }
-            
+
             return favourites;
 
         } catch (FileNotFoundException e) {
@@ -150,17 +150,17 @@ public class Loader {
         }
 
         return null;
-        
+
     }
-    
+
     class SortBySecond implements Comparator<Pair<String, Integer>> {
-        // Used for sorting in descending order 
+        // Used for sorting in descending order
         public int compare(Pair<String, Integer> a, Pair<String, Integer> b)
         {
             return b.getSecond() - a.getSecond();
         }
     }
-    
+
     public boolean unitTest(BufferedWriter logger) throws IOException {
     return false;
 }
