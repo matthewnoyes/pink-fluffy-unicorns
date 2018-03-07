@@ -134,6 +134,7 @@ public void initialize(URL location, ResourceBundle resources) {
 
 	task1.setOnSucceeded(e->{
 			changeUpdateTime(getTimeNow());
+
 			new Thread(task2).start();
 		});
 	new Thread(task1).start();
@@ -251,72 +252,82 @@ public void makeQuery(String text) {
 	chatbot_message_list.add(query);
 	addMessage(query);
 
-	// if the connection is established
-	if(ready) {
-		// Get response in extra task to allow for better user experience
-		Task task = new Task<Message>() {
-			@Override
-			public Message call() {
 
-				Message response;
 
-				try {
-
-					Pair<String, LinkedList<NewsObj> > responsePair =
-						virtualAssistant.getResponse(query.getMessage());
-
-					String responseStr = responsePair.getFirst();
-
-					LinkedList<NewsObj> responseNews = responsePair.getSecond();
-
-					if(responseStr != null && !responseStr.equals("") && virtualAssistant.systemStatus.getSoundEnabled())
-						tts.speak(responseStr, 1.0f, false, false);
-
-					response = new Response(responseStr, responseNews);
-
-				} catch (Exception e) {
-
-					//e.printStackTrace();
-
-					String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";
-					if(virtualAssistant.systemStatus.getSoundEnabled())
-						tts.speak("Sorry, we couldn't find that.", 1.0f, false, false);
-
-					String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
-					response = new URLMessage(message, url);
-				}
-
-				return response;
-			}
-		};
-
-		// Once response is recieved add it to the UI
-		task.setOnSucceeded(new EventHandler() {
-				@Override
-				public void handle(Event event) {
-				        Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-
-						        Message response = (Message)task.getValue();
-						        chatbot_message_list.add(response);
-
-						        addMessage(response);
-
-						}
-					});
-				}
-			});
-		new Thread(task).start();
-
-		// If there is no connection established
+	if(text.toLowerCase().contains("favourites")
+	|| text.toLowerCase().contains("favourite")
+	|| text.toLowerCase().contains("favorites")
+	|| text.toLowerCase().contains("favorite")) {
+		displayFavourites();
 	} else {
-		// Add error message as response
-		Message error_response = new Response("Connection error. Please try again later.",null);
-		chatbot_message_list.add(error_response);
-		addMessage(error_response);
+		// if the connection is established
+		if(ready) {
+			// Get response in extra task to allow for better user experience
+			Task task = new Task<Message>() {
+				@Override
+				public Message call() {
 
+					Message response;
+
+					try {
+
+						Pair<String, LinkedList<NewsObj> > responsePair =
+							virtualAssistant.getResponse(query.getMessage());
+
+						String responseStr = responsePair.getFirst();
+
+						LinkedList<NewsObj> responseNews = responsePair.getSecond();
+
+						if(responseStr != null && !responseStr.equals("") && virtualAssistant.systemStatus.getSoundEnabled())
+							tts.speak(responseStr, 1.0f, false, false);
+
+						response = new Response(responseStr, responseNews);
+
+					} catch (Exception e) {
+
+						//e.printStackTrace();
+
+						String message = "Sorry, we couldn't find that. Use the help button for queries you can ask. Try google meanwhile!";
+						if(virtualAssistant.systemStatus.getSoundEnabled())
+							tts.speak("Sorry, we couldn't find that.", 1.0f, false, false);
+
+						String url = "https://www.google.co.uk/search?q=" + query.getMessage().replaceAll("\\s", "+");
+						response = new URLMessage(message, url);
+					}
+
+					return response;
+				}
+			};
+
+			// Once response is recieved add it to the UI
+			task.setOnSucceeded(new EventHandler() {
+					@Override
+					public void handle(Event event) {
+					        Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+
+							        Message response = (Message)task.getValue();
+							        chatbot_message_list.add(response);
+
+							        addMessage(response);
+
+							}
+						});
+					}
+				});
+			new Thread(task).start();
+
+			// If there is no connection established
+		} else {
+			// Add error message as response
+			Message error_response = new Response("Connection error. Please try again later.",null);
+			chatbot_message_list.add(error_response);
+			addMessage(error_response);
+
+		}
 	}
+
 }
 
 /**
@@ -466,6 +477,13 @@ private void changeMuteButtonIcon(boolean sound){
 		mute_control_image_view.setImage(image);
 	}
 }
+private void displayFavourites() {
+	if(ready) {
+		Message favourites = new FavouritesMessage("Your favourites:", virtualAssistant.learningAgent.getUpdates(3));
+		chatbot_message_list.add(favourites);
+		addMessage(favourites);
+	}
+}
 
 private void addMessage(Message message) {
 	if(onHelp) {
@@ -480,20 +498,36 @@ private void openHelp() {
 	onHelp = true;
 	chatbot_container.getChildren().clear();
 
+
+	/* Black bar - not needed
+	// Favourites bar at top of help page
+	HBox favourites_contain = new HBox(15);
+	favourites_contain.setPrefWidth(Main.WIDTH);
+	favourites_contain.setId("favourites_contain");
+	favourites_contain.setAlignment(Pos.CENTER);
+	if(ready) {
+
+		for(String x : virtualAssistant.learningAgent.getUpdates(3)) {
+			Label label = new Label(x);
+			label.setId("favourites_help_label");
+
+			favourites_contain.getChildren().add(label);
+		}
+
+	} else {
+		Label loading = new Label("Loading favourites...");
+		loading.setId("favourites_help_label");
+		favourites_contain.getChildren().add(loading);
+	}
+	chatbot_container.getChildren().add(favourites_contain);
+	*/
+
+	// Help page
 	Label helpTitle;
 
 	String[] suggested = null;
 
-	if(!ready) {
-		helpTitle = new Label("Some questions you can ask:");
-	} else {
-		suggested = virtualAssistant.learningAgent.suggestQueries(4);
-		if(suggested.length > 0) {
-			helpTitle = new Label("Suggested queries for you:");
-		} else {
-			helpTitle = new Label("Some questions you can ask:");
-		}
-	}
+	helpTitle = new Label("Some questions you can ask:");
 
 	helpTitle.setPrefWidth(Main.WIDTH);
 	helpTitle.setAlignment(Pos.CENTER);
@@ -501,42 +535,41 @@ private void openHelp() {
 
 	chatbot_container.getChildren().add(helpTitle);
 
+	Set<Integer> stated = new HashSet<>();
 
-	if(!ready || suggested.length == 0) {
-		Set<Integer> stated = new HashSet<>();
+	for(int i = 0; i < 4 && i < helptext_list.size(); i++) {
 
-		for(int i = 0; i < 4 && i < helptext_list.size(); i++) {
+		int rand_index = (int)(Math.random() * helptext_list.size());
 
-			int rand_index = (int)(Math.random() * helptext_list.size());
-
-			while (stated.contains(rand_index)) {
-				rand_index = (int)(Math.random() * helptext_list.size());
-			}
-
-			stated.add(rand_index);
-
-			Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
-			text_label.setPrefWidth(Main.WIDTH);
-			text_label.setAlignment(Pos.CENTER);
-			text_label.setTextAlignment(TextAlignment.CENTER);
-			text_label.setWrapText(true);
-			text_label.setId("help_text");
-
-			chatbot_container.getChildren().add(text_label);
+		while (stated.contains(rand_index)) {
+			rand_index = (int)(Math.random() * helptext_list.size());
 		}
-	} else {
 
-		for(String x : suggested) {
-			Label text_label = new Label('"'+x+'"');
-			text_label.setPrefWidth(Main.WIDTH);
-			text_label.setAlignment(Pos.CENTER);
-			text_label.setTextAlignment(TextAlignment.CENTER);
-			text_label.setWrapText(true);
-			text_label.setId("help_text");
+		stated.add(rand_index);
 
-			chatbot_container.getChildren().add(text_label);
-		}
+		Label text_label = new Label('"'+helptext_list.get(rand_index)+'"');
+		text_label.setPrefWidth(Main.WIDTH);
+		text_label.setAlignment(Pos.CENTER);
+		text_label.setTextAlignment(TextAlignment.CENTER);
+		text_label.setWrapText(true);
+		text_label.setId("help_text");
+
+		chatbot_container.getChildren().add(text_label);
 	}
+
+	/*
+	   for(String x : suggested) {
+	        Label text_label = new Label('"'+x+'"');
+	        text_label.setPrefWidth(Main.WIDTH);
+	        text_label.setAlignment(Pos.CENTER);
+	        text_label.setTextAlignment(TextAlignment.CENTER);
+	        text_label.setWrapText(true);
+	        text_label.setId("help_text");
+
+	        chatbot_container.getChildren().add(text_label);
+	   }
+	 */
+
 
 	Label ellipsis = new Label("...");
 	ellipsis.setPrefWidth(Main.WIDTH);

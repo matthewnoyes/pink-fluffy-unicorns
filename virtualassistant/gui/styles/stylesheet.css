@@ -154,6 +154,19 @@
   -fx-min-height: 40px;
 }
 
+#favourites_contain {
+  -fx-margin: -20 -10 0 -10;
+  -fx-background-color: #000000;
+  -fx-min-height: 50px;
+}
+
+#favourites_help_label {
+  -fx-text-fill: white;
+  -fx-font-size: 12pt;
+  -fx-font-weight: bold;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
 #help_title {
   -fx-font-weight: bold;
   -fx-font-size: 25pt;
