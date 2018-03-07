@@ -253,11 +253,7 @@ public void makeQuery(String text) {
 	addMessage(query);
 
 
-
-	if(text.toLowerCase().contains("favourites")
-	|| text.toLowerCase().contains("favourite")
-	|| text.toLowerCase().contains("favorites")
-	|| text.toLowerCase().contains("favorite")) {
+	if(isFavouritesMessage(text)) {
 		displayFavourites();
 	} else {
 		// if the connection is established
@@ -381,6 +377,19 @@ public void stopListening() {
  */
 public void changeUpdateTime(String time) {
 	update_time.setText("Last updated: " + time);
+}
+
+private boolean isFavouritesMessage(String text1) {
+	String text = text1.toLowerCase();
+
+	return text.contains("favourites")
+	|| text.contains("favourite's")
+	|| text.contains("favourite")
+	|| text.contains("favorites")
+	|| text.contains("favorite's")
+	|| text.contains("favorite")
+	|| text.contains("favoured")
+	|| text.contains("favored");
 }
 
 /* =============================================== */
