@@ -40,8 +40,6 @@ import virtualassistant.misc.Pair;
 
 public class Controller implements Initializable {
 
-private static final Logger LOGGER = Logger.getLogger( ClassName.class.getName() );
-
 @FXML
 private ScrollPane scrollpane;
 @FXML
@@ -160,12 +158,6 @@ public void initialize(URL location, ResourceBundle resources) {
 	}
 
 	System.out.println("Launching interface...");
-	String[] alerts = new String[3];
-	alerts[0] = "BARC is rising rapidly";
-	alerts[1] = "TESCO is gaining price quickly";
-	alerts[2] = "COCACOLA HBC AG is gaining price quickly";
-
-	makeSystemQuery("I've noticed these changes", alerts);
 	openHelp();
 }
 
@@ -383,7 +375,7 @@ public void changeUpdateTime(String time) {
 @FXML
 private void handleMuteButtonClick() {
 	virtualAssistant.systemStatus.toggleSound();
-	changeMuteButtonIcon();
+	changeMuteButtonIcon(virtualAssistant.systemStatus.getSoundEnabled());
 }
 
 // handle when the mic button is clicked
