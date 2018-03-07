@@ -207,6 +207,20 @@ public class Scrapper {
         entry.volume = -1;
       }
 
+      if (ticker.equals("III.L") && (!date.equals(Company.resetTime(Calendar.getInstance())))) {
+        if (entry.open != -1.0)
+          entry.open *= 100;
+
+        if (entry.close != -1.0)
+          entry.close *= 100;
+
+        if (entry.high != -1.0)
+          entry.high *= 100;
+
+        if (entry.low != -1.0)
+          entry.low *= 100;
+      }
+
       pastData.put(date, entry);
     }
   }
@@ -347,6 +361,21 @@ public class Scrapper {
         entry.volume = -1;
       }
 
+      //Correct weird yahoo bug
+      if (ticker.equals("III.L") && (!date.equals(Company.resetTime(Calendar.getInstance())))) {
+        if (entry.open != -1.0)
+          entry.open *= 100;
+
+        if (entry.close != -1.0)
+          entry.close *= 100;
+
+        if (entry.high != -1.0)
+          entry.high *= 100;
+
+        if (entry.low != -1.0)
+          entry.low *= 100;
+      }
+
       data.put(date, entry);
     }
 
@@ -360,7 +389,7 @@ public class Scrapper {
 
     System.out.println(data.getCompanyForTicker("BT.A").getOpen());
   }
-  
+
   public boolean unitTest(BufferedWriter logger) throws IOException {
     return false;
 }

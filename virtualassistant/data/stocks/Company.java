@@ -135,7 +135,7 @@ public class Company implements ICompany {
         high = date.getValue().high;
       }
 
-      if (date.getValue().low != 1.0 && low > date.getValue().low) {
+      if (date.getValue().low != -1.0 && low > date.getValue().low) {
         low = date.getValue().low;
       }
 
