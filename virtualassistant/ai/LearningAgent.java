@@ -188,10 +188,10 @@ public class LearningAgent implements ILearningAgent {
       if (!stockNotifications.containsKey(sector)) {
 
         if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
-          alerts.add(sector + " is gaining price quickly");
+          alerts.add(sector + ": +" + stocks.getSectorPercentageChange(sector) + "%");
           stockNotifications.put(sector, Calendar.getInstance());
         } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
-          alerts.add(sector + " is losing price quickly");
+          alerts.add(sector + ": " + stocks.getSectorPercentageChange(sector) + "%");
           stockNotifications.put(sector, Calendar.getInstance());
         }
       } else {
@@ -208,10 +208,10 @@ public class LearningAgent implements ILearningAgent {
         //Check the favourite stocks contain this stock
         if (favouriteStocks.containsKey(com.getTicker())) {
           if (com.getPercentageChange() > minStockImpact) {
-            alerts.add(com.getName() + " is gaining price quickly");
+            alerts.add(com.getName() + ": +" + com.getPercentageChange() + "%");
             stockNotifications.put(com.getTicker(), Calendar.getInstance());
           } else if (com.getPercentageChange() < -minStockImpact) {
-            alerts.add(com.getName() + " is losing price quickly");
+            alerts.add(com.getName() + ": " + com.getPercentageChange() + "%");
             stockNotifications.put(com.getTicker(), Calendar.getInstance());
           }
         }
@@ -226,7 +226,8 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    controller.makeSystemQuery("There are new stock alerts:", alertArray);
+    if (alertArray.length > 0)
+      controller.makeSystemQuery("There are new stock alerts:", alertArray);
 
     return "";
 
@@ -275,7 +276,8 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    controller.makeSystemQuery("There are new news alerts:", alertArray);
+    if (alertArray.length > 0)
+      controller.makeSystemQuery("There are new news alerts:", alertArray);
 
     return "";
 
