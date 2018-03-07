@@ -191,10 +191,10 @@ public class LearningAgent implements ILearningAgent {
       if (!stockNotifications.containsKey(sector)) {
 
         if (stocks.getSectorPercentageChange(sector) > minStockImpact) {
-          alerts.add(sector + ": +" + stocks.getSectorPercentageChange(sector) + "%");
+          alerts.add(sector + ": +" + String.format("%.2f", stocks.getSectorPercentageChange(sector)) + "%");
           stockNotifications.put(sector, Calendar.getInstance());
         } else if (stocks.getSectorPercentageChange(sector) < -minStockImpact) {
-          alerts.add(sector + ": " + stocks.getSectorPercentageChange(sector) + "%");
+          alerts.add(sector + ": " + String.format("%.2f",stocks.getSectorPercentageChange(sector)) + "%");
           stockNotifications.put(sector, Calendar.getInstance());
         }
       } else {
