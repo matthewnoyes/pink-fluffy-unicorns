@@ -58,6 +58,7 @@ public HBox getDisplay() {
 
 						Label heading = new Label(x.getTitle());
 						heading.setWrapText(true);
+						heading.setPrefWidth(Main.WIDTH);
 						heading.setId("news_heading");
 						//Label time = new Label(news.get(x).getDateTime().toString());
 						String strtime = "";
@@ -80,6 +81,7 @@ public HBox getDisplay() {
 						time.setId("news_data");
 						Hyperlink url = new Hyperlink(x.getUrl());
 						url.setWrapText(true);
+						url.setPrefWidth(Main.WIDTH);
 						url.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent e) {

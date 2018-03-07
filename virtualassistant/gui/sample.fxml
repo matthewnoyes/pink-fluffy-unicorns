@@ -5,8 +5,8 @@
 <?import javafx.scene.image.*?>
 
 <VBox fx:id="root" spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="virtualassistant.gui.Controller">
-  <ScrollPane fx:id="scrollpane" fitToHeight="true" fitToWidth="true">
-    <VBox fx:id="chatbot_container" spacing="20" alignment="top_center" />
+  <ScrollPane fx:id="scrollpane" fitToWidth="true">
+    <VBox fx:id="chatbot_container" spacing="20" alignment="top_center" prefWidth="${root.width}"/>
   </ScrollPane>
   <Region VBox.Vgrow="ALWAYS"/>
   <HBox fx:id="textInput" alignment="bottom_center">

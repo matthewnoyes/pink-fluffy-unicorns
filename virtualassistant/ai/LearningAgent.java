@@ -19,6 +19,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.ParseException;
 
+import javafx.application.Platform;
+
 public class LearningAgent implements ILearningAgent {
 
   private Favourites<String, Integer> favouriteStocks;
@@ -173,7 +175,15 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    controller.makeSystemQuery("There are new stock alerts:", alertArray);
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+
+              controller.makeSystemQuery("There are new stock alerts:", alertArray);
+
+      }
+      });
+
 
     return "";
 
@@ -222,7 +232,16 @@ public class LearningAgent implements ILearningAgent {
     String[] alertArray = new String[alerts.size()];
     alerts.toArray(alertArray);
 
-    controller.makeSystemQuery("There are new news alerts:", alertArray);
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+
+              controller.makeSystemQuery("There are new news alerts:", alertArray);
+
+      }
+      });
+
+
 
     return "";
 
