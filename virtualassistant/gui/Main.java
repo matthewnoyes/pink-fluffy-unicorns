@@ -19,7 +19,7 @@ public static void main(String[] args) {
 
 @Override
 public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Trader's Assistant");
+		primaryStage.setTitle("Trader 24");
 		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(e->{
 						e.consume();
